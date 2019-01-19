@@ -112,7 +112,7 @@ It becomes just:
 counter.value += 1;
 ```
 
-Then the StreamedValue is used to drive a StreamedWidget/StreamBuild using the outStream getter.
+Then the StreamedValue is used to drive a StreamedWidget/StreamBuilder using the outStream getter.
 
 #### Usage
 
