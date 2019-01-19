@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:frideos_general/src/homepage.dart';
-import 'package:frideos_general/src/blocs/bloc.dart';
-
-
-
 
 void main() => runApp(MyApp());
 
