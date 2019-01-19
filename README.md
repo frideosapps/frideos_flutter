@@ -206,7 +206,7 @@ StreamBuilder(
 
 ## StreamedList
 
-Used to work with lists.
+This class has been created to work with lists.
 
 #### Usage
 
@@ -228,7 +228,7 @@ From the StreamedList example:
 
 ## StreamedMap
 
-Used to work with maps.
+This class has been created to work with maps.
 
 #### Usage
 
