@@ -27,7 +27,7 @@ A collection of helpers, made with the intent to simplify the using of streams a
 - ScrollingText
 - Sliders
 
-## Examples
+## [Examples](https://github.com/frideosapps/frideos_flutter/tree/master/examples/frideos_general)
 
 Examples that show how to use this library.
 
