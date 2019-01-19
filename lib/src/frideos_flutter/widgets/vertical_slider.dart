@@ -27,12 +27,12 @@ class VerticalSlider extends StatefulWidget {
   final Function(double) onSliding;
 
   @override
-  VerticalSliderState createState() {
-    return new VerticalSliderState();
+  _VerticalSliderState createState() {
+    return new _VerticalSliderState();
   }
 }
 
-class VerticalSliderState extends State<VerticalSlider> {
+class _VerticalSliderState extends State<VerticalSlider> {
   final slider = StreamedValue<double>();
 
   double width;
@@ -119,7 +119,7 @@ class VerticalSliderState extends State<VerticalSlider> {
                       top: sliderPosition,
                       child: GestureDetector(
                         child: CustomPaint(
-                            foregroundPainter: VerticalSliderPainter(
+                            foregroundPainter: _VerticalSliderPainter(
                                 height: baseTriangleSize,
                                 width: baseTriangleSize,
                                 color: widget.triangleColor),
@@ -169,12 +169,12 @@ class VerticalSliderState extends State<VerticalSlider> {
   }
 }
 
-class VerticalSliderPainter extends CustomPainter {
+class _VerticalSliderPainter extends CustomPainter {
   final height;
   final width;
   Color color;
 
-  VerticalSliderPainter({this.height, this.width, this.color});
+  _VerticalSliderPainter({this.height, this.width, this.color});
 
   @override
   void paint(Canvas canvas, Size size) {

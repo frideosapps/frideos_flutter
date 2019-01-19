@@ -1,5 +1,5 @@
 import 'streamed_value.dart';
-import 'streamed_collection.dart';
+import 'streamed_list.dart';
 import 'streamed_map.dart';
 
 /// Used to make a one-way tunnel beetween two blocs (from blocA to a StremedValue on blocB).
@@ -31,7 +31,7 @@ import 'streamed_map.dart';
 /// tunnelSenderStr.send("Text from blocA to blocB");
 /// ```
 class StreamedSender<T> {
-  StreamedValueBase<T> _receiver;
+  StreamedValue<T> _receiver;
 
   StreamedSender();
 

@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'streamed_collection.dart';
+import 'streamed_list.dart';
 
 ///
 ///
 /// Base class for the streamed objects
 ///
 ///
-class StreamedValueBase<T> {
+class _StreamedValueBase<T> {
   final stream = BehaviorSubject<T>();
 
   /// timesUpdate shows how many times the got updated
@@ -40,16 +40,69 @@ class StreamedValueBase<T> {
 /// It's the simplest object derived from the [StreamValueBase] class.
 ///
 /// When a value is set through the setter, if it's different from the one
-/// alredy stored then the new value is stored and sent to stream by it's setter.
+/// alredy stored then the new value is stored and sent to stream by 
+/// it's setter. Used in tandem with the StreamedWidget/StreamBuilder, 
+/// it automatically triggers the refresh of the widget when a new 
+/// value is set.
+/// 
+/// This essentially does a simple thing: every time a new value is set,
+/// this is compared to the oldest one and if it is different assigned to
+/// the variable and sent to stream. Why this? So that when a new value
+/// is set, it automatically triggers the StreamerBuilder of the widget 
+/// and it refreshes without the need to manually add the value to the
+/// sink of the stream.
+/// 
+/// So for example, instead of doing something like this:
+/// 
+/// ```dart
+/// counter += 1;
+/// stream.sink.add(counter);
+/// ```
+/// 
+/// It becomes just:
+/// 
+/// ```dart
+/// counter.value += 1;
+/// ```
+/// 
+/// Then the StreamedValue is used to drive a [StreamedWidget]/StreamBuilder
+/// using the outStream getter.
+
+/// #### Usage
+/// 
+/// ```dart
+/// // In the BLoC
+/// final counter = StreamedValue<int>();
+/// 
+/// incrementCounter() {
+///   counter.value += 2.0;
+/// }
+/// 
+/// 
+/// // View
+/// StreamedWidget<int>(
+///     stream: bloc.count.outStream,
+///     builder: (BuildContext context,
+///         AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
+///     noDataChild: Text('NO DATA'),
+/// ),
+/// RaisedButton(
+///     color: buttonColor,
+///     child: Text('+'),
+///     onPressed: () {
+///         bloc.incrementCounter();
+///         },
+/// ),
+/// ```
+/// 
+/// On update the [timesUpdated] increases showing how many times the 
+/// value has been updated.
+/// 
 ///
-/// Then [timesUpdated] increases showing how many times the value has been updated.
+/// N.B. For collections use the [StreamedList] and [StreamedMap] instead.
+/// 
 ///
-/// For collections use the [add] method to add items to the collections and send to the stream
-/// the updated collection. If it used the 'object.value.add' the stream doesn't get updated.
-///
-///
-///
-class StreamedValue<T> extends StreamedValueBase<T> {
+class StreamedValue<T> extends _StreamedValueBase<T> {
   set value(T value) {
     if (stream.value != value) {
       inStream(value);
@@ -60,9 +113,66 @@ class StreamedValue<T> extends StreamedValueBase<T> {
 
 ///
 ///
-/// Object to use when there is the neeed to transform a stream.
-///
-///
+/// A special StreamedValue that is used when there is the need to use 
+/// a StreamTransformer (e.g. validation of input fields).
+/// 
+/// 
+/// #### Usage
+/// 
+/// From the StreamedMap example:
+/// 
+/// ```dart
+/// // In the BLoC class
+///   final streamedKey = StreamedTransformed<String, int>();
+/// 
+/// 
+/// // In the constructor of the BLoC class
+///   streamedKey.setTransformer(validateKey);
+/// 
+/// 
+/// // Validation (e.g. in the BLoC or in a mixin class)
+/// final validateKey =
+///       StreamTransformer<String, int>.fromHandlers(handleData: (key, sink) {
+///     var k = int.tryParse(key);
+///     if (k != null) {
+///       sink.add(k);
+///     } else {
+///       sink.addError('The key must be an integer.');
+///     }
+///   });
+/// 
+/// 
+/// // In the view:
+/// StreamBuilder(
+///             stream: bloc.streamedKey.outTransformed,
+///             builder: (context, AsyncSnapshot<int> snapshot) {
+///               return Column(
+///                 children: <Widget>[
+///                   Padding(
+///                     padding: const EdgeInsets.symmetric(
+///                       vertical: 12.0,
+///                       horizontal: 20.0,
+///                     ),
+///                     child: TextField(
+///                       style: TextStyle(
+///                         fontSize: 18.0,
+///                         color: Colors.black,
+///                       ),
+///                       decoration: InputDecoration(
+///                         labelText: 'Key:',
+///                         hintText: 'Insert an integer...',
+///                         errorText: snapshot.error,
+///                       ),
+///                       // To avoid the user could insert text use the TextInputType.number
+///                       // Here is commented to show the error msg.
+///                       //keyboardType: TextInputType.number,
+///                       onChanged: bloc.streamedKey.inStream,
+///                     ),
+///                   ),
+///                 ],
+///               );
+///             }),
+/// ```
 ///
 ///
 class StreamedTransformed<T, S> {
@@ -109,7 +219,7 @@ class StreamedTransformed<T, S> {
 ///
 ///
 ///
-class MemoryValue<T> extends StreamedValueBase<T> {
+class MemoryValue<T> extends _StreamedValueBase<T> {
   T oldValue;
 
   set value(T value) {
@@ -180,7 +290,7 @@ const updateTimerMilliseconds = 17;
 ///
 ///
 ///
-class TimerObject extends StreamedValueBase<int> {
+class TimerObject extends _StreamedValueBase<int> {
   /// TIMER
   Timer _timer;
 

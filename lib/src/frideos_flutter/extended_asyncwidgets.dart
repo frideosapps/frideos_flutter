@@ -11,16 +11,14 @@ typedef ErrorCallback = Widget Function(Object);
 typedef WaitingCallback = Widget Function();
 
 ///
+/// StreamedWidget is a wrapper for the [StreamBuilder] widget
 ///
+/// If no [noDataChild] widget or [onNoData] callback is provided then a [Container] is shown
+///
+/// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
 ///
 ///
 class StreamedWidget<T> extends StreamBuilder<T> {
-  /// StreamedWidget is a wrapper for the [StreamBuilder] widget
-  ///
-  /// If no [noDataChild] widget or [onNoData] callback is provided then a [Container] is shown
-  ///
-  /// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
-
   const StreamedWidget(
       {Key key,
       this.initialData,
@@ -73,54 +71,16 @@ class StreamedWidget<T> extends StreamBuilder<T> {
   }
 }
 
-/* return errorChild != null
-          ? errorChild
-          : onError != null ? onError(currentSummary.error) : Container();*/
-/*
-    return noDataChild != null
-        ? noDataChild
-        : onNoData != null ? onNoData() : Container();*/
-
-/*
-
-    if (currentSummary.hasError) {
-      if (errorChild != null) {
-        return errorChild;
-      } else {
-        if (onError != null) {
-          return onError(currentSummary.error);
-        } else {
-          return Container();
-        }
-      }
-    }
-
-    if (noDataChild != null) {
-      return noDataChild;
-    } else {
-      if (onNoData != null) {
-        return onNoData();
-      } else {
-        return Container();
-      }
-    }
-
-    */
 
 ///
+/// FuturedWidget is a wrapper for the [FutureBuilder] widget
 ///
+/// If no [onWaitingWidget] widget or [onWaiting] callback is provided then a [Container] is shown
 ///
-///
-///
+/// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
 ///
 ///
 class FuturedWidget<T> extends StatelessWidget {
-  /// FuturedWidget is a wrapper for the [FutureBuilder] widget
-  ///
-  /// If no [onWaitingWidget] widget or [onWaiting] callback is provided then a [Container] is shown
-  ///
-  /// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
-
   FuturedWidget(
       {this.initialData,
       @required this.future,
@@ -176,11 +136,3 @@ class FuturedWidget<T> extends StatelessWidget {
         });
   }
 }
-/*   if (snapshot.hasError)
-            return errorChild != null
-                ? errorChild
-                : onError != null ? onError(snapshot.error) : Container();
-
-          return onWaitingChild != null
-              ? onWaitingChild
-              : onWaitingChild != null ? onWaiting() : Container();*/

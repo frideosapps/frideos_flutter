@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos/frideos_dart.dart';
-
 import 'extended_asyncwidgets.dart';
 
+/// 
+/// Used with a StreamedValue when the type is a widget to
+/// directly stream a widget to the view. Under the hood
+/// a StreamedWidget handles the stream and shows 
+/// the widget.
+/// 
+/// 
 class ReceiverWidget extends StatelessWidget {
   ReceiverWidget({this.stream});
 

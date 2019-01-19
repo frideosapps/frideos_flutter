@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -29,12 +27,12 @@ class HorizontalSlider extends StatefulWidget {
   final Function(double) onSliding;
 
   @override
-  HorizontalSliderState createState() {
-    return new HorizontalSliderState();
+  _HorizontalSliderState createState() {
+    return new _HorizontalSliderState();
   }
 }
 
-class HorizontalSliderState extends State<HorizontalSlider> {
+class _HorizontalSliderState extends State<HorizontalSlider> {
   final slider = StreamedValue<double>();
 
   double width;
@@ -66,8 +64,7 @@ class HorizontalSliderState extends State<HorizontalSlider> {
       min = widget.rangeMin;
       max = widget.rangeMax;
       step = widget.step;
-      //step = 1.1;      
-      //step = 1.0;
+
 
       initialValue = widget.initialValue;
 
@@ -80,27 +77,6 @@ class HorizontalSliderState extends State<HorizontalSlider> {
 
       sliderPosition = sliderInitialPosition;
 
-/*
-      var sliderInitialPosition = (initialValue / max) * sliderEnd;
-
-      sliderPosition = sliderInitialPosition;
-
-      slider.value = sliderInitialPosition;
-      */
-
-      print('initial value: $initialValue');
-
-      //print('slider initial position: $sliderInitialPosition');
-
-      print('slider position: $sliderPosition');
-
-      print('initial value: ${slider.value}');
-
-      /*
-      slider.value = Utils.convertRange(
-                                0.0, sliderEnd, min, max, sliderPosition);
-
-                                */
     });
   }
 
@@ -140,7 +116,7 @@ class HorizontalSliderState extends State<HorizontalSlider> {
                       left: sliderPosition,
                       child: GestureDetector(
                         child: CustomPaint(
-                            foregroundPainter: HorizontalSliderPainter(
+                            foregroundPainter: _HorizontalSliderPainter(
                                 height: baseTriangleSize,
                                 width: baseTriangleSize,
                                 color: widget.triangleColor),
@@ -149,35 +125,15 @@ class HorizontalSliderState extends State<HorizontalSlider> {
                               width: baseTriangleSize,
                               height: baseTriangleSize,
                             )),
-                        //onTap: () => print('tap'),
+                       
                         onHorizontalDragUpdate: (v) {
-                          //print('Drag $v');
-                          /*
-                          var step = v.delta.direction > 0 ? -1.0 : 1.0;
-                          var newValue = slider.value + step;
-                          var sliderEnd =
-                              sliderWidth + sliderMargin - baseTriangleSize;
-                          //print('NW: $newValue, Limit: $sliderEnd, $sliderWidth, $sliderMargin, $baseTriangleSize');
-                          if (newValue >= 0.0 && newValue <= sliderEnd) {
-                            slider.value = newValue;
-                            widget.onSliding(slider.value);
-                          }*/
+                          
                           var stepDir = v.delta.direction > 0 ? -step : step;
 
                           var newPosition = sliderPosition + stepDir;
 
-/*
-                          if (newPosition >= 0.0 && newPosition <= sliderEnd) {
-                            sliderPosition = newPosition;
-
-                            slider.value = Utils.convertRange(
-                                0.0, sliderEnd, min, max, sliderPosition);
-
-                            widget.onSliding(slider.value);
-                          } */
-
                           sliderPosition = newPosition;
-                          //print(sliderPosition);
+                        
 
                           if (sliderPosition < 0.0) {
                             sliderPosition = widget.rangeMin;                            
@@ -203,12 +159,12 @@ class HorizontalSliderState extends State<HorizontalSlider> {
   }
 }
 
-class HorizontalSliderPainter extends CustomPainter {
+class _HorizontalSliderPainter extends CustomPainter {
   final height;
   final width;
   Color color;
 
-  HorizontalSliderPainter({this.height, this.width, this.color});
+  _HorizontalSliderPainter({this.height, this.width, this.color});
 
   @override
   void paint(Canvas canvas, Size size) {

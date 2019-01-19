@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'streamed_value.dart';
 
+///
+/// This class is used to handle the stages:
+///
 class Stage {
   Widget widget;
-  int time; // milliseconds  
+  int time; // milliseconds
   Function onShow = () {};
   Stage({this.widget, this.time, this.onShow});
 }
@@ -15,9 +18,117 @@ enum StageStatus { active, stop }
 
 const updateTimeStaged = 100;
 
+/// A complex class to hadle the rendering of widgets over the time.
+/// It takes a collection of "Stages" and triggers the visualization of
+/// the widgets at a given time (relative o absolute timing).
+/// For example to make a demostration on how to use an application,
+/// showing the widgets and pages along with explanations.
 ///
 ///
-/// This class is used to show a series of widgets over a period of time.
+/// Every stage is handled by using the Stage class:
+///
+/// class Stage {
+///   Widget widget;
+///   int time; // milliseconds
+///   Function onShow = () {};
+///   Stage({this.widget, this.time, this.onShow});
+/// }
+/// ```
+///
+/// ##### N.B. The onShow callback is used to trigger an action when the stage shows
+///
+/// #### Usage
+///
+/// From the StagedObject example:
+///
+/// 1. #### Declare a map <int, Stage>
+///    Here the map is in the view and is set in the BLoC class by the setStagesMap.
+///
+/// ```dart
+/// Map<int, Stage> get widgetsMap => <int, Stage>{
+///   0: Stage(
+///       widget: Container(
+///         width: 200.0,
+///         height: 200.0,
+///         color: Colors.indigo[200],
+///         alignment: Alignment.center,
+///         key: Key('0'),
+///         child: ScrollingText(
+///           text:
+///             'This stage will last 8 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
+///           scrollingDuration: 2000,
+///           style: TextStyle(
+///             color: Colors.blue,
+///             fontSize: 18.0,
+///             fontWeight: FontWeight.w500)),
+///         ),
+///       time: 8000,
+///       onShow: () {}),
+///  1: Stage(
+///       widget: Container(
+///         width: 200.0,
+///         height: 200.0,
+///         color: Colors.indigo[200],
+///         alignment: Alignment.center,
+///         key: Key('00'),
+///         child: ScrollingText(
+///               text: 'The next widgets will cross      fade.',
+///               scrollingDuration: 2000,
+///             ),
+///           ),
+///       time: 8000,
+///       onShow: () {}),
+///
+/// }
+/// ```
+/// 2. #### In the BLoC
+///
+/// ```dart
+///   final text = StreamedValue<String>();
+///   final staged = StagedObject();
+///
+///   // The map can be set through the constructor of the StagedObject
+///   // or by the setStagesMap method like in this case.
+///   setMap(Map<int, Stage> widgetsMap) {
+///     staged.setStagesMap(widgetsMap);
+///   }
+///
+///   start() {
+///     if (staged.getMapLength() > 0) {
+///       staged.setCallback(sendNextStageText);
+///       staged.startStages();
+///     }
+///   }
+///
+///
+///   sendNextStageText() {
+///     var nextStage = staged.getNextStage();
+///     if (nextStage != null) {
+///       text.value = "Next stage:";
+///       widget.value = nextStage.widget;
+///       stage.value = StageBridge(
+///           staged.getStageIndex(), staged.getCurrentStage(), nextStage);
+///     } else {
+///       text.value = "This is the last stage";
+///       widget.value = Container();
+///     }
+///   }
+/// ```
+///
+/// 3. #### In the view:
+///
+/// ```dart
+///   // Setting the map in the build method
+///   StagedObjectBloc bloc = BlocProvider.of(context);
+///   bloc.setMap(widgetsMap);
+///
+///
+///   // To show the current widget on the view using the ReceiverWidget.
+///   // As an alternative it can be used the StreamedWidget/StreamBuilder.
+///   ReceiverWidget(
+///     stream: bloc.staged.widgetStream,
+///   ),
+/// ```
 ///
 ///
 class StagedObject {

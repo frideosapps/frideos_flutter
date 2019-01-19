@@ -7,7 +7,9 @@ import 'package:frideos/frideos_dart.dart';
 import '../extended_asyncwidgets.dart';
 
 
+/// 
 /// Class used in the cross fading between two stages
+/// 
 class StageBridge {
   int currentStage;
   Stage old;
@@ -33,12 +35,12 @@ class LinearTransition extends StatefulWidget {
   final int transitionDuration;
 
   @override
-  LinearTransitionState createState() {
-    return new LinearTransitionState();
+  _LinearTransitionState createState() {
+    return new _LinearTransitionState();
   }
 }
 
-class LinearTransitionState extends State<LinearTransition> {
+class _LinearTransitionState extends State<LinearTransition> {
   final opacity = StreamedValue<double>();
   Timer timer;
   int interval;
@@ -119,12 +121,12 @@ class CurvedTransition extends StatefulWidget {
   final Curve curve;
 
   @override
-  CurvedTransitionState createState() {
-    return new CurvedTransitionState();
+  _CurvedTransitionState createState() {
+    return new _CurvedTransitionState();
   }
 }
 
-class CurvedTransitionState extends State<CurvedTransition>
+class _CurvedTransitionState extends State<CurvedTransition>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   CurvedAnimation animationCurve;

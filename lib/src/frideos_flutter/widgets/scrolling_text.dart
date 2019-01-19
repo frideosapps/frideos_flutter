@@ -19,12 +19,12 @@ class ScrollingText extends StatefulWidget {
   final TextStyle style;
 
   @override
-  ScrollingTextState createState() {
-    return new ScrollingTextState();
+  _ScrollingTextState createState() {
+    return new _ScrollingTextState();
   }
 }
 
-class ScrollingTextState extends State<ScrollingText> {
+class _ScrollingTextState extends State<ScrollingText> {
   final textStream = StreamedValue<String>();
   Timer timer;
 

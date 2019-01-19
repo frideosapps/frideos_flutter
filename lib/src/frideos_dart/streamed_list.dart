@@ -6,7 +6,23 @@ import 'package:rxdart/rxdart.dart';
 ///
 /// Used when T is a collection, it works like [StreamedValue].
 ///
-///
+/// To just add elements to the list it is possibile to use the [addElement]
+/// method and the stream get updated by the [refresh] method called inside 
+/// this function. For other direct actions on the list (e.g. adding, deleting items,
+/// clear the list etc.), call the [refresh] method to update the stream.
+/// 
+/// e.g. 
+/// 
+/// ```dart
+///   streamedList.value.add(item);
+///   streamedList.refresh();
+/// ```
+/// 
+/// ```dart
+///   streamedList.value.clear();
+///   streamedList.refresh();
+/// ```
+/// 
 class StreamedList<T> {
   final stream = BehaviorSubject<List<T>>();
   
