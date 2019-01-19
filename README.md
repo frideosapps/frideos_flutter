@@ -41,6 +41,40 @@ Examples that show how to use this library.
 - CurvedTransition
 - Sliders
 
+
+## Getting started:
+
+Add the library to the dependencies to the pubspec.yaml file:
+    
+    dependencies:
+      ...
+      frideos:
+        git:
+          url: https://github.com/frideosapps/frideos_flutter.git
+
+For the helpers classes import ```frideos_dart.dart```:
+
+```dart
+import 'package:frideos/frideos_dart.dart';
+```
+
+ ```frideos_flutter.dart``` for the widgets:
+
+```dart
+import 'package:frideos/frideos_flutter.dart';
+```
+
+```frideos.dart``` if you need both:
+
+```dart
+import 'package:frideos/frideos.dart';
+```
+
+## Dependencies
+
+- [RxDart](https://pub.dartlang.org/packages/rxdart)
+
+
 # Helpers
 
 Utility classes to make a little bit easier working with RxDart streams and Flutter.
