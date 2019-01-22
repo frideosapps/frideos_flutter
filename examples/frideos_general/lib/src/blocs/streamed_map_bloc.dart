@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'package:frideos/frideos.dart';
+import 'package:frideos/frideos_dart.dart';
 
 import 'package:frideos_general/src/blocs/bloc.dart';
 
