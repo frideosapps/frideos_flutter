@@ -28,7 +28,7 @@ class StreamedListBloc extends BlocBase {
   addText() {
     streamedList.addElement(streamedText.value);
 
-    // In alternative:
+    // Or, as an alternative:
     // streamedList.value.add(streamedText.value);
     // streamedList.refresh(); // To refresh the stream with the new value
   }

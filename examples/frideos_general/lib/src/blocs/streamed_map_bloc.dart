@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'package:frideos/frideos_dart.dart';
+import 'package:frideos/frideos.dart';
 
 import 'package:frideos_general/src/blocs/bloc.dart';
 
@@ -28,8 +28,11 @@ class StreamedMapBloc extends BlocBase with Validators {
     var key = int.parse(streamedKey.value);
     var value = streamedText.value;
 
-    streamedMap.value[key] = value;
-    streamedMap.refresh();
+    streamedMap.addKey(key, value);
+
+    // Or, as an alternative:
+    //streamedMap.value[key] = value;
+    //streamedMap.refresh();
   }
 
   dispose() {

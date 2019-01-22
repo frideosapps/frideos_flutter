@@ -24,7 +24,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   frideos:
-    path: c:\PROJECTS\FLUTTER\EXP\frideos
+    path: ../../
 
 
 # For information on the generic Dart part of this file, see the

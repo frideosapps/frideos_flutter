@@ -240,9 +240,32 @@ StreamBuilder(
 
 ## StreamedList
 
-This class has been created to work with lists.
+This class has been created to work with lists. It works like [StreamedValue].
+
+To modify the list (e.g. adding items) and update the stream automatically
+use these methods:
+
+- [addElement]
+- [removeElement]
+- [removeAt]
+- [clear]
+
+For other direct actions on the list, to update the stream call
+the [refresh] method instead.
 
 #### Usage
+
+e.g. adding an item:
+
+```dart
+ streamedList.addElement(item);
+```
+
+it is the same as:
+```dart
+  streamedList.value.add(item);
+  streamedList.refresh();
+```
 
 From the StreamedList example:
 
@@ -254,7 +277,7 @@ From the StreamedList example:
   addText() {
     streamedList.addElement(streamedText.value);
 
-    // In alternative:
+    // Or, as an alternative:
     // streamedList.value.add(streamedText.value);
     // streamedList.refresh(); // To refresh the stream with the new value
   }
@@ -262,9 +285,31 @@ From the StreamedList example:
 
 ## StreamedMap
 
-This class has been created to work with maps.
+This class has been created to work with maps, it works like [StreamedList].
+
+To modify the list (e.g. adding items) and update the stream automatically
+use these methods:
+
+- [addKey]
+- [removeKey]
+- [clear]
+
+For other direct actions on the map, to update the stream call
+the [refresh] method instead.
 
 #### Usage
+
+e.g. adding a key/value pair:
+```dart
+  streamedMap.addKey(1, 'first');
+```
+
+it is the same as:
+
+```dart
+   streamedMap.value[1] = 'first';
+   streamedList.refresh();
+```
 
 From the streamed map example:
 
@@ -277,8 +322,11 @@ From the streamed map example:
     var key = int.parse(streamedKey.value);
     var value = streamedText.value;
 
-    streamedMap.value[key] = value;
-    streamedMap.refresh();
+    streamedMap.addKey(key, value);
+
+    // Or, as an alternative:
+    //streamedMap.value[key] = value;
+    //streamedMap.refresh();
   }
 ```
 
