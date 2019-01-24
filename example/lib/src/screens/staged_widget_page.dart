@@ -90,7 +90,7 @@ class StagedWidgetPage extends StatelessWidget {
           }),
       1: Stage(
           widget: Container(
-              key: Key('0'),
+              key: Key('1'),
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
