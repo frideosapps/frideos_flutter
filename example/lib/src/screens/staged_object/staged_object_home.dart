@@ -19,10 +19,10 @@ class StagedHomePage extends StatelessWidget {
     var height = MediaQuery.of(context).size.height * 0.6;
 
     var widgets = [
-      Image.asset('assets/images/1.jpg', fit: BoxFit.fill),
-      Image.asset('assets/images/2.jpg', fit: BoxFit.fill),
-      Image.asset('assets/images/3.jpg', fit: BoxFit.fill),
-      Image.asset('assets/images/4.jpg', fit: BoxFit.fill),
+      SizedBox(height: height, width: width, child: Image.asset('assets/images/1.jpg', fit: BoxFit.fill)),
+      SizedBox(height: height, width: width, child: Image.asset('assets/images/2.jpg', fit: BoxFit.fill)),
+      SizedBox(height: height, width: width, child: Image.asset('assets/images/3.jpg', fit: BoxFit.fill)),
+      SizedBox(height: height, width: width, child: Image.asset('assets/images/4.jpg', fit: BoxFit.fill)),
     ];
 
     var stagesMap = <int, Stage>{
@@ -36,7 +36,7 @@ class StagedHomePage extends StatelessWidget {
             child: ScrollingText(
                 text:
                     'This stage will last 5 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
-                scrollingDuration: 1000,
+                scrollingDuration: 2000,
                 style: TextStyle(
                     color: Colors.blueGrey[900],
                     fontSize: 18.0,
@@ -107,8 +107,7 @@ class StagedHomePage extends StatelessWidget {
       6: Stage(
           widget: Container(
             width: width,
-            height: height,
-            //color: Colors.blue[100],
+            height: height,            
             alignment: Alignment.center,
             key: Key('6'),
             child: Column(
@@ -182,7 +181,6 @@ class StagedHomePage extends StatelessWidget {
                         );
                       }),
                 ),
-               
               ],
             ),
             Container(
@@ -289,234 +287,3 @@ class StagedHomePage extends StatelessWidget {
     );
   }
 }
-
-/*
-
-Map<int, Stage> get stagesMap => <int, Stage>{
-      0: Stage(
-          widget: Container(
-            key: Key('0'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.blueGrey[50],
-            child: ScrollingText(
-                text:
-                    'This page is built using a StagedObject. Every stage is a widget that is streamed to the view.',
-                duration: 2000,
-                style: style),
-          ),
-          time: 4000,
-          data: null,
-          onShow: () {}),
-      1: Stage(
-          //widget: Text('Click on the page one to compose a map of widgets to show, then go to page two to play it', style: style),
-          widget: Container(
-            key: Key('1'),
-            color: Colors.blueGrey[100],
-            child: ScrollingText(
-                text:
-                    'Click on the page one to compose a map of widgets to show, then go to page two to play it',
-                duration: 4000,
-                style: style),
-          ),
-          time: 6000,
-          data: null,
-          onShow: () {}),
-      2: Stage(
-          //widget: Text('Click on the page one to compose a map of widgets to show, then go to page two to play it', style: style),
-          widget: Container(
-            key: Key('2'),
-            color: Colors.blueGrey[200],
-            child: ScrollingText(
-                text:
-                    'This page is built using a StagedObject. Every stage is a widget that is streamed to the view.',
-                duration: 4000,
-                style: style),
-          ),
-          time: 6000,
-          data: null,
-          onShow: () {}),
-      3: Stage(
-          widget: CircularProgressIndicator(),
-          time: 2000,
-          data: null,
-          onShow: () {}),
-      4: Stage(
-          widget: Text('3', style: style),
-          time: 4000,
-          data: null,
-          onShow: () {}),
-      5: Stage(
-          widget: CircularProgressIndicator(),
-          time: 2000,
-          data: null,
-          onShow: () {}),
-      6: Stage(
-          widget: Text('4', style: style),
-          time: 4000,
-          data: null,
-          onShow: () {}),
-      7: Stage(
-          widget: CircularProgressIndicator(),
-          time: 2000,
-          data: null,
-          onShow: () {}),
-      8: Stage(
-          widget: Text('5', style: style),
-          time: 4000,
-          data: null,
-          onShow: () {}),
-    };
- */
-
-/*
-Map<int, Stage> get stagesMap => <int, Stage>{
-      0: Stage(
-          widget: Container(
-            key: Key('0'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.blueGrey[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'This widget will last 5 seconds (the scrolling text will be completed in 2s', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      1: Stage(
-          //widget: Text('Click on the page one to compose a map of widgets to show, then go to page two to play it', style: style),
-          widget: Container(
-            key: Key('1'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.pink[200],
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      2: Stage(
-          //widget: Text('Click on the page one to compose a map of widgets to show, then go to page two to play it', style: style),
-          widget: Container(
-            key: Key('2'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.blue[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      3: Stage(
-          widget: Container(
-            key: Key('3'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.orange[200],
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      4: Stage(
-          widget: Container(
-            key: Key('4'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.green[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      5: Stage(
-          widget: Container(
-            key: Key('5'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.purple[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      6: Stage(
-          widget: Container(
-            key: Key('6'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.blueGrey[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      7: Stage(
-          //widget: Text('Click on the page one to compose a map of widgets to show, then go to page two to play it', style: style),
-          widget: Container(
-            key: Key('7'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.pink[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      8: Stage(
-          //widget: Text('Click on the page one to compose a map of widgets to show, then go to page two to play it', style: style),
-          widget: Container(
-            key: Key('8'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.blue[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      9: Stage(
-          widget: Container(
-            key: Key('9'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.orange[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      10: Stage(
-          widget: Container(
-            key: Key('10'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.green[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-      11: Stage(
-          widget: Container(
-            key: Key('11'),
-            width: 200.0,
-            height: 200.0,
-            color: Colors.purple[200],
-            alignment: Alignment.center,
-            child: ScrollingText(text:'Stage', duration: 2000,),
-          ),
-          time: 5000,
-          data: null,
-          onShow: () {}),
-};*/
