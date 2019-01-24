@@ -839,7 +839,6 @@ FadeOutWidget(
 ```
 ## StagedWidget
 
-![StagedWidget](https://i.imgur.com/xmeojn1.gif)
 
 #### Usage
 ```dart
