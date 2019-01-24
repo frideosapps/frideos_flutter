@@ -36,10 +36,10 @@ class StagedWidgetPage extends StatelessWidget {
     }
 
     var backgrounds = [
-      _background('assets/images/1.jpg'),
+      _background('assets/images/4.jpg'),
       _background('assets/images/2.jpg'),
       _background('assets/images/3.jpg'),
-      _background('assets/images/4.jpg'),
+      _background('assets/images/1.jpg'),
     ];
 
     var stagesMap = <int, Stage>{
