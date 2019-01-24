@@ -96,8 +96,8 @@ class StagedWidgetPage extends StatelessWidget {
                 children: <Widget>[
                   // BACKGROUND TRANSITION
                   LinearTransition(
-                    firstWidget: backgrounds[0],
-                    secondWidget: backgrounds[1],
+                    firstWidget: backgrounds[1],
+                    secondWidget: backgrounds[2],
                     transitionDuration: 4000,
                   ),
                   // FOREGROUND TRANSITION
@@ -154,8 +154,8 @@ class StagedWidgetPage extends StatelessWidget {
                 children: <Widget>[
                   // BACKGROUND TRANSITION
                   LinearTransition(
-                    firstWidget: backgrounds[1],
-                    secondWidget: backgrounds[2],
+                    firstWidget: backgrounds[2],
+                    secondWidget: backgrounds[3],
                     transitionDuration: 3500,
                   ),
                   // FOREGROUND TRANSITION
@@ -190,8 +190,8 @@ class StagedWidgetPage extends StatelessWidget {
                 children: <Widget>[
                   // BACKGROUND TRANSITION
                   LinearTransition(
-                    firstWidget: backgrounds[2],
-                    secondWidget: backgrounds[3],
+                    firstWidget: backgrounds[3],
+                    secondWidget: backgrounds[0],
                     transitionDuration: 4000,
                   ),
                   Center(
@@ -226,8 +226,8 @@ class StagedWidgetPage extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   LinearTransition(
-                    firstWidget: backgrounds[3],
-                    secondWidget: backgrounds[0],
+                    firstWidget: backgrounds[0],
+                    secondWidget: backgrounds[1],
                     transitionDuration: 4000,
                   ),
                   Center(
