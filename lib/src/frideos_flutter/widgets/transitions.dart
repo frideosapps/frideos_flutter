@@ -6,10 +6,138 @@ import 'package:frideos/frideos_dart.dart';
 
 import '../extended_asyncwidgets.dart';
 
+///
+///
+/// Fade out widget.
+///
+///
+class FadeOutWidget extends StatefulWidget {
+  FadeOutWidget(
+      {Key key,
+      @required this.child,
+      @required this.duration,
+      this.curve = Curves.linear})
+      : super(key: key);
 
-/// 
+  final Widget child;
+  final int duration;
+  final Curve curve;
+
+  @override
+  _FadeOutWidgetState createState() {
+    return new _FadeOutWidgetState();
+  }
+}
+
+class _FadeOutWidgetState extends State<FadeOutWidget>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  CurvedAnimation animationCurve;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+        duration: Duration(milliseconds: widget.duration), vsync: this);
+    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve);
+
+    animationCurve.addListener(() {
+      setState(() {});
+    });
+
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Stack(
+      children: <Widget>[
+        Opacity(
+          opacity: 1.0 - animationCurve.value,
+          child: widget.child,
+        ),
+      ],
+    ));
+  }
+}
+
+
+///
+///
+/// Fade out widget.
+///
+///
+class FadeInWidget extends StatefulWidget {
+  FadeInWidget(
+      {Key key,
+      @required this.child,
+      @required this.duration,
+      this.curve = Curves.linear})
+      : super(key: key);
+
+  final Widget child;
+  final int duration;
+  final Curve curve;
+
+  @override
+  _FadeInWidgetState createState() {
+    return new _FadeInWidgetState();
+  }
+}
+
+class _FadeInWidgetState extends State<FadeInWidget>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  CurvedAnimation animationCurve;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+        duration: Duration(milliseconds: widget.duration), vsync: this);
+    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve);
+
+    animationCurve.addListener(() {
+      setState(() {});
+    });
+
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Stack(
+      children: <Widget>[
+        Opacity(
+          opacity: animationCurve.value,
+          child: widget.child,
+        ),
+      ],
+    ));
+  }
+}
+
+
+
+///
 /// Class used in the cross fading between two stages
-/// 
+///
 class StageBridge {
   int currentStage;
   Stage old;
@@ -76,7 +204,6 @@ class _LinearTransitionState extends State<LinearTransition> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.0),
       child: StreamedWidget<double>(
         initialData: 0,
         stream: opacity.outStream,
@@ -156,18 +283,17 @@ class _CurvedTransitionState extends State<CurvedTransition>
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(12.0),
         child: Stack(
-          children: <Widget>[
-            Opacity(
-              opacity: 1.0 - animationCurve.value,
-              child: widget.firstWidget,
-            ),
-            Opacity(
-              opacity: animationCurve.value,
-              child: widget.secondWidget,
-            ),
-          ],
-        ));
+      children: <Widget>[
+        Opacity(
+          opacity: 1.0 - animationCurve.value,
+          child: widget.firstWidget,
+        ),
+        Opacity(
+          opacity: animationCurve.value,
+          child: widget.secondWidget,
+        ),
+      ],
+    ));
   }
 }

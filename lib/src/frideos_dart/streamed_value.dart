@@ -67,7 +67,13 @@ class _StreamedValueBase<T> {
 /// 
 /// Then the StreamedValue is used to drive a [StreamedWidget]/StreamBuilder
 /// using the outStream getter.
-
+/// 
+/// 
+/// N.B. when the type is not a basic type (e.g int, double, String etc.) and 
+/// the value of a property of the object is changed, it is necessary to call 
+/// the [refresh] method to update the stream.
+/// 
+/// 
 /// #### Usage
 /// 
 /// ```dart
@@ -327,7 +333,7 @@ class TimerObject extends _StreamedValueBase<int> {
   ///
   startTimer() {
     if (!isTimerActive) {
-      print('Starting timer');
+      // print('Starting timer');
       _timer = Timer.periodic(_interval, (Timer t) => updateTime(t));
       isTimerActive = true;
     }
@@ -359,8 +365,7 @@ class TimerObject extends _StreamedValueBase<int> {
     if (isStopwatchActive) {
       var milliseconds = _stopwatch.elapsedMilliseconds;
       _stopwatchStreamed.value = milliseconds;
-      print('Time: $_time');
-      print(milliseconds);
+      // print(milliseconds);
       _stopwatch.reset();
       _stopwatch.start();
     }

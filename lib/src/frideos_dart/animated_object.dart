@@ -6,7 +6,7 @@ enum AnimatedStatus { active, stop, pause }
 
 ///
 ///
-/// This class is used to update a value over a period of time. 
+/// This class is used to update a value over a period of time.
 /// Useful to handle animations using the BLoC pattern.
 ///
 /// From the AnimatedObject example:
@@ -111,13 +111,13 @@ class AnimatedObject<T> {
   get animationStream => animation.outStream;
 
   /// The initial value of the animation
-  final T initialValue;
+  T initialValue;
 
   /// Timer to handle the timing
   final timer = TimerObject();
 
   /// Interval in milliseconds
-  final int interval;
+  int interval;
 
   ///
   /// AnimatedObject status
@@ -140,12 +140,11 @@ class AnimatedObject<T> {
 
   // In the callback increase the animation.value!
   start(Function(Timer t) callback) {
-    print('start: ${timer.isTimerActive}');
     if (!timer.isTimerActive) {
       animation.value = initialValue;
       timer.startPeriodic(
           Duration(milliseconds: interval), (Timer t) => callback(t));
-      // 
+      //
       _status.value = AnimatedStatus.active;
     }
   }

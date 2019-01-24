@@ -26,6 +26,9 @@ A collection of helpers, made with the intent to simplify the using of streams a
 - CurvedTransition
 - ScrollingText
 - Sliders
+- FadeInWidget
+- FadeOutWidget
+- StagedWidget
 
 ## [Examples](https://github.com/frideosapps/frideos_flutter/tree/master/examples/frideos_general)
 
@@ -147,6 +150,8 @@ counter.value += 1;
 ```
 
 Then the StreamedValue is used to drive a StreamedWidget/StreamBuilder using the outStream getter.
+
+N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the ```refresh``` method to update the stream.
 
 #### Usage
 
@@ -503,7 +508,7 @@ From the StagedObject example:
    Here the map is in the view and is set in the BLoC class by the setStagesMap.
 
 ```dart
-Map<int, Stage> get widgetsMap => <int, Stage>{
+Map<int, Stage> get stagesMap => <int, Stage>{
   0: Stage(
       widget: Container(
         width: 200.0,
@@ -549,11 +554,12 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
 
   // The map can be set through the constructor of the StagedObject
   // or by the setStagesMap method like in this case.
-  setMap(Map<int, Stage> widgetsMap) {
-    staged.setStagesMap(widgetsMap);
+  setMap(Map<int, Stage> stagesMap) {
+    staged.setStagesMap(stagesMap);
   }
 
 
+  // This method is then called from a button in the view
   start() {
     if (staged.getMapLength() > 0) {
       staged.setCallback(sendNextStageText);
@@ -561,7 +567,8 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
     }
   }
 
-
+  // By this method we get the next stage to show it
+  // in a little box below the current stage
   sendNextStageText() {
     var nextStage = staged.getNextStage();
     if (nextStage != null) {
@@ -582,7 +589,7 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
 ```dart
   // Setting the map in the build method
   StagedObjectBloc bloc = BlocProvider.of(context);
-  bloc.setMap(widgetsMap);
+  bloc.setMap(stagesMap);
 
 
   // To show the current widget on the view using the ReceiverWidget.
@@ -790,4 +797,101 @@ VerticalSlider(
   onSliding: (slider) {
     bloc.verticalSlider(slider);
     },
+```
+
+
+## FadeInWidget
+
+#### Usage
+
+```dart
+FadeInWidget(
+  duration: 7000,
+  child: ScrollingText(
+      text: 'Fade in text',
+      scrollingDuration: 2000,
+      style: TextStyle(
+        color: Colors.blue,
+        fontSize: 94.0,
+        fontWeight: FontWeight.w500,              
+      ),
+    ),
+),
+```
+
+## FadeOutWidget
+
+#### Usage
+
+```dart
+FadeOutWidget(
+  duration: 7000,
+  child: ScrollingText(
+      text: 'Fade out text',
+      scrollingDuration: 2000,
+      style: TextStyle(
+        color: Colors.blue,
+        fontSize: 94.0,
+        fontWeight: FontWeight.w500,              
+      ),
+    ),
+),
+```
+## StagedWidget
+
+![StagedWidget](https://i.imgur.com/xmeojn1.gif)
+
+#### Usage
+```dart
+1. #### Declare a map <int, Stage>
+   Here the map is in the view and is set in the BLoC class by the setStagesMap.
+
+```dart
+Map<int, Stage> get stagesMap => <int, Stage>{
+  0: Stage(
+      widget: Container(
+        width: 200.0,
+        height: 200.0,
+        color: Colors.indigo[200],
+        alignment: Alignment.center,
+        key: Key('0'),
+        child: ScrollingText(
+          text:
+            'This stage will last 8 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
+          scrollingDuration: 2000,
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 18.0,
+            fontWeight: FontWeight.w500)),
+        ),
+      time: 8000,
+      onShow: () {}),
+  1: Stage(
+      widget: Container(
+        width: 200.0,
+        height: 200.0,
+        color: Colors.indigo[200],
+        alignment: Alignment.center,
+        key: Key('00'),
+        child: ScrollingText(
+              text: 'The next widgets will cross      fade.',
+              scrollingDuration: 2000,
+            ),
+          ),
+      time: 8000,
+      onShow: () {}),
+
+}
+```
+
+2. #### In the view:
+```dart
+StagedWidget(
+  stagesMap: stagesMap,
+  onStart: // function to call,
+  onEnd: () {
+    // Function to call at the end of the last stage
+    // (only if relative timing):
+    // e.g. Navigator.pop(context);
+  }),
 ```

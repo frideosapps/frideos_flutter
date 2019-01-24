@@ -1,8 +1,18 @@
-## 0.0.2
-##
+## Version 0.0.3 (24-01-19)
+
+#### - Added the FadeInWidget
+#### - Added the FadeOutWidget
+#### - Added the StagedWidget
+
+#### - StagedObject class
+
+##### 1. Added the ```onEnd``` callback
+##### 2. The ```widgetsMap``` property was renamed to ```stagesMap```
 
 
-#### StreamedList class
+## Version 0.0.2
+
+#### - StreamedList class
 
 ##### 1. Added a getter for the length of the list
    
@@ -17,8 +27,8 @@
 *  removeElement
 *  removeAt
 *  clear
-##
-#### StreamedMap class
+
+#### - StreamedMap class
 
 ##### 1. Added a getter for the length of the map
    

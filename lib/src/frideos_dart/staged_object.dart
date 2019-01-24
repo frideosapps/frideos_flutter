@@ -45,7 +45,7 @@ const updateTimeStaged = 100;
 ///    Here the map is in the view and is set in the BLoC class by the setStagesMap.
 ///
 /// ```dart
-/// Map<int, Stage> get widgetsMap => <int, Stage>{
+/// Map<int, Stage> get stagesMap => <int, Stage>{
 ///   0: Stage(
 ///       widget: Container(
 ///         width: 200.0,
@@ -89,8 +89,8 @@ const updateTimeStaged = 100;
 ///
 ///   // The map can be set through the constructor of the StagedObject
 ///   // or by the setStagesMap method like in this case.
-///   setMap(Map<int, Stage> widgetsMap) {
-///     staged.setStagesMap(widgetsMap);
+///   setMap(Map<int, Stage> stagesMap) {
+///     staged.setStagesMap(stagesMap);
 ///   }
 ///
 ///   start() {
@@ -120,7 +120,7 @@ const updateTimeStaged = 100;
 /// ```dart
 ///   // Setting the map in the build method
 ///   StagedObjectBloc bloc = BlocProvider.of(context);
-///   bloc.setMap(widgetsMap);
+///   bloc.setMap(stagesMap);
 ///
 ///
 ///   // To show the current widget on the view using the ReceiverWidget.
@@ -132,8 +132,9 @@ const updateTimeStaged = 100;
 ///
 ///
 class StagedObject {
-  //Default constructor
-  StagedObject({this.absoluteTiming = false, this.callbackOnStart = true}) {
+  // Default constructor
+  StagedObject(
+      {this.absoluteTiming = false, this.callbackOnStart = true}) {
     if (absoluteTiming) {
       periodic = checkAbsolute;
     } else {
@@ -141,7 +142,7 @@ class StagedObject {
     }
   }
 
-  StagedObject.withMap(Map<int, Stage> widgetsMap,
+  StagedObject.withMap(Map<int, Stage> stagesMap,
       {this.absoluteTiming = false, this.callbackOnStart = true}) {
     if (absoluteTiming) {
       periodic = checkAbsolute;
@@ -149,10 +150,10 @@ class StagedObject {
       periodic = checkRelative;
     }
 
-    _widgetsMap = widgetsMap;
+    _stagesMap = stagesMap;
 
     // Extract the times
-    widgetsMap.forEach((k, v) => _stages.add(v.time));
+    stagesMap.forEach((k, v) => _stages.add(v.time));
 
     // Buffering the list
     _stagesBuffer.addAll(_stages);
@@ -204,7 +205,7 @@ class StagedObject {
 
   /// Map of widgets
   ///
-  Map<int, Stage> _widgetsMap;
+  Map<int, Stage> _stagesMap;
 
   /// Every widget is sent to this stream
   ///
@@ -214,38 +215,57 @@ class StagedObject {
   ///
   Stream<Widget> get widgetStream => _widgetStream.outStream;
 
-  /// Callback
+  /// This callback it is not stage specific and it is called
+  /// everytime the stage changes. Setting the [callbackOnStart]
+  /// to false, the callback it is not called at the stage 0.
   ///
   Function() _callback = () {};
+
+  /// By default the callback it is called at the beginning
+  /// and on every stage change, set to false to disable the
+  /// call of the callback at the stage 0. Default is true.
   bool callbackOnStart = true;
+
+  /// This callback is called at the end.
+  Function() _onEnd = () {};
 
   /// Type of timing, absolute or relative
   ///
   bool absoluteTiming;
+
+  /// By this function is set the type of timing: absolute or relative
   Function(Timer t) periodic;
 
   clearMap() {
-    _widgetsMap.clear();
+    _stagesMap.clear();
   }
 
-  setStagesMap(Map<int, Stage> widgetsMap) {
-    _widgetsMap = widgetsMap;
+  /// To se the map of the stages
+  setStagesMap(Map<int, Stage> stagesMap) {
+    _stagesMap = stagesMap;
 
     // Extract the times
     if (_stages.length > 0) _stages.clear();
-    widgetsMap.forEach((k, v) => _stages.add(v.time));
+    stagesMap.forEach((k, v) => _stages.add(v.time));
   }
 
   getMapLength() {
-    return _widgetsMap.length;
+    return _stagesMap.length;
   }
 
+  /// To set the callback non widget specific (this is called
+  /// on every stage change and at the beginning if the flag [callbackOnStart]
+  /// it is not set to false, default is true).
   setCallback(Function callback) {
     _callback = callback;
   }
 
+  setOnEndCallback(Function callback) {
+    _onEnd = callback;
+  }
+
   Stage getCurrentStage() {
-    return _widgetsMap[stageIndex];
+    return _stagesMap[stageIndex];
   }
 
   int getStageIndex() {
@@ -254,8 +274,8 @@ class StagedObject {
 
   Stage getNextStage() {
     var nextStage = stageIndex + 1;
-    if (_widgetsMap.containsKey(nextStage)) {
-      return _widgetsMap[nextStage];
+    if (_stagesMap.containsKey(nextStage)) {
+      return _stagesMap[nextStage];
     } else {
       return null;
     }
@@ -263,17 +283,17 @@ class StagedObject {
 
   Stage getStage(int index) {
     // Adding check?
-    return _widgetsMap[index];
+    return _stagesMap[index];
   }
 
   startStages() {
-    if (!_timerObject.isTimerActive && _widgetsMap != null) {
+    if (!_timerObject.isTimerActive && _stagesMap != null) {
       // Buffer the list
       if (_stagesBuffer.length > 0) _stagesBuffer.clear();
       _stagesBuffer.addAll(_stages);
 
       // Show the first element of the list of widgets
-      _widgetStream.value = _widgetsMap[0].widget;
+      _widgetStream.value = _stagesMap[0].widget;
 
       // Set the stage index to the first element
       stageIndex = 0;
@@ -286,6 +306,11 @@ class StagedObject {
 
       _status.value = StageStatus.active;
 
+      // Call the onShow function
+      if (_stagesMap[stageIndex].onShow != null) {
+        _stagesMap[stageIndex].onShow();
+      }
+
       // Calling the callback on start if the flag isn't set to false
       if (callbackOnStart) {
         _callback();
@@ -294,23 +319,29 @@ class StagedObject {
   }
 
   resetStages() {
-    print('Reset stages');
+    // print('Reset stages');
     // Refresh the buffer with the original list
     _stagesBuffer.clear();
     _stagesBuffer.addAll(_stages);
 
     // Set the stage to the first element
     stageIndex = 0;
-    _widgetStream.value = _widgetsMap[0].widget;
+    _widgetStream.value = _stagesMap[0].widget;
 
     isLastStage = false;
   }
 
   stopStages() {
-    print('Stop stages');
+    // print('Stop stages');
     _timerObject.stopTimer();
     lastStageTime = 0;
     _status.value = StageStatus.stop;
+
+    // Calling the onEnd callback if the timing is relative
+    if (!absoluteTiming) {
+      var time = _stagesMap[stageIndex].time;
+      Timer(Duration(milliseconds: time), _onEnd);
+    }
   }
 
   // check for absolute time position
@@ -327,10 +358,8 @@ class StagedObject {
       // If the current time is between +/- 100ms of an item of the stages
       if (currentTime >= stage - stageTimeMargin &&
           currentTime <= stage + stageTimeMargin) {
-        print('MATCH ->  T:$currentTime, S:$stage');
-
         // Send to stream the new widget
-        _widgetStream.value = _widgetsMap[stageIndex].widget;
+        _widgetStream.value = _stagesMap[stageIndex].widget;
 
         // To call the general callback and the onShow callback of the single windget
         _callCallbacks();
@@ -373,14 +402,10 @@ class StagedObject {
         stageIndex++;
 
         // Send to stream the new widget
-        _widgetStream.value = _widgetsMap[stageIndex].widget;
+        _widgetStream.value = _stagesMap[stageIndex].widget;
 
         // To call the general callback and the onShow callback of the single windget
         _callCallbacks();
-
-        // print(widgetStream.value);
-        // print('MATCH ->  T:$currentTime, S:$stage');
-        // print('Length: ${_stagesBuffer.length}');
 
         // Remove the current item
         _stagesBuffer.removeAt(0);
@@ -397,13 +422,13 @@ class StagedObject {
 
   _callCallbacks() {
     // Call the onShow function
-    if (_widgetsMap[stageIndex].onShow != null) {
-      _widgetsMap[stageIndex].onShow();
+    if (_stagesMap[stageIndex].onShow != null) {
+      _stagesMap[stageIndex].onShow();
     }
 
     // Calling the callback
     // If no callback is set then this is -> () {}
-    _callback();
+    _callback();    
   }
 
   dispose() {
