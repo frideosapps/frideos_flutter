@@ -6,6 +6,7 @@ Examples that show how to use this library to simplify the use of the BLoC patte
 * ### Streamed collections
 * ### TimerObject: a simple stopwatch 
 * ### StagedObject
+* ### StagedWidget
 * ### AnimatedObject
 * ### Multiple selection and tunnel pattern  (to share data between two blocs)
 * ### LinearTransition
@@ -18,7 +19,8 @@ Examples that show how to use this library to simplify the use of the BLoC patte
 ![Screenshot](screenshots/streamed.png?s=150)
 ![Screenshot](screenshots/streamedlist.png?s=150)
 ![Screenshot](screenshots/streamedmap.png?s=150)
-![StagedObject](https://i.imgur.com/OaCgxiv.gif)
+![StagedObject](https://i.imgur.com/9XLb7JD.gif)
+![StagedWidget](https://i.imgur.com/nCsbJCy.gif)
 ![AnimatedObject](https://i.imgur.com/jBETLuj.gif)
 ![MultipleSelection](https://i.imgur.com/nGLRiCY.gif)
 ![LinearTransition](https://i.imgur.com/mqB3pRA.gif)
