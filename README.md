@@ -842,7 +842,7 @@ FadeOutWidget(
 ![StagedWidget](https://i.imgur.com/nCsbJCy.gif)
 
 #### Usage
-```dart
+
 1. #### Declare a map <int, Stage>
    Here the map is in the view and is set in the BLoC class by the setStagesMap.
 
