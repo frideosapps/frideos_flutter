@@ -5,6 +5,28 @@ import 'package:frideos/frideos.dart';
 class LinearTransitionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _background(MaterialColor color) {
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.1, 0.5, 1.0],
+            colors: [
+              color[900],
+              color[600],
+              color[300],
+            ],
+          ),
+        ),
+      );
+    }
+
+    var backgrounds = [
+      _background(Colors.blue),
+      _background(Colors.pink),
+    ];
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -13,8 +35,8 @@ class LinearTransitionPage extends StatelessWidget {
         body: Container(
           alignment: Alignment.center,
           child: LinearTransition(
-            firstWidget: Image.asset('assets/images/1.jpg', fit: BoxFit.fill),
-            secondWidget: Image.asset('assets/images/2.jpg', fit: BoxFit.fill),
+            firstWidget: backgrounds[0],
+            secondWidget: backgrounds[1],
             transitionDuration: 4000,
           ),
         ),

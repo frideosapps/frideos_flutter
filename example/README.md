@@ -23,6 +23,6 @@ Examples that show how to use this library to simplify the use of the BLoC patte
 ![StagedWidget](https://i.imgur.com/nCsbJCy.gif)
 ![AnimatedObject](https://i.imgur.com/jBETLuj.gif)
 ![MultipleSelection](https://i.imgur.com/nGLRiCY.gif)
-![LinearTransition](https://i.imgur.com/mqB3pRA.gif)
-![CurvedTransition](https://i.imgur.com/HMa4mwW.gif)
+![LinearTransition](https://i.imgur.com/CWJcIbh.gif)
+![CurvedTransition](https://i.imgur.com/wc0DK5w.gif)
 ![Sliders](https://i.imgur.com/H16VE01.gif)

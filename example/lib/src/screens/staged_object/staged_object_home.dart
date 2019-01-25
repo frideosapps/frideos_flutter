@@ -43,25 +43,7 @@ class StagedHomePage extends StatelessWidget {
       _background(Colors.blueGrey),
       _background(Colors.orange),
     ];
-/*
-    var widgets = [
-      SizedBox(
-          height: height,
-          width: width,
-          child: Image.asset('assets/images/1.jpg', fit: BoxFit.fill)),
-      SizedBox(
-          height: height,
-          width: width,
-          child: Image.asset('assets/images/2.jpg', fit: BoxFit.fill)),
-      SizedBox(
-          height: height,
-          width: width,
-          child: Image.asset('assets/images/3.jpg', fit: BoxFit.fill)),
-      SizedBox(
-          height: height,
-          width: width,
-          child: Image.asset('assets/images/4.jpg', fit: BoxFit.fill)),
-    ];*/
+
 
     var stagesMap = <int, Stage>{
       0: Stage(
