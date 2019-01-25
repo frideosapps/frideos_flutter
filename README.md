@@ -30,7 +30,7 @@ A collection of helpers, made with the intent to simplify the using of streams a
 - FadeOutWidget
 - StagedWidget
 
-## [Examples](https://github.com/frideosapps/frideos_flutter/tree/master/examples/frideos_general)
+## [Examples](https://github.com/frideosapps/frideos_flutter/tree/master/example)
 
 Examples that show how to use this library.
 
