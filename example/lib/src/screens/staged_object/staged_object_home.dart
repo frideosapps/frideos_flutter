@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:frideos/frideos_flutter.dart';
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/blocs/staged_object/staged_object_bloc.dart';
+import '../../blocs/bloc.dart';
+import '../../blocs/staged_object/staged_object_bloc.dart';
 
 import 'staged_object_page_one.dart';
 import 'staged_object_page_two.dart';

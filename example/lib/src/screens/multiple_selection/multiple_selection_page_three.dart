@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos_flutter.dart';
 
-import 'package:frideos_general/src/blocs/multiple_selection/multiple_selection_page_three_bloc.dart';
-import 'package:frideos_general/src/models/item_model.dart';
+import '../../blocs/multiple_selection/multiple_selection_page_three_bloc.dart';
+import '../../models/item_model.dart';
 
 class MultipleSelectionPageThree extends StatelessWidget {
   MultipleSelectionPageThree({this.bloc});

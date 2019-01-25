@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/blocs/animated_object_bloc.dart';
+import '../blocs/bloc.dart';
+import '../blocs/animated_object_bloc.dart';
 
 class AnimatedObjectPage extends StatelessWidget {
   @override

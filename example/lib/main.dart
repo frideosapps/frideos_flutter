@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos_general/src/homepage.dart';
+import 'src/homepage.dart';
 
 void main() => runApp(MyApp());
 

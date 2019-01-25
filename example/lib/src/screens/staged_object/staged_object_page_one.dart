@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frideos/frideos_flutter.dart';
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/staged_object/staged_page_one_bloc.dart';
+import '../../blocs/staged_object/staged_page_one_bloc.dart';
 
 class StagedPageOne extends StatelessWidget {
   StagedPageOne({this.bloc});

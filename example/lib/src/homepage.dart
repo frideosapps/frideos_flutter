@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos_general/src/blocs/animated_object_bloc.dart';
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/blocs/sliders_bloc.dart';
-import 'package:frideos_general/src/blocs/staged_widget_bloc.dart';
-import 'package:frideos_general/src/blocs/staged_object/staged_object_bloc.dart';
-import 'package:frideos_general/src/blocs/streamed_list_bloc.dart';
-import 'package:frideos_general/src/blocs/streamed_map_bloc.dart';
-import 'package:frideos_general/src/blocs/streamed_values_bloc.dart';
-import 'package:frideos_general/src/blocs/timer_object_bloc.dart';
-import 'package:frideos_general/src/blocs/multiple_selection/multiple_selection_bloc.dart';
+import '../src/blocs/animated_object_bloc.dart';
+import '../src/blocs/bloc.dart';
+import '../src/blocs/sliders_bloc.dart';
+import '../src/blocs/staged_widget_bloc.dart';
+import '../src/blocs/staged_object/staged_object_bloc.dart';
+import '../src/blocs/streamed_list_bloc.dart';
+import '../src/blocs/streamed_map_bloc.dart';
+import '../src/blocs/streamed_values_bloc.dart';
+import '../src/blocs/timer_object_bloc.dart';
+import '../src/blocs/multiple_selection/multiple_selection_bloc.dart';
 
 import 'screens/animated_object_page.dart';
 import 'screens/curvedtransition_page.dart';

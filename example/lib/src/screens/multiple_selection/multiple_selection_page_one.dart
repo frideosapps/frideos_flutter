@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos_flutter.dart';
 
-import 'package:frideos_general/src/blocs/multiple_selection/multiple_selection_page_one_bloc.dart';
+import '../../blocs/multiple_selection/multiple_selection_page_one_bloc.dart';
 
 class MultipleSelectionPageOne extends StatelessWidget {
   MultipleSelectionPageOne({this.bloc});

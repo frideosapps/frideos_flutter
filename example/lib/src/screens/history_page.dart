@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos_flutter.dart';
 
-import 'package:frideos_general/src/blocs/streamed_values_bloc.dart';
+import '../blocs/streamed_values_bloc.dart';
 
 class HistoryPage extends StatelessWidget {
   HistoryPage(this.bloc);

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos_flutter.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/blocs/streamed_values_bloc.dart';
+import '../blocs/bloc.dart';
+import '../blocs/streamed_values_bloc.dart';
 
 import 'history_page.dart';
 

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/models/item_model.dart';
+import '../../blocs/bloc.dart';
+import '../../models/item_model.dart';
 
 const double opacitySpeed = 0.090;
 

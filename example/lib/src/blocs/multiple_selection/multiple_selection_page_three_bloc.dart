@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/models/item_model.dart';
+import '../../blocs/bloc.dart';
+import '../../models/item_model.dart';
 
 class PageThreeBloc extends BlocBase {
   final items = StreamedList<Item>();

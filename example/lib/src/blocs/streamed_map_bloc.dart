@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
+import '../blocs/bloc.dart';
 
 class StreamedMapBloc extends BlocBase with Validators {
   StreamedMapBloc() {

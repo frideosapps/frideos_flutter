@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos_flutter.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/blocs/streamed_list_bloc.dart';
+import '../blocs/bloc.dart';
+import '../blocs/streamed_list_bloc.dart';
 
 const styleHeader =
     TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);

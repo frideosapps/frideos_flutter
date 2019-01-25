@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos_general/src/blocs/multiple_selection/multiple_selection_bloc.dart';
+import '../../blocs/bloc.dart';
+import '../../blocs/multiple_selection/multiple_selection_bloc.dart';
 
 import 'multiple_selection_page_one.dart';
 import 'multiple_selection_page_two.dart';

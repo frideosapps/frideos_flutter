@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
+import '../blocs/bloc.dart';
 
 class StagedWidgetBloc extends BlocBase {
   StagedWidgetBloc() {

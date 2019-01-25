@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:frideos/frideos_dart.dart';
 
-import 'package:frideos_general/src/blocs/bloc.dart';
+import '../blocs/bloc.dart';
 
 class AnimatedObjectBloc extends BlocBase {
   AnimatedObjectBloc() {

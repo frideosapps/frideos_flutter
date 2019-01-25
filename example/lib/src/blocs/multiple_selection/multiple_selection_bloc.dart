@@ -1,5 +1,4 @@
-import 'package:frideos_general/src/blocs/bloc.dart';
-import 'package:frideos/frideos_dart.dart';
+import '../../blocs/bloc.dart';
 
 import 'multiple_selection_page_one_bloc.dart';
 import 'multiple_selection_page_two_bloc.dart';
