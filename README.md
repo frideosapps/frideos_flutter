@@ -485,7 +485,7 @@ From the AnimatedObject example:
 
 A complex class to hadle the rendering of widgets over the time. It takes a collection of "Stages" and triggers the visualization of the widgets at a given time (relative o absolute timing). For example to make a demostration on how to use an application, showing the widgets and pages along with explanations.
 
-![StagedObject](https://i.imgur.com/OaCgxiv.gif)
+![StagedObject](https://i.imgur.com/9XLb7JD.gif)
 
 Every stage is handled by using the Stage class:
 
@@ -717,7 +717,7 @@ N.B. The callback is executed only if the respective child is not provided.
 
 Linear cross fading transition between two widgets, it can be used with the [StagedObject].
 
-![LinearTransition](https://i.imgur.com/mqB3pRA.gif)
+![LinearTransition](https://i.imgur.com/CWJcIbh.gif)
 
 #### Usage
 
@@ -735,7 +735,7 @@ LinearTransition(
 
 Cross fading transition between two widgets. This uses the Flutter way to make an animation.
 
-![CurvedTransition](https://i.imgur.com/HMa4mwW.gif)
+![CurvedTransition](https://i.imgur.com/wc0DK5w.gif)
 
 #### Usage
 
@@ -839,6 +839,7 @@ FadeOutWidget(
 ```
 ## StagedWidget
 
+![StagedWidget](https://i.imgur.com/nCsbJCy.gif)
 
 #### Usage
 ```dart
