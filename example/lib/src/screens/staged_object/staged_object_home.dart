@@ -18,12 +18,50 @@ class StagedHomePage extends StatelessWidget {
     var width = MediaQuery.of(context).size.width * 0.7;
     var height = MediaQuery.of(context).size.height * 0.6;
 
-    var widgets = [
-      SizedBox(height: height, width: width, child: Image.asset('assets/images/1.jpg', fit: BoxFit.fill)),
-      SizedBox(height: height, width: width, child: Image.asset('assets/images/2.jpg', fit: BoxFit.fill)),
-      SizedBox(height: height, width: width, child: Image.asset('assets/images/3.jpg', fit: BoxFit.fill)),
-      SizedBox(height: height, width: width, child: Image.asset('assets/images/4.jpg', fit: BoxFit.fill)),
+    _background(MaterialColor color) {
+      return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.1, 0.5, 1.0],
+            colors: [
+              color[900],
+              color[600],
+              color[300],
+            ],
+          ),
+        ),
+      );
+    }
+
+    var backgrounds = [
+      _background(Colors.blue),
+      _background(Colors.pink),
+      _background(Colors.blueGrey),
+      _background(Colors.orange),
     ];
+/*
+    var widgets = [
+      SizedBox(
+          height: height,
+          width: width,
+          child: Image.asset('assets/images/1.jpg', fit: BoxFit.fill)),
+      SizedBox(
+          height: height,
+          width: width,
+          child: Image.asset('assets/images/2.jpg', fit: BoxFit.fill)),
+      SizedBox(
+          height: height,
+          width: width,
+          child: Image.asset('assets/images/3.jpg', fit: BoxFit.fill)),
+      SizedBox(
+          height: height,
+          width: width,
+          child: Image.asset('assets/images/4.jpg', fit: BoxFit.fill)),
+    ];*/
 
     var stagesMap = <int, Stage>{
       0: Stage(
@@ -66,8 +104,8 @@ class StagedHomePage extends StatelessWidget {
           widget: Container(
               key: Key('2'),
               child: LinearTransition(
-                firstWidget: widgets[0],
-                secondWidget: widgets[1],
+                firstWidget: backgrounds[0],
+                secondWidget: backgrounds[1],
                 transitionDuration: 4000,
               )),
           time: 5000,
@@ -76,8 +114,8 @@ class StagedHomePage extends StatelessWidget {
           widget: Container(
               key: Key('3'),
               child: CurvedTransition(
-                firstWidget: widgets[2],
-                secondWidget: widgets[3],
+                firstWidget: backgrounds[2],
+                secondWidget: backgrounds[3],
                 transitionDuration: 4000,
                 curve: Curves.bounceOut,
               )),
@@ -87,8 +125,8 @@ class StagedHomePage extends StatelessWidget {
           widget: Container(
               key: Key('4'),
               child: LinearTransition(
-                firstWidget: widgets[1],
-                secondWidget: widgets[2],
+                firstWidget: backgrounds[1],
+                secondWidget: backgrounds[2],
                 transitionDuration: 4000,
               )),
           time: 5000,
@@ -97,8 +135,8 @@ class StagedHomePage extends StatelessWidget {
           widget: Container(
               key: Key('5'),
               child: CurvedTransition(
-                firstWidget: widgets[3],
-                secondWidget: widgets[0],
+                firstWidget: backgrounds[3],
+                secondWidget: backgrounds[0],
                 transitionDuration: 4000,
                 curve: Curves.bounceInOut,
               )),
@@ -107,7 +145,7 @@ class StagedHomePage extends StatelessWidget {
       6: Stage(
           widget: Container(
             width: width,
-            height: height,            
+            height: height,
             alignment: Alignment.center,
             key: Key('6'),
             child: Column(

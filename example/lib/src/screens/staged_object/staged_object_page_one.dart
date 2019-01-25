@@ -10,10 +10,40 @@ class StagedPageOne extends StatelessWidget {
 
   final StagedPageOneBloc bloc;
 
-   @override
+  @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width * 0.5;
     var height = MediaQuery.of(context).size.height * 0.3;
+
+    _background(MaterialColor color) {
+      return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent, width: 0.0),
+          borderRadius: BorderRadius.circular(25.0),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.1, 0.5, 1.0],
+            colors: [
+              color[900],
+              color[600],
+              color[300],
+            ],
+          ),
+        ),
+      );
+    }
+
+    var backgrounds = [
+      _background(Colors.teal),
+      _background(Colors.blue),
+      _background(Colors.pink),
+      _background(Colors.blueGrey),
+      _background(Colors.orange),
+      _background(Colors.purple),
+    ];
 
     var stagesMap = <int, Stage>{
       0: Stage(
@@ -27,9 +57,8 @@ class StagedPageOne extends StatelessWidget {
               borderRadius: BorderRadius.circular(25.0),
             ),
             child: CurvedTransition(
-              firstWidget: Image.asset('assets/images/1.jpg', fit: BoxFit.fill),
-              secondWidget:
-                  Image.asset('assets/images/2.jpg', fit: BoxFit.fill),
+              firstWidget: backgrounds[0],
+              secondWidget: backgrounds[1],
               transitionDuration: 4000,
               curve: Curves.bounceInOut,
             ),
@@ -47,8 +76,8 @@ class StagedPageOne extends StatelessWidget {
               borderRadius: BorderRadius.circular(25.0),
             ),
             child: LinearTransition(
-              firstWidget: Image.asset('assets/images/3.jpg', fit: BoxFit.fill),
-              secondWidget: Image.asset('assets/images/4.jpg', fit: BoxFit.fill),
+              firstWidget: backgrounds[1],
+              secondWidget: backgrounds[2],
               transitionDuration: 4000,
             ),
           ),
@@ -65,8 +94,8 @@ class StagedPageOne extends StatelessWidget {
               borderRadius: BorderRadius.circular(25.0),
             ),
             child: LinearTransition(
-              firstWidget: Container(color: Colors.teal),
-              secondWidget: Container(color: Colors.blue[700]),
+              firstWidget: backgrounds[2],
+              secondWidget: backgrounds[3],
               transitionDuration: 3000,
             ),
           ),
@@ -83,8 +112,8 @@ class StagedPageOne extends StatelessWidget {
               borderRadius: BorderRadius.circular(25.0),
             ),
             child: CurvedTransition(
-              firstWidget: Container(color: Colors.blue),
-              secondWidget: Container(color: Colors.pink),
+              firstWidget: backgrounds[3],
+              secondWidget: backgrounds[4],
               transitionDuration: 3000,
               curve: Curves.bounceInOut,
             ),

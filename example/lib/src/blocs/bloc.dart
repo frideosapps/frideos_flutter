@@ -10,21 +10,21 @@ class BlocProvider extends StatefulWidget {
   final Widget child;
 
   @override
-  BlocProviderState createState() {
-    return new BlocProviderState();
+  _BlocProviderState createState() {
+    return new _BlocProviderState();
   }
 
   static BlocBase of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(InheritedBloc)
-            as InheritedBloc)
+    return (context.inheritFromWidgetOfExactType(_InheritedBloc)
+            as _InheritedBloc)
         .bloc;
   }
 }
 
-class BlocProviderState extends State<BlocProvider> {
+class _BlocProviderState extends State<BlocProvider> {
   @override
   Widget build(BuildContext context) {
-    return InheritedBloc(bloc: widget.bloc, child: widget.child);
+    return _InheritedBloc(bloc: widget.bloc, child: widget.child);
   }
 
   @override
@@ -34,17 +34,15 @@ class BlocProviderState extends State<BlocProvider> {
   }
 }
 
-class InheritedBloc extends InheritedWidget {
+class _InheritedBloc extends InheritedWidget {
   final BlocBase bloc;
 
-  InheritedBloc({
+  _InheritedBloc({
     Key key,
     @required this.bloc,
     @required Widget child,
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(InheritedBloc old) => bloc != old.bloc;
+  bool updateShouldNotify(_InheritedBloc old) => bloc != old.bloc;
 }
-
-
