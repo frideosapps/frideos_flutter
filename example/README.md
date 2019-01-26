@@ -1,4 +1,4 @@
-# Frideos-flutter examples
+# Frideos examples
 
 Example app to show how to use this library: 
 
@@ -12,6 +12,11 @@ Example app to show how to use this library:
 * ### LinearTransition
 * ### CurvedTransition
 * ### Sliders
+  
+
+
+
+
 
 
 ### StramedMap example

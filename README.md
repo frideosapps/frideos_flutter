@@ -1,4 +1,4 @@
-# Frideos-flutter
+# Frideos
 
 A collection of helpers, made with the intent to simplify the using of streams and the BLoC pattern, and various widgets for Flutter (animations, transitions, timed widgets, scrollingtext, etc.).
 
