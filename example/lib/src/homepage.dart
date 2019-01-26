@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Streamed list'),
+              title: Text('StreamedList'),
               onTap: () {
                 Navigator.pop(context);
 
@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Streamed map'),
+              title: Text('StreamedMap'),
               onTap: () {
                 Navigator.pop(context);
 
@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Timer object'),
+              title: Text('TimerObject'),
               onTap: () {
                 Navigator.pop(context);
 
@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Animated object'),
+              title: Text('AnimatedObject'),
               onTap: () {
                 Navigator.pop(context);
 
@@ -186,7 +186,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Curved transition'),
+              title: Text('CurvedTransition'),
               onTap: () {
                 Navigator.pop(context);
 
@@ -201,7 +201,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Linear transition'),
+              title: Text('LinearTransition'),
               onTap: () {
                 Navigator.pop(context);
 

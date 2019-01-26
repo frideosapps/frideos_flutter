@@ -107,7 +107,7 @@ class MemoryWidget extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) =>
                   Column(
                     children: <Widget>[
-                      Text('Value: ${bloc.countMemory.value}',
+                      Text('Value: ${snapshot.data}',
                           style: styleValue),
                       Text('oldValue: ${bloc.countMemory.oldValue}',
                           style: styleOldValue),

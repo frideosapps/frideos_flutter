@@ -20,8 +20,7 @@ class StreamedMapBloc extends BlocBase with Validators {
   final streamedKey = StreamedTransformed<String, int>();
 
   Observable<bool> get isFilled => Observable.combineLatest2(
-      streamedText.outStream, streamedKey.outTransformed, (a, b) => true);
-
+      streamedText.outTransformed, streamedKey.outTransformed, (a, b) => true);
 
   // Add to the streamed map the key/value pair put by the user 
   addText() {

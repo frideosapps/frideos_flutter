@@ -5,6 +5,7 @@ import 'package:frideos/frideos_flutter.dart';
 import '../blocs/bloc.dart';
 import '../blocs/streamed_list_bloc.dart';
 
+
 const styleHeader =
     TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
 const styleValue = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);

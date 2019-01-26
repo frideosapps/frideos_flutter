@@ -8,7 +8,7 @@ import '../extended_asyncwidgets.dart';
 
 ///
 ///
-/// Fade out widget.
+/// Fade out transition widget.
 ///
 ///
 class FadeOutWidget extends StatefulWidget {
@@ -72,7 +72,7 @@ class _FadeOutWidgetState extends State<FadeOutWidget>
 
 ///
 ///
-/// Fade out widget.
+/// Fade in transition widget.
 ///
 ///
 class FadeInWidget extends StatefulWidget {

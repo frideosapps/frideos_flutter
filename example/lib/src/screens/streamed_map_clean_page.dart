@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:frideos/frideos_flutter.dart';
 
 import '../blocs/bloc.dart';
-import '../blocs/streamed_map_bloc.dart';
-
 import '../blocs/streamed_map_clean_bloc.dart';
-import '../screens/streamed_map_clean_page.dart';
+
 
 const styleHeader =
     TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
@@ -16,7 +14,7 @@ const styleOldValue =
 const padding = 22.0;
 const buttonColor = Color(0xff99cef9);
 
-class StreamedMapPage extends StatelessWidget {
+class StreamedMapCleanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -25,40 +23,25 @@ class StreamedMapPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('StreamedMap'),
         ),
-        body: StreamedMapWidget(),
+        body: StreamedMapCleanWidget(),
       ),
     );
   }
 }
 
-class StreamedMapWidget extends StatelessWidget {
+class StreamedMapCleanWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final StreamedMapBloc bloc = BlocProvider.of(context);
+    final StreamedMapCleanBloc bloc = BlocProvider.of(context);
 
     return Column(
       children: <Widget>[
         Container(
           height: 16.0,
         ),
-        RaisedButton(
-          child: Text('Classic BLoC'),
-          onPressed: () {
-            final bloc = StreamedMapCleanBloc();
-
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                        bloc: bloc,
-                        child: StreamedMapCleanPage(),
-                      ),
-                ));
-          },
-        ),
         Text('StreamedMap', style: styleHeader),
-        StreamBuilder<String>(           
-            stream: bloc.streamedText.outTransformed,
+        StreamBuilder<String>(            
+            stream: bloc.outTextTransformed,
             builder: (context, AsyncSnapshot<String> snapshot) {
               return Column(
                 children: <Widget>[
@@ -77,14 +60,14 @@ class StreamedMapWidget extends StatelessWidget {
                         hintText: 'Insert a text...',
                         errorText: snapshot.error,
                       ),
-                      onChanged: bloc.streamedText.inStream,
+                      onChanged: bloc.inText,
                     ),
                   ),
                 ],
               );
             }),
         StreamBuilder(
-            stream: bloc.streamedKey.outTransformed,
+            stream: bloc.outKeyTransformed,
             builder: (context, AsyncSnapshot<int> snapshot) {
               return Column(
                 children: <Widget>[
@@ -106,7 +89,7 @@ class StreamedMapWidget extends StatelessWidget {
                       // To avoid the user could insert text use the TextInputType.number
                       // Here is commented to show the error msg.
                       //keyboardType: TextInputType.number,
-                      onChanged: bloc.streamedKey.inStream,
+                      onChanged: bloc.inKey,
                     ),
                   ),
                 ],
@@ -124,7 +107,7 @@ class StreamedMapWidget extends StatelessWidget {
         Container(height: 20.0),
         Expanded(
           child: StreamedWidget<Map<int, String>>(            
-            stream: bloc.streamedMap.outStream,
+            stream: bloc.outMap,
             builder: (BuildContext context,
                 AsyncSnapshot<Map<int, String>> snapshot) {
               return ListView.builder(
