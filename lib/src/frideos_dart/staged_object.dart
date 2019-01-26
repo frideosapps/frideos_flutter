@@ -3,19 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'streamed_value.dart';
+import 'models/stage.dart';
 
 ///
-/// This class is used to handle the stages:
+/// Enum to handle the Status of the StagedObject
 ///
-class Stage {
-  Widget widget;
-  int time; // milliseconds
-  Function onShow = () {};
-  Stage({this.widget, this.time, this.onShow});
-}
-
 enum StageStatus { active, stop }
 
+///
+/// Interval in millisecond to check for the next stage
+///
 const updateTimeStaged = 100;
 
 /// A complex class to hadle the rendering of widgets over the time.
@@ -167,9 +164,11 @@ class StagedObject {
   ///
   final _status = StreamedValue<StageStatus>();
 
+  /// Getters for the stream of status
   Stream<StageStatus> get statusStream => _status.outStream;
 
-  get getStatus => _status;
+  /// Status of the StagedObject
+  StreamedValue<StageStatus> get getStatus => _status;
 
   ///
   /// Used for timing the stages

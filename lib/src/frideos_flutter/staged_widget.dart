@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos/frideos_dart.dart';
+import 'receiver_widget.dart';
+import '../frideos_dart/models/stage.dart';
+import '../frideos_dart/staged_object.dart';
 
-import '../receiver_widget.dart';
+
 
 ///
 ///
@@ -11,8 +13,8 @@ import '../receiver_widget.dart';
 /// 
 /// It takes as a parameter a Map<int, Stage> and plays every [Stage].
 /// 
-/// By default to change the stage is used the relative time, so the [time]
-/// parameter of the stage indicates how much time the stage will lasts. Instead, 
+/// By default to change the stage is used the relative time, so the time
+/// parameter of the [Stage] indicates how much time the stage will lasts. Instead, 
 /// to specify the absolute time, set to true the [absoluteTiming] flag, in this case
 /// the time parameter indicates the absolute time when to show the widget.
 ///

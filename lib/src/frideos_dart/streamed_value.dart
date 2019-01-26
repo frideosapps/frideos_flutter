@@ -16,7 +16,7 @@ class _StreamedValueBase<T> {
   int timesUpdated = 0;
 
   /// Sink for the stream
-  Function(T) get inStream => stream.sink.add;
+  Function get inStream => stream.sink.add;
 
   /// Stream getter
   Stream<T> get outStream => stream.stream;
@@ -25,6 +25,8 @@ class _StreamedValueBase<T> {
 
   set value(T value) => inStream(value);
 
+  /// Method to refresh the stream (e.g to use when the type it is not
+  /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
   }
@@ -37,7 +39,7 @@ class _StreamedValueBase<T> {
 
 ///
 ///
-/// It's the simplest object derived from the [StreamValueBase] class.
+/// It's the simplest object derived from the [_StreamedValueBase] class.
 ///
 /// When a value is set through the setter, if it's different from the one
 /// alredy stored then the new value is stored and sent to stream by
@@ -192,6 +194,15 @@ class StreamedTransformed<T, S> {
 
   T get value => stream.value;
 
+  /// Streamtransformer
+  StreamTransformer _transformer;
+
+  /// Getter for the stream transformed
+  Stream<S> get outTransformed => stream.transform(_transformer);
+
+
+  /// Method to refresh the stream (e.g to use when the type it is not
+  /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
   }
@@ -207,12 +218,11 @@ class StreamedTransformed<T, S> {
     }
   }
 
-  StreamTransformer _transformer;
+  /// Method to set the StreamTransformer for the stream
   setTransformer(StreamTransformer<T, dynamic> transformer) {
     _transformer = transformer;
   }
 
-  Stream<S> get outTransformed => stream.transform(_transformer);
 }
 
 ///
@@ -245,10 +255,10 @@ class MemoryValue<T> extends _StreamedValueBase<T> {
 ///
 ///
 ///
-/// HistoryObject extends the [MemoryValue] class, adding a [StreamedCollection].
+/// HistoryObject extends the [MemoryValue] class, adding a [StreamedList].
 ///
-/// When the current value needs to be stored, the [saveValue] function is called to save
-/// it to the [_history] collection. The collection is sent to stream.
+/// When the current value needs to be stored, the [saveValue] function is called 
+/// to send it to the [_historyStream].
 ///
 class HistoryObject<T> extends MemoryValue<T> {
   final _historyStream = StreamedList<T>();
@@ -263,7 +273,7 @@ class HistoryObject<T> extends MemoryValue<T> {
   }
 
   ///
-  /// Getter for the collection [_History]
+  /// Getter for the list
   ///
   List<T> get history => _historyStream.value;
 
@@ -353,9 +363,10 @@ class TimerObject extends _StreamedValueBase<int> {
 
   /// GETTERS
   ///
-  get time => _time;
+  int get time => _time;
 
-  get stopwatchStream => _stopwatchStreamed.stream;
+  /// Getter for the stream of the stopwatch
+  Stream<int> get stopwatchStream => _stopwatchStreamed.stream;
 
   /// Start timer and stopwatch only if they aren't active
   ///
@@ -389,6 +400,7 @@ class TimerObject extends _StreamedValueBase<int> {
     }
   }
 
+  /// Method to get the lap time
   getLapTime() {
     if (isStopwatchActive) {
       var milliseconds = _stopwatch.elapsedMilliseconds;
@@ -415,11 +427,13 @@ class TimerObject extends _StreamedValueBase<int> {
     }
   }
 
+  /// Method to reset the timer
   resetTimer() {
     _time = 0;
     inStream(_time);
   }
 
+  /// Method to cancel the current timer
   pauseTimer() {
     _timer.cancel();
   }

@@ -6,7 +6,7 @@ import 'streamed_map.dart';
 /// 
 /// #### Usage:
 /// 
-/// 1 - Define a [StreamedValueBase] derived object in the blocB
+/// 1 - Define a streamed object (e.g. [StreamedValue]) in the blocB
 /// 
 /// ```dart
 /// final receiverStr = StreamedValue<String>();
@@ -92,8 +92,7 @@ class ListSender<T> {
     _receiver = receiver;
   }
 
-  send(List<T> data) {
-    print('data: $data');
+  send(List<T> data) {    
     _receiver.value.clear();
     _receiver.value.addAll(data);    
     _receiver.refresh();
@@ -138,12 +137,15 @@ class MapSender<K, V> {
     _receiver = receiver;
   }
 
+  /// Method to set the [StreamedMap] on the other bloc where
+  /// to send the data
   setReceiver(StreamedMap<K, V> receiver) {
     _receiver = receiver;
   }
 
-  send(Map<K, V> data) {
-    print('data: $data');
+  /// Method to send the data to the StreamedMap set by the [setReceiver]
+  /// method.
+  send(Map<K, V> data) {    
     _receiver.value.clear();
     _receiver.value.addAll(data);
     _receiver.refresh();     

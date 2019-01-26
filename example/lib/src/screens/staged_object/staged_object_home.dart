@@ -55,14 +55,14 @@ class StagedHomePage extends StatelessWidget {
             key: Key('0'),
             child: ScrollingText(
                 text:
-                    'This stage will last 5 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
-                scrollingDuration: 2000,
+                    'This stage will last 7 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
+                scrollingDuration: 3000,
                 style: TextStyle(
                     color: Colors.blueGrey[900],
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500)),
           ),
-          time: 5000,
+          time: 7000,
           onShow: () {}),
       1: Stage(
           widget: Container(

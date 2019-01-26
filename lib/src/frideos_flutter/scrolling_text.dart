@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:frideos/frideos_dart.dart';
+import '../frideos_dart/streamed_value.dart';
+import '../frideos_dart/utils.dart';
 
-import '../extended_asyncwidgets.dart';
+import 'extended_asyncwidgets.dart';
 
 ///
 /// A simple widget that animates a input string making a scrolling text

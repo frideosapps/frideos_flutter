@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'streamed_value.dart';
 
+///
+/// Enum to handle the status of the animation.
+///
 enum AnimatedStatus { active, stop, pause }
 
 ///
@@ -108,7 +111,7 @@ class AnimatedObject<T> {
 
   /// Getter for stream of the [StreamedValue] that holds the animation
   /// value.
-  get animationStream => animation.outStream;
+  Stream<T> get animationStream => animation.outStream;
 
   /// The initial value of the animation
   T initialValue;
@@ -125,11 +128,12 @@ class AnimatedObject<T> {
   final _status = StreamedValue<AnimatedStatus>();
 
   /// Getter for the stream of the status of the animation
-  get statusStream => _status.outStream;
+  Stream<AnimatedStatus> get statusStream => _status.outStream;
 
   /// Status getter
   AnimatedStatus get getStatus => _status.value;
 
+  /// Method to check if the animation is playing or not.
   bool isAnimating() {
     if (getStatus == AnimatedStatus.active) {
       return true;
@@ -149,15 +153,19 @@ class AnimatedObject<T> {
     }
   }
 
+  /// Method to stop the animation-
   stop() {
     timer.stopTimer();
     _status.value = AnimatedStatus.stop;
   }
 
+  /// Method to reset the animation. It doesn't stop the animation, it just
+  /// sets the animation.value to the [initialValue].
   reset() {
     animation.value = initialValue;
   }
 
+  /// Method to pause the animation
   pause() {
     _status.value = AnimatedStatus.pause;
   }
