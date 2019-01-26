@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'package:frideos/frideos_dart.dart';
-
 import '../blocs/bloc.dart';
 
 class StreamedMapCleanBloc extends BlocBase with Validators {
   StreamedMapCleanBloc() {
-    print('-------StreamedMap BLOC--------');
+    print('-------StreamedMapClean BLOC--------');
   }
 
   final _map = BehaviorSubject<Map<int, String>>();
@@ -44,7 +42,7 @@ class StreamedMapCleanBloc extends BlocBase with Validators {
   }
 
   dispose() {
-    print('-------StreamedMap BLOC DISPOSE--------');
+    print('-------StreamedMapClean BLOC DISPOSE--------');
 
     _map.close();
     _text.close();
