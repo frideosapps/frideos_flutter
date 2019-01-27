@@ -1,3 +1,9 @@
+## Version 0.1 (26-01-19)
+
+#### - Released as package
+#### - Code refactoring
+
+
 ## Version 0.0.3 (24-01-19)
 
 #### - Added the FadeInWidget
