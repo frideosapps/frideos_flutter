@@ -64,7 +64,7 @@ class StreamedMap<K, V> {
   Function(Map<K, V>) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<Map<K, V>> get outStream => stream.stream;
+  ValueObservable<Map<K, V>> get outStream => stream.stream;
 
   Map<K, V> get value => stream.value;
 

@@ -2,16 +2,16 @@
 
 Example app to show how to use this library: 
 
-* ### Streamed objects 
-* ### Streamed collections
-* ### TimerObject: a simple stopwatch 
-* ### StagedObject
-* ### StagedWidget
-* ### AnimatedObject
-* ### Multiple selection and tunnel pattern (to share data between two blocs)
-* ### LinearTransition
-* ### CurvedTransition
-* ### Sliders
+* #### Streamed objects 
+* #### Streamed collections
+* #### TimerObject: a simple stopwatch 
+* #### StagedObject
+* #### StagedWidget
+* #### AnimatedObject
+* #### Multiple selection and tunnel pattern (to share data between two blocs)
+* #### LinearTransition
+* #### CurvedTransition
+* #### Sliders
   
 
 
@@ -145,13 +145,14 @@ As you can see the code is more clean, easier to read and to mantain.
 
 ## Screenshots
 
-![Screenshot](screenshots/streamed.png?s=150)
-![Screenshot](screenshots/streamedlist.png?s=150)
-![Screenshot](screenshots/streamedmap.png?s=150)
-![StagedObject](https://i.imgur.com/9XLb7JD.gif)
 ![StagedWidget](https://i.imgur.com/nCsbJCy.gif)
+![StagedObject](https://i.imgur.com/9XLb7JD.gif)
+![Blur](https://i.imgur.com/A7XmY5t.gif?s=150)
+![LinearTransition](https://i.imgur.com/viGPpCu.gif)
+![CurvedTransition](https://i.imgur.com/kxWOKMU.gif)
 ![AnimatedObject](https://i.imgur.com/jBETLuj.gif)
 ![MultipleSelection](https://i.imgur.com/nGLRiCY.gif)
-![LinearTransition](https://i.imgur.com/CWJcIbh.gif)
-![CurvedTransition](https://i.imgur.com/wc0DK5w.gif)
 ![Sliders](https://i.imgur.com/H16VE01.gif)
+![Screenshot](screenshots/streamedmap.png?s=150)
+![Screenshot](screenshots/streamed.png?s=150)
+![Screenshot](screenshots/streamedlist.png?s=150)

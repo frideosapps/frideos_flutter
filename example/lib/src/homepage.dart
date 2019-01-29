@@ -61,8 +61,11 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               DrawerHeader(
                 child: Center(
-                    child: Text('Examples',
-                        style: TextStyle(color: Colors.white, fontSize: 22.0))),
+                  child: Text(
+                    'Examples',
+                    style: TextStyle(color: Colors.white, fontSize: 22.0),
+                  ),
+                ),
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
@@ -250,7 +253,7 @@ class HomePage extends StatelessWidget {
           transitionDuration: 1000,
           firstWidget: Container(),
           secondWidget: Container(
-            child: WavesWidget(              
+            child: WavesWidget(
               color: Colors.blue,
               child: Container(
                   color: Colors.blue[800],

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:rxdart/rxdart.dart';
+
 import 'streamed_value.dart';
 import 'models/stage.dart';
 
@@ -165,7 +167,7 @@ class StagedObject {
   final _status = StreamedValue<StageStatus>();
 
   /// Getters for the stream of status
-  Stream<StageStatus> get statusStream => _status.outStream;
+  ValueObservable<StageStatus> get statusStream => _status.outStream;
 
   /// Status of the StagedObject
   StreamedValue<StageStatus> get getStatus => _status;
@@ -212,7 +214,7 @@ class StagedObject {
 
   /// WidgetStream getter
   ///
-  Stream<Widget> get widgetStream => _widgetStream.outStream;
+  ValueObservable<Widget> get widgetStream => _widgetStream.outStream;
 
   /// This callback it is not stage specific and it is called
   /// everytime the stage changes. Setting the [callbackOnStart]

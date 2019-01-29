@@ -1,6 +1,6 @@
-# Frideos
+# Frideos [![pub package](https://img.shields.io/pub/v/frideos.svg)](https://pub.dartlang.org/packages/frideos)
 
-A collection of helpers, made with the intent to simplify the using of streams and the BLoC pattern, and various widgets for Flutter (animations, transitions, timed widgets, scrollingtext, etc.).
+A set of helpers to simplify the using of streams and BLoC pattern, and various widgets (animations, blur, transitions, timed widgets, scrollingtext, etc.).
 
 ## Helpers for streams and BLoC pattern:
 
@@ -15,6 +15,7 @@ A collection of helpers, made with the intent to simplify the using of streams a
 - MapSender
 
 ## Animations and timing
+
 - TimerObject
 - AnimatedObject
 - StagedObject
@@ -26,20 +27,29 @@ A collection of helpers, made with the intent to simplify the using of streams a
 - ReceiverWidget
 - FuturedWidget
 
-## Various
-  
+## Effects
+
 - LinearTransition
 - CurvedTransition
 - FadeInWidget
 - FadeOutWidget
+- BlurWidget
+- BlurInWidget
+- BlurOutWidget
+- AnimatedBlurWidget
+- WavesWidget
+
+## Various
+
 - ScrollingText
 - HorizontalSlider
 - VerticalSlider
- 
 
-## [Examples](https://github.com/frideosapps/frideos_flutter/tree/master/example)
 
-Example app to show how to use this library.
+## Examples
+
+### 1. [General](https://github.com/frideosapps/frideos_flutter/tree/master/example)
+An example app to show how to use this library.
 
 - Streamed objects
 - Streamed collections
@@ -50,24 +60,35 @@ Example app to show how to use this library.
 - Multiple selection and tunnel pattern (to share data between two blocs)
 - LinearTransition
 - CurvedTransition
+- Blur (fixed, in, out, animated)
+- WavesWidget
 - Sliders
+  
+### 2. [Counter](https://github.com/frideosapps/counter)
+A simple app using the BLoC pattern showing a counter implemented with this library.
+
+### 3. [Blood pressure](https://github.com/frideosapps/bloodpressure)
+An example of a medical app built with Flutter for the classification of the arterial blood pressure.
+
+### 4. [Pair game](https://github.com/frideosapps/pair_game)
+A simple pair game (multiple selections, animations, tunnel pattern).
 
 
 ## Getting started:
 
-For the helpers classes import ```frideos_dart.dart```:
+For the helpers classes import `frideos_dart.dart`:
 
 ```dart
 import 'package:frideos/frideos_dart.dart';
 ```
 
- ```frideos_flutter.dart``` for the widgets:
+`frideos_flutter.dart` for the widgets:
 
 ```dart
 import 'package:frideos/frideos_flutter.dart';
 ```
 
-```frideos.dart``` if you need both:
+`frideos.dart` if you need both:
 
 ```dart
 import 'package:frideos/frideos.dart';
@@ -76,7 +97,6 @@ import 'package:frideos/frideos.dart';
 ## Dependencies
 
 - [RxDart](https://pub.dartlang.org/packages/rxdart)
-
 
 # Helpers for streams and BLoC pattern
 
@@ -95,7 +115,7 @@ class StreamedValueBase<T> {
   Function(T) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<T> get outStream => stream.stream;
+  ValueObservable<T> get outStream => stream.stream;
 
   T get value => stream.value;
 
@@ -125,12 +145,12 @@ class StreamedValue<T> extends StreamedValueBase<T> {
 }
 ```
 
+## Example
 
-### Example
 This example (you can find it in the example folder of this repo) shows how to use some classes of this library, and a comparison code without it. It is just a page with two textfields to add a key/value pair to a map. The map is then used to drive a ListView.builder showing all the pairs.
 
-
 #### Common code
+
 ```dart
 class Validators {
   final validateText =
@@ -212,7 +232,7 @@ class StreamedMapBloc extends BlocBase with Validators {
     print('-------StreamedMap BLOC--------');
 
     // Set the validation transformers for the textfields
-    streamedText.setTransformer(validateText);    
+    streamedText.setTransformer(validateText);
     streamedKey.setTransformer(validateKey);
   }
 
@@ -223,7 +243,7 @@ class StreamedMapBloc extends BlocBase with Validators {
   Observable<bool> get isFilled => Observable.combineLatest2(
       streamedText.outTransformed, streamedKey.outTransformed, (a, b) => true);
 
-  // Add to the streamed map the key/value pair put by the user 
+  // Add to the streamed map the key/value pair put by the user
   addText() {
     var key = int.parse(streamedKey.value);
     var value = streamedText.value;
@@ -246,9 +266,6 @@ class StreamedMapBloc extends BlocBase with Validators {
 
 As you can see the code is more clean, easier to read and to mantain.
 
-
-
-
 ## StreamedValue
 
 Used in tandem with the StreamedWidget/StreamBuilder, it automatically triggers the refresh of the widget when a new value is set.
@@ -270,7 +287,7 @@ counter.value += 1;
 
 Then the StreamedValue is used to drive a StreamedWidget/StreamBuilder using the outStream getter.
 
-N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the ```refresh``` method to update the stream.
+N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the `refresh` method to update the stream.
 
 #### Usage
 
@@ -386,6 +403,7 @@ e.g. adding an item:
 ```
 
 it is the same as:
+
 ```dart
   streamedList.value.add(item);
   streamedList.refresh();
@@ -424,6 +442,7 @@ the [refresh] method instead.
 #### Usage
 
 e.g. adding a key/value pair:
+
 ```dart
   streamedMap.addKey(1, 'first');
 ```
@@ -550,7 +569,6 @@ blocA.tunnelMap.setReceiver(blocB.receiverMap);
 tunnelList.send(list);
 tunnelMap.send(map);
 ```
-
 
 # Animations and timing
 
@@ -846,6 +864,7 @@ Map<int, Stage> get stagesMap => <int, Stage>{
 ```
 
 2. #### In the view:
+
 ```dart
 StagedWidget(
   stagesMap: stagesMap,
@@ -856,7 +875,6 @@ StagedWidget(
     // e.g. Navigator.pop(context);
   }),
 ```
-
 
 # Widgets for streams and futures
 
@@ -904,14 +922,13 @@ FuturedWidget<String>(future: future, builder: (BuildContext context, AsyncSnaps
 
 N.B. The callback is executed only if the respective child is not provided.
 
-# Various
-
+# Effects
 
 ## LinearTransition
 
 Linear cross fading transition between two widgets, it can be used with the [StagedObject].
 
-![LinearTransition](https://i.imgur.com/CWJcIbh.gif)
+![LinearTransition](https://i.imgur.com/viGPpCu.gif)
 
 #### Usage
 
@@ -929,7 +946,7 @@ LinearTransition(
 
 Cross fading transition between two widgets. This uses the Flutter way to make an animation.
 
-![CurvedTransition](https://i.imgur.com/wc0DK5w.gif)
+![CurvedTransition](https://i.imgur.com/kxWOKMU.gif)
 
 #### Usage
 
@@ -944,9 +961,6 @@ CurvedTransition(
 ),
 ```
 
-
-
-
 ## FadeInWidget
 
 #### Usage
@@ -960,7 +974,7 @@ FadeInWidget(
       style: TextStyle(
         color: Colors.blue,
         fontSize: 94.0,
-        fontWeight: FontWeight.w500,              
+        fontWeight: FontWeight.w500,
       ),
     ),
 ),
@@ -979,11 +993,89 @@ FadeOutWidget(
       style: TextStyle(
         color: Colors.blue,
         fontSize: 94.0,
-        fontWeight: FontWeight.w500,              
+        fontWeight: FontWeight.w500,
       ),
     ),
 ),
 ```
+
+## BlurWidget
+
+![Blur](https://i.imgur.com/Q8CJboZ.png)
+
+
+#### Usage
+
+```dart
+BlurWidget(
+  sigmaX: 2.0,
+  sigmaY: 3.0,
+  child: Text('Fixed blur')
+)
+```
+
+## BlurInWidget
+
+#### Usage
+
+```dart
+BlurInWidget(
+  initialSigmaX: 2.0,
+  initialSigmaY: 12.0,
+  duration: 5000,
+  refreshTime: 20,
+  child: Text('Blur out'),
+)
+```
+
+## BlurOutWidget
+
+#### Usage
+
+```dart
+BlurOutWidget(
+  finalSigmaX: 2.0,
+  finalSigmaY: 12.0,
+  duration: 5000,
+  refreshTime: 20,
+  child: Text('Blur out'),
+)
+```
+
+## AnimatedBlurWidget
+
+#### Usage
+
+```dart
+AnimatedBlurWidget(
+  initialSigmaX: 2.0,
+  initialSigmaY: 3.0,
+  finalSigmaX: 2.0,
+  finalSigmaY: 3.0,
+  duration: 5000,
+  reverseAnimation: true,
+  loop: true,
+  refreshTime: 20,
+  child: Text('Fixed blur')
+)
+```
+
+
+## WavesWidget
+
+#### Usage
+
+```dart
+WavesWidget(
+  width: 128.0,
+  height: 128.0,
+  color: Colors.red,
+  child: Container(
+    color: Colors.red[400],   
+ ),
+```
+
+# Various
 
 ## ScrollingText
 
@@ -1033,7 +1125,5 @@ VerticalSlider(
   onSliding: (slider) {
     bloc.verticalSlider(slider);
   },
-) 
+)
 ```
-
-

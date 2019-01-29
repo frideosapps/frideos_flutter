@@ -19,7 +19,7 @@ class _StreamedValueBase<T> {
   Function get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<T> get outStream => stream.stream;
+  ValueObservable<T> get outStream => stream.stream;
 
   T get value => stream.value;
 
@@ -122,7 +122,8 @@ class StreamedValue<T> extends _StreamedValueBase<T> {
 ///
 ///
 /// A special StreamedValue that is used when there is the need to use
-/// a StreamTransformer (e.g. validation of input fields).
+/// a StreamTransformer (e.g. stream transformation, validation of input 
+/// fields, etc.).
 ///
 ///
 /// #### Usage
@@ -190,7 +191,7 @@ class StreamedTransformed<T, S> {
   Function(T) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<T> get outStream => stream.stream;
+  ValueObservable<T> get outStream => stream.stream;
 
   T get value => stream.value;
 
@@ -198,7 +199,7 @@ class StreamedTransformed<T, S> {
   StreamTransformer _transformer;
 
   /// Getter for the stream transformed
-  Stream<S> get outTransformed => stream.transform(_transformer);
+  Observable<S> get outTransformed => stream.transform(_transformer);
 
 
   /// Method to refresh the stream (e.g to use when the type it is not
@@ -366,7 +367,7 @@ class TimerObject extends _StreamedValueBase<int> {
   int get time => _time;
 
   /// Getter for the stream of the stopwatch
-  Stream<int> get stopwatchStream => _stopwatchStreamed.stream;
+  ValueObservable<int> get stopwatchStream => _stopwatchStreamed.stream;
 
   /// Start timer and stopwatch only if they aren't active
   ///
@@ -404,8 +405,7 @@ class TimerObject extends _StreamedValueBase<int> {
   getLapTime() {
     if (isStopwatchActive) {
       var milliseconds = _stopwatch.elapsedMilliseconds;
-      _stopwatchStreamed.value = milliseconds;
-      // print(milliseconds);
+      _stopwatchStreamed.value = milliseconds;      
       _stopwatch.reset();
       _stopwatch.start();
     }
@@ -413,8 +413,7 @@ class TimerObject extends _StreamedValueBase<int> {
 
   /// Stop timer and stopwatch, and set to false the booleans
   stopTimer() {
-    if (isTimerActive) {
-      //print('Stop timer: $_time');
+    if (isTimerActive) {      
       _timer.cancel();
       _time = 0;
       inStream(null);

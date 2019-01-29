@@ -5,7 +5,7 @@ import 'package:frideos/frideos.dart';
 class LinearTransitionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _background(MaterialColor color) {
+    _firstChild() {
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -13,19 +13,28 @@ class LinearTransitionPage extends StatelessWidget {
             end: Alignment.bottomCenter,
             stops: [0.1, 0.5, 1.0],
             colors: [
-              color[900],
-              color[600],
-              color[300],
+              Colors.blue[900],
+              Colors.blue[600],
+              Colors.blue[300],
             ],
           ),
         ),
       );
     }
 
-    var backgrounds = [
-      _background(Colors.blue),
-      _background(Colors.pink),
-    ];
+    _secondChild() {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Text('LinearTransition', style: TextStyle(fontSize: 34.0)),
+            FlutterLogo(
+              size: 192.0,
+            ),
+            Container(
+              height: 12.0,
+            )
+          ]);
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -35,8 +44,8 @@ class LinearTransitionPage extends StatelessWidget {
         body: Container(
           alignment: Alignment.center,
           child: LinearTransition(
-            firstWidget: backgrounds[0],
-            secondWidget: backgrounds[1],
+            firstWidget: _firstChild(),
+            secondWidget: _secondChild(),
             transitionDuration: 4000,
           ),
         ),

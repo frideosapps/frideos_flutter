@@ -1,4 +1,18 @@
-## Version 0.1 (26-01-19)
+
+
+## Version 0.1.1 (29-01-19)
+
+#### - Documentation improved
+#### - Code refactoring
+#### - New widgets:
+- BlurWidget
+- BlurInWidget
+- BlurOutWidget
+- AnimatedBlurWidget
+- WavesWidget
+
+
+## Version 0.1.0 (26-01-19)
 
 #### - Released as package
 #### - Code refactoring

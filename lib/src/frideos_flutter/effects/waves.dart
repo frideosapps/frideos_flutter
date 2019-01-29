@@ -7,8 +7,84 @@ import 'package:frideos/frideos.dart';
 const strokeWidth = 25.0;
 const baseHeight = 15.0;
 
-class WavesPainter extends CustomPainter {
-  WavesPainter({this.frame, this.color});
+///
+/// Waves animation
+///
+class WavesWidget extends StatefulWidget {
+  WavesWidget({
+    this.width,
+    this.height,
+    this.color,
+    this.refreshTime = 20,
+    @required this.child,
+  });
+
+  final double width;
+  final double height;
+  final MaterialColor color;
+  final Widget child;
+
+  ///
+  /// Refresh time in milliseconds (default: 20)
+  ///
+  final int refreshTime;
+
+  @override
+  _WavesWidgetState createState() {
+    return new _WavesWidgetState();
+  }
+}
+
+class _WavesWidgetState extends State<WavesWidget> {
+  AnimatedObject<int> frame;
+
+  @override
+  void initState() {
+    super.initState();
+    frame = AnimatedObject<int>(initialValue: 1, interval: widget.refreshTime);
+    frame.animation.value = 1;
+
+    frame.start((t) {
+      frame.animation.value += 10;
+    });
+  }
+
+  @override
+  void dispose() {
+    frame.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) =>
+          StreamedWidget(
+              stream: frame.animationStream,
+              builder: (context, AsyncSnapshot<int> snapshot) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.center,
+                      height: widget.height,
+                      child: widget.child,
+                    ),
+                    CustomPaint(
+                      painter: _WavesPainter(
+                          frame: snapshot.data, color: widget.color),
+                      child: Container(
+                        height: widget.height,
+                      ),
+                    ),
+                  ],
+                );
+              }),
+    );
+  }
+}
+
+class _WavesPainter extends CustomPainter {
+  _WavesPainter({this.frame, this.color});
 
   final int frame;
   MaterialColor color;
@@ -22,7 +98,7 @@ class WavesPainter extends CustomPainter {
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    var height = size.height - paint.strokeWidth / 2; // - paint.strokeWidth;
+    var height = size.height - paint.strokeWidth / 2;
     var width = size.width;
 
     var path = Path();
@@ -45,7 +121,6 @@ class WavesPainter extends CustomPainter {
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    
     path.reset();
     path.moveTo(0.0, height + baseHeight);
     path.lineTo(width, height + baseHeight);
@@ -62,11 +137,10 @@ class WavesPainter extends CustomPainter {
     paint
       ..color = color[300]
       ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round      
+      ..strokeCap = StrokeCap.round
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    //var path = Path();
     path.reset();
     path.moveTo(0.0, height + baseHeight);
     path.lineTo(width, height + baseHeight);
@@ -83,11 +157,10 @@ class WavesPainter extends CustomPainter {
     paint
       ..color = color[500]
       ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round      
+      ..strokeCap = StrokeCap.round
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    
     path.reset();
     path.moveTo(0.0, height + baseHeight);
     path.lineTo(width, height + baseHeight);
@@ -104,73 +177,4 @@ class WavesPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
-}
-
-class WavesWidget extends StatefulWidget {
-  WavesWidget({
-    this.width,
-    this.height,
-    this.color,
-    @required this.child,
-  });
-
-  final double width;
-  final double height;
-  final MaterialColor color;
-  final Widget child;
-
-  @override
-  _WavesWidgetState createState() {
-    return new _WavesWidgetState();
-  }
-}
-
-class _WavesWidgetState extends State<WavesWidget> {
-  final frame = AnimatedObject<int>(initialValue: 1, interval: 50);
-
-  @override
-  void initState() {
-    super.initState();
-    frame.animation.value = 1;
-
-    frame.start((t) {
-      frame.animation.value += 10;
-      //if (frame.animation.value > widget.width) {
-      //  frame.stop();
-      //}
-    });
-  }
-
-  @override
-  void dispose() {
-    frame.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) =>
-          StreamedWidget(
-              stream: frame.animationStream,
-              builder: (context, AsyncSnapshot<int> snapshot) {                
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.center,
-                      height: widget.height,
-                      child: widget.child,
-                    ),
-                    CustomPaint(
-                      painter: WavesPainter(
-                          frame: snapshot.data, color: widget.color),
-                      child: Container(
-                        height: widget.height,
-                      ),
-                    ),
-                  ],
-                );
-              }),
-    );
-  }
 }

@@ -63,7 +63,7 @@ class StreamedList<T> {
   Function(List<T>) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<List<T>> get outStream => stream.stream;
+  ValueObservable<List<T>> get outStream => stream.stream;
 
   List<T> get value => stream.value;
 

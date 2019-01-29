@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
+
 import 'streamed_value.dart';
 
 ///
@@ -111,7 +113,7 @@ class AnimatedObject<T> {
 
   /// Getter for stream of the [StreamedValue] that holds the animation
   /// value.
-  Stream<T> get animationStream => animation.outStream;
+  ValueObservable<T> get animationStream => animation.outStream;
 
   /// The initial value of the animation
   T initialValue;
@@ -128,7 +130,7 @@ class AnimatedObject<T> {
   final _status = StreamedValue<AnimatedStatus>();
 
   /// Getter for the stream of the status of the animation
-  Stream<AnimatedStatus> get statusStream => _status.outStream;
+  ValueObservable<AnimatedStatus> get statusStream => _status.outStream;
 
   /// Status getter
   AnimatedStatus get getStatus => _status.value;
