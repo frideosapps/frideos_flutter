@@ -1,0 +1,313 @@
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+
+import 'extended_asyncwidgets.dart';
+import '../frideos_dart/animated_object.dart';
+
+const initialBlurVel = 0.1;
+const refreshBlurTime = 100;
+
+///
+/// Fixed Blur
+///
+class BlurWidget extends StatelessWidget {
+  BlurWidget(
+      {@required this.child, @required this.sigmaX, @required this.sigmaY});
+
+  ///
+  /// Child to blur
+  ///
+  final Widget child;
+
+  ///
+  /// Vvalue of the sigmaX parameter of the blur
+  ///
+  final double sigmaX;
+
+  ///
+  /// Value of the sigmaY parameter of the blur
+  ///
+  final double sigmaY;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) => Stack(
+            children: <Widget>[
+              Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth,
+                  child: child),
+              BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
+                  child: Container(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    color: Colors.transparent,
+                  )),
+            ],
+          ),
+    );
+  }
+}
+
+///
+/// Animated blur
+///
+class AnimatedBlurWidget extends StatefulWidget {
+  AnimatedBlurWidget(
+      {@required this.child,
+      this.initialSigmaX = 0.0,
+      this.initialSigmaY = 0.0,
+      this.finalSigmaX = 4.0,
+      this.finalSigmaY = 8.0,
+      this.duration = 5000,
+      this.reverseAnimation = true,
+      this.loop = true});
+
+  ///
+  /// Child to blur
+  ///
+  final Widget child;
+
+  ///
+  /// Initial value of the sigmaX parameter of the blur
+  ///
+  final double initialSigmaX;
+
+  ///
+  /// Initial value of the sigmaY parameter of the blur
+  ///
+  final double initialSigmaY;
+
+  ///
+  /// Final value of the sigmaX parameter of the blur
+  ///
+  final double finalSigmaX;
+
+  ///
+  /// Final value of the sigmaY parameter of the blur
+  ///
+  final double finalSigmaY;
+
+  ///
+  /// Time for the blur to reach the final values
+  ///
+  final int duration;
+
+  ///
+  /// Looping animation (default: false)
+  ///
+  final bool loop;
+
+  ///
+  /// If set to true (default: true), when the max values are reached
+  /// the animation reverses until the values reaches their initial value
+  ///
+  final bool reverseAnimation;
+
+  @override
+  _AnimatedBlurWidgetState createState() {
+    return new _AnimatedBlurWidgetState();
+  }
+}
+
+class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
+  final blur = AnimatedObject(initialValue: 0.0, interval: refreshBlurTime);
+  double blurSigmaY;
+
+  @override
+  void initState() {
+    super.initState();
+
+    blur.animation.value = widget.initialSigmaX;
+    blurSigmaY = widget.initialSigmaY;
+
+    // Calculate the step of the blur
+    //
+    var blurVelX = (widget.finalSigmaX - widget.initialSigmaX) /
+        (widget.duration / refreshBlurTime);
+    var blurVelY = (widget.finalSigmaY - widget.initialSigmaY) /
+        (widget.duration / refreshBlurTime);
+
+    blur.start((t) {
+      // Update the blur.
+      //
+      blur.animation.value += blurVelX;
+      blurSigmaY += blurVelY;
+
+      // Check if limit reached.
+      //
+      if (blur.animation.value > widget.finalSigmaX) {
+        // If the reverseAnimation flag is set to true (default)
+        // then invert the direction.
+        //
+        if (widget.reverseAnimation) {
+          blurVelX = -blurVelX;
+          blurVelY = -blurVelY;
+        } else {
+          // If the loop flag is set true (default: false)
+          // then reset the blur values
+          //
+          if (widget.loop) {
+            blur.animation.value = 0.0;
+            blurSigmaY = 0.0;
+          }
+          // Otherwise, stop the animation.
+          //
+          else {
+            blur.stop();
+          }
+        }
+      }
+
+      // Check if the value is below the initialValue.
+      //
+      if (blur.animation.value < widget.initialSigmaX) {
+        // If the loop flag is set to true, invert the direction
+        // of the animation.
+        //
+        if (widget.loop) {
+          blurVelX = -blurVelX;
+          blurVelY = -blurVelY;
+        }
+        // Otherwise, stop the animation.
+        //
+        else {
+          blur.stop();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    blur.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) =>
+          StreamedWidget(
+              stream: blur.animationStream,
+              builder: (context, AsyncSnapshot<double> snapshot) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        child: widget.child),
+                    BackdropFilter(
+                        filter: ui.ImageFilter.blur(
+                            sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                        child: Container(
+                          height: constraints.maxHeight,
+                          width: constraints.maxWidth,
+                          color: Colors.transparent,
+                        )),
+                  ],
+                );
+              }),
+    );
+  }
+}
+
+///
+/// Blur in
+///
+class BlurInWidget extends StatefulWidget {
+  BlurInWidget(
+      {@required this.child,
+      this.initialSigmaX = 4.0,
+      this.initialSigmaY = 6.0,
+      this.duration = 5000});
+
+  ///
+  /// Child to blur
+  ///
+  final Widget child;
+
+  ///
+  /// Initial value of the sigmaX parameter of the blur
+  ///
+  final double initialSigmaX;
+
+  ///
+  /// Initial value of the sigmaY parameter of the blur
+  ///
+  final double initialSigmaY;
+
+  ///
+  /// Time for the blur to reach the final values
+  ///
+  final int duration;
+
+  @override
+  _BlurInWidgetState createState() {
+    return new _BlurInWidgetState();
+  }
+}
+
+class _BlurInWidgetState extends State<BlurInWidget> {
+  final blur = AnimatedObject(initialValue: 5.0, interval: 50);
+
+  @override
+  void initState() {
+    super.initState();
+    blur.animation.value = widget.initialSigmaX;
+    double blurSigmaY = widget.initialSigmaY;
+
+    // Calculate the step of the blur
+    //
+    var blurVelX = widget.initialSigmaX / (widget.duration / refreshBlurTime);
+    var blurVelY = widget.initialSigmaY / (widget.duration / refreshBlurTime);
+
+    blur.start((t) {
+      blur.animation.value -= blurVelX;
+      blurSigmaY -= blurVelY;
+
+      if (blur.animation.value < 0) {
+        blurVelX = 0.0;
+        blurSigmaY = 0.0;
+        blur.stop();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    blur.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) =>
+          StreamedWidget(
+              stream: blur.animationStream,
+              builder: (context, AsyncSnapshot<double> snapshotBlur) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        child: widget.child),
+                    BackdropFilter(
+                        filter: ui.ImageFilter.blur(
+                            sigmaX: snapshotBlur.data,
+                            sigmaY: snapshotBlur.data),
+                        child: Container(
+                          height: constraints.maxHeight,
+                          width: constraints.maxWidth,
+                          color: Colors.transparent,
+                        )),
+                  ],
+                );
+              }),
+    );
+  }
+}
