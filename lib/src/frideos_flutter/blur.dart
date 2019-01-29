@@ -267,16 +267,12 @@ class _BlurInWidgetState extends State<BlurInWidget> {
     //
     var blurVelX = widget.initialSigmaX / (widget.duration / refreshBlurTime);
     var blurVelY = widget.initialSigmaY / (widget.duration / refreshBlurTime);
-    print('$blurVelX, ${widget.initialSigmaX}');
-    print('$blurVelY, ${widget.initialSigmaY}');
+
     blur.start((t) {
-      print('${blur.animation.value}');
-      print('$blurSigmaY');
       blur.animation.value -= blurVelX;
       blurSigmaY -= blurVelY;
 
-      if (blur.animation.value < 0.0) {
-        print('stop');
+      if (blur.animation.value < 0.0) {        
         blurVelX = 0.0;
         blurSigmaY = 0.0;
         blur.stop();
