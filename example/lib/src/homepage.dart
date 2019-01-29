@@ -250,8 +250,7 @@ class HomePage extends StatelessWidget {
           transitionDuration: 1000,
           firstWidget: Container(),
           secondWidget: Container(
-            child: WavesWidget(
-              //width: MediaQuery.of(context).size.width,
+            child: WavesWidget(              
               color: Colors.blue,
               child: Container(
                   color: Colors.blue[800],
