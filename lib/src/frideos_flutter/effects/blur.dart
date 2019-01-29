@@ -2,11 +2,11 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import 'extended_asyncwidgets.dart';
-import '../frideos_dart/animated_object.dart';
+import '../extended_asyncwidgets.dart';
+import '../../frideos_dart/animated_object.dart';
 
 const initialBlurVel = 0.1;
-const refreshBlurTime = 100;
+const refreshBlurTime = 20;
 
 ///
 /// Fixed Blur
@@ -272,7 +272,7 @@ class _BlurInWidgetState extends State<BlurInWidget> {
       blur.animation.value -= blurVelX;
       blurSigmaY -= blurVelY;
 
-      if (blur.animation.value < 0.0) {        
+      if (blur.animation.value < 0.0) {
         blurVelX = 0.0;
         blurSigmaY = 0.0;
         blur.stop();
