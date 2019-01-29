@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:frideos/frideos_flutter.dart';
+
 import '../src/blocs/animated_object_bloc.dart';
 import '../src/blocs/bloc.dart';
 import '../src/blocs/sliders_bloc.dart';
@@ -34,9 +36,13 @@ class HomePage extends StatelessWidget {
   }
 
   _tile(String title, Function onTap) {
-    return ListTile(      
+    return ListTile(
       dense: true,
-      title: Text(title,  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, fontStyle: FontStyle.italic)),
+      title: Text(title,
+          style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.italic)),
       onTap: onTap,
     );
   }
@@ -240,7 +246,26 @@ class HomePage extends StatelessWidget {
       ),
       body: Container(
         alignment: Alignment.center,
-        child: Text('Home Page'),
+        child: LinearTransition(
+          transitionDuration: 1000,
+          firstWidget: Container(),
+          secondWidget: Container(
+            child: WavesWidget(
+              //width: MediaQuery.of(context).size.width,
+              color: Colors.blue,
+              child: Container(
+                  color: Colors.blue[800],
+                  alignment: Alignment.center,
+                  child: BlurInWidget(
+                      initialSigmaX: 6.0,
+                      initialSigmaY: 12.0,
+                      duration: 2000,
+                      child: FlutterLogo(
+                        size: 240.0,
+                      ))),
+            ),
+          ),
+        ),
       ),
     );
   }
