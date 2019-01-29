@@ -252,24 +252,31 @@ class BlurInWidget extends StatefulWidget {
 }
 
 class _BlurInWidgetState extends State<BlurInWidget> {
-  final blur = AnimatedObject(initialValue: 5.0, interval: 50);
+  AnimatedObject blur;
+  double blurSigmaY;
 
   @override
   void initState() {
     super.initState();
+    blur = AnimatedObject(
+        initialValue: widget.initialSigmaX, interval: refreshBlurTime);
     blur.animation.value = widget.initialSigmaX;
-    double blurSigmaY = widget.initialSigmaY;
+    blurSigmaY = widget.initialSigmaY;
 
     // Calculate the step of the blur
     //
     var blurVelX = widget.initialSigmaX / (widget.duration / refreshBlurTime);
     var blurVelY = widget.initialSigmaY / (widget.duration / refreshBlurTime);
-
+    print('$blurVelX, ${widget.initialSigmaX}');
+    print('$blurVelY, ${widget.initialSigmaY}');
     blur.start((t) {
+      print('${blur.animation.value}');
+      print('$blurSigmaY');
       blur.animation.value -= blurVelX;
       blurSigmaY -= blurVelY;
 
-      if (blur.animation.value < 0) {
+      if (blur.animation.value < 0.0) {
+        print('stop');
         blurVelX = 0.0;
         blurSigmaY = 0.0;
         blur.stop();
@@ -289,7 +296,7 @@ class _BlurInWidgetState extends State<BlurInWidget> {
       builder: (BuildContext context, BoxConstraints constraints) =>
           StreamedWidget(
               stream: blur.animationStream,
-              builder: (context, AsyncSnapshot<double> snapshotBlur) {
+              builder: (context, AsyncSnapshot snapshot) {
                 return Stack(
                   children: <Widget>[
                     Container(
@@ -298,8 +305,103 @@ class _BlurInWidgetState extends State<BlurInWidget> {
                         child: widget.child),
                     BackdropFilter(
                         filter: ui.ImageFilter.blur(
-                            sigmaX: snapshotBlur.data,
-                            sigmaY: snapshotBlur.data),
+                            sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                        child: Container(
+                          height: constraints.maxHeight,
+                          width: constraints.maxWidth,
+                          color: Colors.transparent,
+                        )),
+                  ],
+                );
+              }),
+    );
+  }
+}
+
+///
+/// Blur out
+///
+class BlurOutWidget extends StatefulWidget {
+  BlurOutWidget(
+      {@required this.child,
+      this.finalSigmaX = 4.0,
+      this.finalSigmaY = 6.0,
+      this.duration = 5000});
+
+  ///
+  /// Child to blur
+  ///
+  final Widget child;
+
+  ///
+  /// Final value of the sigmaX parameter of the blur
+  ///
+  final double finalSigmaX;
+
+  ///
+  /// Final value of the sigmaY parameter of the blur
+  ///
+  final double finalSigmaY;
+
+  ///
+  /// Time for the blur to reach the final values
+  ///
+  final int duration;
+
+  @override
+  _BlurOutWidgetState createState() {
+    return new _BlurOutWidgetState();
+  }
+}
+
+class _BlurOutWidgetState extends State<BlurOutWidget> {
+  final blur = AnimatedObject(initialValue: 0.0, interval: refreshBlurTime);
+  double blurSigmaY = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    blur.animation.value = 0.0;
+
+    // Calculate the step of the blur
+    //
+    var blurVelX = widget.finalSigmaX / (widget.duration / refreshBlurTime);
+    var blurVelY = widget.finalSigmaY / (widget.duration / refreshBlurTime);
+
+    blur.start((t) {
+      blur.animation.value += blurVelX;
+      blurSigmaY += blurVelY;
+
+      if (blur.animation.value > widget.finalSigmaX) {
+        blurVelX = widget.finalSigmaX;
+        blurSigmaY = widget.finalSigmaY;
+        blur.stop();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    blur.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) =>
+          StreamedWidget(
+              stream: blur.animationStream,
+              builder: (context, AsyncSnapshot<double> snapshot) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        child: widget.child),
+                    BackdropFilter(
+                        filter: ui.ImageFilter.blur(
+                            sigmaX: snapshot.data, sigmaY: blurSigmaY),
                         child: Container(
                           height: constraints.maxHeight,
                           width: constraints.maxWidth,
