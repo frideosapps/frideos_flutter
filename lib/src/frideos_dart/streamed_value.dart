@@ -16,15 +16,17 @@ class _StreamedValueBase<T> {
   int timesUpdated = 0;
 
   /// Sink for the stream
-  Function(T) get inStream => stream.sink.add;
+  Function get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<T> get outStream => stream.stream;
+  ValueObservable<T> get outStream => stream.stream;
 
   T get value => stream.value;
 
   set value(T value) => inStream(value);
 
+  /// Method to refresh the stream (e.g to use when the type it is not
+  /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
   }
@@ -37,48 +39,54 @@ class _StreamedValueBase<T> {
 
 ///
 ///
-/// It's the simplest object derived from the [StreamValueBase] class.
+/// It's the simplest object derived from the [_StreamedValueBase] class.
 ///
 /// When a value is set through the setter, if it's different from the one
-/// alredy stored then the new value is stored and sent to stream by 
-/// it's setter. Used in tandem with the StreamedWidget/StreamBuilder, 
-/// it automatically triggers the refresh of the widget when a new 
+/// alredy stored then the new value is stored and sent to stream by
+/// it's setter. Used in tandem with the StreamedWidget/StreamBuilder,
+/// it automatically triggers the refresh of the widget when a new
 /// value is set.
-/// 
+///
 /// This essentially does a simple thing: every time a new value is set,
 /// this is compared to the oldest one and if it is different assigned to
 /// the variable and sent to stream. Why this? So that when a new value
-/// is set, it automatically triggers the StreamerBuilder of the widget 
+/// is set, it automatically triggers the StreamerBuilder of the widget
 /// and it refreshes without the need to manually add the value to the
 /// sink of the stream.
-/// 
+///
 /// So for example, instead of doing something like this:
-/// 
+///
 /// ```dart
 /// counter += 1;
 /// stream.sink.add(counter);
 /// ```
-/// 
+///
 /// It becomes just:
-/// 
+///
 /// ```dart
 /// counter.value += 1;
 /// ```
-/// 
+///
 /// Then the StreamedValue is used to drive a [StreamedWidget]/StreamBuilder
 /// using the outStream getter.
-
+///
+///
+/// N.B. when the type is not a basic type (e.g int, double, String etc.) and
+/// the value of a property of the object is changed, it is necessary to call
+/// the [refresh] method to update the stream.
+///
+///
 /// #### Usage
-/// 
+///
 /// ```dart
 /// // In the BLoC
 /// final counter = StreamedValue<int>();
-/// 
+///
 /// incrementCounter() {
 ///   counter.value += 2.0;
 /// }
-/// 
-/// 
+///
+///
 /// // View
 /// StreamedWidget<int>(
 ///     stream: bloc.count.outStream,
@@ -94,13 +102,13 @@ class _StreamedValueBase<T> {
 ///         },
 /// ),
 /// ```
-/// 
-/// On update the [timesUpdated] increases showing how many times the 
+///
+/// On update the [timesUpdated] increases showing how many times the
 /// value has been updated.
-/// 
+///
 ///
 /// N.B. For collections use the [StreamedList] and [StreamedMap] instead.
-/// 
+///
 ///
 class StreamedValue<T> extends _StreamedValueBase<T> {
   set value(T value) {
@@ -113,23 +121,24 @@ class StreamedValue<T> extends _StreamedValueBase<T> {
 
 ///
 ///
-/// A special StreamedValue that is used when there is the need to use 
-/// a StreamTransformer (e.g. validation of input fields).
-/// 
-/// 
+/// A special StreamedValue that is used when there is the need to use
+/// a StreamTransformer (e.g. stream transformation, validation of input 
+/// fields, etc.).
+///
+///
 /// #### Usage
-/// 
+///
 /// From the StreamedMap example:
-/// 
+///
 /// ```dart
 /// // In the BLoC class
 ///   final streamedKey = StreamedTransformed<String, int>();
-/// 
-/// 
+///
+///
 /// // In the constructor of the BLoC class
 ///   streamedKey.setTransformer(validateKey);
-/// 
-/// 
+///
+///
 /// // Validation (e.g. in the BLoC or in a mixin class)
 /// final validateKey =
 ///       StreamTransformer<String, int>.fromHandlers(handleData: (key, sink) {
@@ -140,8 +149,8 @@ class StreamedValue<T> extends _StreamedValueBase<T> {
 ///       sink.addError('The key must be an integer.');
 ///     }
 ///   });
-/// 
-/// 
+///
+///
 /// // In the view:
 /// StreamBuilder(
 ///             stream: bloc.streamedKey.outTransformed,
@@ -182,10 +191,19 @@ class StreamedTransformed<T, S> {
   Function(T) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<T> get outStream => stream.stream;
+  ValueObservable<T> get outStream => stream.stream;
 
   T get value => stream.value;
 
+  /// Streamtransformer
+  StreamTransformer _transformer;
+
+  /// Getter for the stream transformed
+  Observable<S> get outTransformed => stream.transform(_transformer);
+
+
+  /// Method to refresh the stream (e.g to use when the type it is not
+  /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
   }
@@ -201,12 +219,11 @@ class StreamedTransformed<T, S> {
     }
   }
 
-  StreamTransformer _transformer;
+  /// Method to set the StreamTransformer for the stream
   setTransformer(StreamTransformer<T, dynamic> transformer) {
     _transformer = transformer;
   }
 
-  Stream<S> get outTransformed => stream.transform(_transformer);
 }
 
 ///
@@ -220,11 +237,13 @@ class StreamedTransformed<T, S> {
 ///
 ///
 class MemoryValue<T> extends _StreamedValueBase<T> {
-  T oldValue;
+  T _oldValue;
+
+  T get oldValue => _oldValue;
 
   set value(T value) {
     if (stream.value != value) {
-      oldValue = stream.value;
+      _oldValue = stream.value;
       stream.value = value;
       inStream(value);
       timesUpdated++;
@@ -237,17 +256,17 @@ class MemoryValue<T> extends _StreamedValueBase<T> {
 ///
 ///
 ///
-/// HistoryObject extends the [MemoryValue] class, adding a [StreamedCollection].
+/// HistoryObject extends the [MemoryValue] class, adding a [StreamedList].
 ///
-/// When the current value needs to be stored, the [saveValue] function is called to save
-/// it to the [_history] collection. The collection is sent to stream.
+/// When the current value needs to be stored, the [saveValue] function is called 
+/// to send it to the [_historyStream].
 ///
 class HistoryObject<T> extends MemoryValue<T> {
   final _historyStream = StreamedList<T>();
 
   set value(T value) {
     if (stream.value != value) {
-      oldValue = stream.value;
+      _oldValue = stream.value;
       stream.value = value;
       timesUpdated++;
       inStream(value);
@@ -255,7 +274,7 @@ class HistoryObject<T> extends MemoryValue<T> {
   }
 
   ///
-  /// Getter for the collection [_History]
+  /// Getter for the list
   ///
   List<T> get history => _historyStream.value;
 
@@ -280,15 +299,41 @@ class HistoryObject<T> extends MemoryValue<T> {
 
 ///
 ///
-///
-/// [TimerObject]
-///
-///
-///
+/// Timer refresh time
 const updateTimerMilliseconds = 17;
 
 ///
 ///
+/// An object that embeds a timer and a stopwatch.
+///
+///
+/// #### Usage
+///
+/// ```dart
+/// final timerObject = TimerObject();
+///
+/// startTimer() {
+///   timerObject.startTimer();
+/// }
+///
+/// stopTimer() {
+///   timerObject.stopTimer();
+/// }
+///
+/// getLapTime() {
+///   timerObject.getLapTime();
+/// }
+///
+/// incrementCounter(Timer t) {
+///   counter.value += 2.0;
+/// }
+///
+/// startPeriodic() {
+///   var interval = Duration(milliseconds: 1000);
+///   timerObject.startPeriodic(interval, incrementCounter);
+/// }
+///
+///```
 ///
 class TimerObject extends _StreamedValueBase<int> {
   /// TIMER
@@ -319,15 +364,16 @@ class TimerObject extends _StreamedValueBase<int> {
 
   /// GETTERS
   ///
-  get time => _time;
+  int get time => _time;
 
-  get stopwatchStream => _stopwatchStreamed.stream;
+  /// Getter for the stream of the stopwatch
+  ValueObservable<int> get stopwatchStream => _stopwatchStreamed.stream;
 
   /// Start timer and stopwatch only if they aren't active
   ///
   startTimer() {
     if (!isTimerActive) {
-      print('Starting timer');
+      // print('Starting timer');
       _timer = Timer.periodic(_interval, (Timer t) => updateTime(t));
       isTimerActive = true;
     }
@@ -355,12 +401,11 @@ class TimerObject extends _StreamedValueBase<int> {
     }
   }
 
+  /// Method to get the lap time
   getLapTime() {
     if (isStopwatchActive) {
       var milliseconds = _stopwatch.elapsedMilliseconds;
-      _stopwatchStreamed.value = milliseconds;
-      print('Time: $_time');
-      print(milliseconds);
+      _stopwatchStreamed.value = milliseconds;      
       _stopwatch.reset();
       _stopwatch.start();
     }
@@ -368,8 +413,7 @@ class TimerObject extends _StreamedValueBase<int> {
 
   /// Stop timer and stopwatch, and set to false the booleans
   stopTimer() {
-    if (isTimerActive) {
-      //print('Stop timer: $_time');
+    if (isTimerActive) {      
       _timer.cancel();
       _time = 0;
       inStream(null);
@@ -382,11 +426,13 @@ class TimerObject extends _StreamedValueBase<int> {
     }
   }
 
+  /// Method to reset the timer
   resetTimer() {
     _time = 0;
     inStream(_time);
   }
 
+  /// Method to cancel the current timer
   pauseTimer() {
     _timer.cancel();
   }

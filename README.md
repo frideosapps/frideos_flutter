@@ -1,6 +1,6 @@
-# Frideos-flutter
+# Frideos [![pub package](https://img.shields.io/pub/v/frideos.svg)](https://pub.dartlang.org/packages/frideos)
 
-A collection of helpers, made with the intent to simplify the using of streams and the BLoC pattern, and various widgets for Flutter.
+A set of helpers to simplify the using of streams and BLoC pattern, and various widgets (animations, blur, transitions, timed widgets, scrollingtext, etc.).
 
 ## Helpers for streams and BLoC pattern:
 
@@ -10,61 +10,85 @@ A collection of helpers, made with the intent to simplify the using of streams a
 - StreamedMap
 - MemoryValue
 - HistoryObject
-- TimerObject
-- AnimatedObject
-- StagedObject
 - StreamedSender
 - ListSender
 - MapSender
 
-## Widgets
+## Animations and timing
+
+- TimerObject
+- AnimatedObject
+- StagedObject
+- StagedWidget
+
+## Widgets for streams and futures
 
 - StreamedWidget
 - ReceiverWidget
 - FuturedWidget
+
+## Effects
+
 - LinearTransition
 - CurvedTransition
+- FadeInWidget
+- FadeOutWidget
+- BlurWidget
+- BlurInWidget
+- BlurOutWidget
+- AnimatedBlurWidget
+- WavesWidget
+
+## Various
+
 - ScrollingText
-- Sliders
+- HorizontalSlider
+- VerticalSlider
 
-## [Examples](https://github.com/frideosapps/frideos_flutter/tree/master/examples/frideos_general)
 
-Examples that show how to use this library.
+## Examples
+
+### 1. [General](https://github.com/frideosapps/frideos_flutter/tree/master/example)
+An example app to show how to use this library.
 
 - Streamed objects
 - Streamed collections
 - TimerObject: a simple stopwatch
 - StagedObject
+- StagedWidget
 - AnimatedObject
 - Multiple selection and tunnel pattern (to share data between two blocs)
 - LinearTransition
 - CurvedTransition
+- Blur (fixed, in, out, animated)
+- WavesWidget
 - Sliders
+  
+### 2. [Counter](https://github.com/frideosapps/counter)
+A simple app using the BLoC pattern showing a counter implemented with this library.
+
+### 3. [Blood pressure](https://github.com/frideosapps/bloodpressure)
+An example of a medical app built with Flutter for the classification of the arterial blood pressure.
+
+### 4. [Pair game](https://github.com/frideosapps/pair_game)
+A simple pair game (multiple selections, animations, tunnel pattern).
 
 
 ## Getting started:
 
-Add the library to the dependencies to the pubspec.yaml file:
-    
-    dependencies:
-      ...
-      frideos:
-        git:
-          url: https://github.com/frideosapps/frideos_flutter.git
-
-For the helpers classes import ```frideos_dart.dart```:
+For the helpers classes import `frideos_dart.dart`:
 
 ```dart
 import 'package:frideos/frideos_dart.dart';
 ```
 
- ```frideos_flutter.dart``` for the widgets:
+`frideos_flutter.dart` for the widgets:
 
 ```dart
 import 'package:frideos/frideos_flutter.dart';
 ```
 
-```frideos.dart``` if you need both:
+`frideos.dart` if you need both:
 
 ```dart
 import 'package:frideos/frideos.dart';
@@ -74,8 +98,7 @@ import 'package:frideos/frideos.dart';
 
 - [RxDart](https://pub.dartlang.org/packages/rxdart)
 
-
-# Helpers
+# Helpers for streams and BLoC pattern
 
 Utility classes to make a little bit easier working with RxDart streams and Flutter.
 
@@ -92,7 +115,7 @@ class StreamedValueBase<T> {
   Function(T) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<T> get outStream => stream.stream;
+  ValueObservable<T> get outStream => stream.stream;
 
   T get value => stream.value;
 
@@ -122,10 +145,126 @@ class StreamedValue<T> extends StreamedValueBase<T> {
 }
 ```
 
+## Example
 
+This example (you can find it in the example folder of this repo) shows how to use some classes of this library, and a comparison code without it. It is just a page with two textfields to add a key/value pair to a map. The map is then used to drive a ListView.builder showing all the pairs.
 
+#### Common code
 
+```dart
+class Validators {
+  final validateText =
+      StreamTransformer<String, String>.fromHandlers(handleData: (str, sink) {
+    if (str.isNotEmpty) {
+      sink.add(str);
+    } else {
+      sink.addError('The text must not be empty.');
+    }
+  });
 
+  final validateKey =
+      StreamTransformer<String, int>.fromHandlers(handleData: (key, sink) {
+    var k = int.tryParse(key);
+    if (k != null) {
+      sink.add(k);
+    } else {
+      sink.addError('The key must be an integer.');
+    }
+  });
+}
+```
+
+1. ##### BLoC without this library
+
+```dart
+class StreamedMapCleanBloc extends BlocBase with Validators {
+  StreamedMapCleanBloc() {
+    print('-------StreamedMapClean BLOC--------');
+  }
+
+  final _map = BehaviorSubject<Map<int, String>>();
+  Stream<Map<int, String>> get outMap => _map.stream;
+  Function(Map<int, String> map) get inMap => _map.sink.add;
+  final map = Map<int, String>();
+
+  final _text = BehaviorSubject<String>();
+  Stream<String> get outText => _text.stream;
+  Stream<String> get outTextTransformed => _text.stream.transform(validateText);
+  Function(String text) get inText => _text.sink.add;
+
+  final _key = BehaviorSubject<String>();
+  Stream<String> get outKey => _key.stream;
+  Stream<int> get outKeyTransformed => _key.stream.transform(validateKey);
+  Function(String) get inKey => _key.sink.add;
+
+  Observable<bool> get isFilled => Observable.combineLatest2(
+      outTextTransformed, outKeyTransformed, (a, b) => true);
+
+  // Add to the streamed map the key/value pair put by the user
+  addText() {
+    var key = int.parse(_key.value);
+    var value = _text.value;
+    var streamMap = _map.value;
+
+    if (streamMap != null) {
+      map.addAll(streamMap);
+    }
+
+    map[key] = value;
+    inMap(map);
+  }
+
+  dispose() {
+    print('-------StreamedMapClean BLOC DISPOSE--------');
+
+    _map.close();
+    _text.close();
+    _key.close();
+  }
+}
+```
+
+2. ##### With this library:
+
+```dart
+class StreamedMapBloc extends BlocBase with Validators {
+  StreamedMapBloc() {
+    print('-------StreamedMap BLOC--------');
+
+    // Set the validation transformers for the textfields
+    streamedText.setTransformer(validateText);
+    streamedKey.setTransformer(validateKey);
+  }
+
+  final streamedMap = StreamedMap<int, String>();
+  final streamedText = StreamedTransformed<String, String>();
+  final streamedKey = StreamedTransformed<String, int>();
+
+  Observable<bool> get isFilled => Observable.combineLatest2(
+      streamedText.outTransformed, streamedKey.outTransformed, (a, b) => true);
+
+  // Add to the streamed map the key/value pair put by the user
+  addText() {
+    var key = int.parse(streamedKey.value);
+    var value = streamedText.value;
+
+    streamedMap.addKey(key, value);
+
+    // Or, as an alternative:
+    //streamedMap.value[key] = value;
+    //streamedMap.refresh();
+  }
+
+  dispose() {
+    print('-------Streamed BLOC DISPOSE--------');
+    streamedMap.dispose();
+    streamedText.dispose();
+    streamedKey.dispose();
+  }
+}
+```
+
+As you can see the code is more clean, easier to read and to mantain.
 
 ## StreamedValue
 
@@ -147,6 +286,8 @@ counter.value += 1;
 ```
 
 Then the StreamedValue is used to drive a StreamedWidget/StreamBuilder using the outStream getter.
+
+N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the `refresh` method to update the stream.
 
 #### Usage
 
@@ -170,8 +311,8 @@ RaisedButton(
     color: buttonColor,
     child: Text('+'),
     onPressed: () {
-        bloc.incrementCounter();
-        },
+      bloc.incrementCounter();
+    },
 ),
 ```
 
@@ -185,12 +326,12 @@ From the StreamedMap example:
 
 ```dart
 // In the BLoC class
-  final streamedKey = StreamedTransformed<String, int>();
+final streamedKey = StreamedTransformed<String, int>();
 
 
 
 // In the constructor of the BLoC class
-  streamedKey.setTransformer(validateKey);
+streamedKey.setTransformer(validateKey);
 
 
 
@@ -240,9 +381,33 @@ StreamBuilder(
 
 ## StreamedList
 
-This class has been created to work with lists.
+This class has been created to work with lists. It works like [StreamedValue].
+
+To modify the list (e.g. adding items) and update the stream automatically
+use these methods:
+
+- [addElement]
+- [removeElement]
+- [removeAt]
+- [clear]
+
+For other direct actions on the list, to update the stream call
+the [refresh] method instead.
 
 #### Usage
+
+e.g. adding an item:
+
+```dart
+ streamedList.addElement(item);
+```
+
+it is the same as:
+
+```dart
+  streamedList.value.add(item);
+  streamedList.refresh();
+```
 
 From the StreamedList example:
 
@@ -254,7 +419,7 @@ From the StreamedList example:
   addText() {
     streamedList.addElement(streamedText.value);
 
-    // In alternative:
+    // Or, as an alternative:
     // streamedList.value.add(streamedText.value);
     // streamedList.refresh(); // To refresh the stream with the new value
   }
@@ -262,9 +427,32 @@ From the StreamedList example:
 
 ## StreamedMap
 
-This class has been created to work with maps.
+This class has been created to work with maps, it works like [StreamedList].
+
+To modify the list (e.g. adding items) and update the stream automatically
+use these methods:
+
+- [addKey]
+- [removeKey]
+- [clear]
+
+For other direct actions on the map, to update the stream call
+the [refresh] method instead.
 
 #### Usage
+
+e.g. adding a key/value pair:
+
+```dart
+  streamedMap.addKey(1, 'first');
+```
+
+it is the same as:
+
+```dart
+   streamedMap.value[1] = 'first';
+   streamedList.refresh();
+```
 
 From the streamed map example:
 
@@ -277,14 +465,26 @@ From the streamed map example:
     var key = int.parse(streamedKey.value);
     var value = streamedText.value;
 
-    streamedMap.value[key] = value;
-    streamedMap.refresh();
+    streamedMap.addKey(key, value);
+
+    // Or, as an alternative:
+    //streamedMap.value[key] = value;
+    //streamedMap.refresh();
   }
 ```
 
 ## MemoryValue
 
 The MemoryObject has a property to preserve the previous value. The setter checks for the new value, if it is different from the one already stored, this one is given [oldValue] before storing and streaming the new one.
+
+#### Usage
+
+```dart
+final countMemory = MemoryValue<int>();
+
+countMemory.value // current value
+couneMemory.oldValue // previous value
+```
 
 ## HistoryObject
 
@@ -301,6 +501,76 @@ saveToHistory() {
   countHistory.saveValue();
 }
 ```
+
+# Tunnel pattern
+
+Easy pattern to share data between two blocs.
+
+## StreamedSender
+
+Used to make a one-way tunnel beetween two blocs (from blocA to a StremedValue on blocB).
+
+#### Usage
+
+1. #### Define a [StreamedValueBase] derived object in the blocB
+
+```dart
+final receiverStr = StreamedValue<String>();
+```
+
+2. #### Define a [StreamedSender] in the blocA
+
+```dart
+final tunnelSenderStr = StreamedSender<String>();
+```
+
+3. #### Set the receiver in the sender on the class the holds the instances of the blocs
+
+```dart
+blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
+```
+
+4. #### To send data from blocA to bloc B then:
+
+```dart
+tunnelSenderStr.send("Text from blocA to blocB");
+```
+
+## ListSender and MapSender
+
+Like the StreamedSender, but used with collections.
+
+#### Usage
+
+1. #### Define a [StreamedList] or [StreamedMap]object in the blocB
+
+```dart
+final receiverList = StreamedList<int>();
+final receiverMap = StreamedMap<int, String>();
+```
+
+2. #### Define a [ListSender]/[MapSender] in the blocA
+
+```dart
+final tunnelList = ListSender<int>();
+final tunnelMap = MapSender<int, String>();
+```
+
+3. #### Set the receiver in the sender on the class the holds the instances of the blocs
+
+```dart
+blocA.tunnelList.setReceiver(blocB.receiverList);
+blocA.tunnelMap.setReceiver(blocB.receiverMap);
+```
+
+4. #### To send data from blocA to bloc B then:
+
+```dart
+tunnelList.send(list);
+tunnelMap.send(map);
+```
+
+# Animations and timing
 
 ## TimerObject
 
@@ -432,7 +702,7 @@ From the AnimatedObject example:
 
 A complex class to hadle the rendering of widgets over the time. It takes a collection of "Stages" and triggers the visualization of the widgets at a given time (relative o absolute timing). For example to make a demostration on how to use an application, showing the widgets and pages along with explanations.
 
-![StagedObject](https://i.imgur.com/OaCgxiv.gif)
+![StagedObject](https://i.imgur.com/9XLb7JD.gif)
 
 Every stage is handled by using the Stage class:
 
@@ -455,7 +725,7 @@ From the StagedObject example:
    Here the map is in the view and is set in the BLoC class by the setStagesMap.
 
 ```dart
-Map<int, Stage> get widgetsMap => <int, Stage>{
+Map<int, Stage> get stagesMap => <int, Stage>{
   0: Stage(
       widget: Container(
         width: 200.0,
@@ -501,11 +771,12 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
 
   // The map can be set through the constructor of the StagedObject
   // or by the setStagesMap method like in this case.
-  setMap(Map<int, Stage> widgetsMap) {
-    staged.setStagesMap(widgetsMap);
+  setMap(Map<int, Stage> stagesMap) {
+    staged.setStagesMap(stagesMap);
   }
 
 
+  // This method is then called from a button in the view
   start() {
     if (staged.getMapLength() > 0) {
       staged.setCallback(sendNextStageText);
@@ -513,7 +784,8 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
     }
   }
 
-
+  // By this method we get the next stage to show it
+  // in a little box below the current stage
   sendNextStageText() {
     var nextStage = staged.getNextStage();
     if (nextStage != null) {
@@ -534,7 +806,7 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
 ```dart
   // Setting the map in the build method
   StagedObjectBloc bloc = BlocProvider.of(context);
-  bloc.setMap(widgetsMap);
+  bloc.setMap(stagesMap);
 
 
   // To show the current widget on the view using the ReceiverWidget.
@@ -544,75 +816,67 @@ Map<int, Stage> get widgetsMap => <int, Stage>{
   ),
 ```
 
-# TunnelPattern
+## StagedWidget
 
-Easy pattern to share data between two blocs.
-
-## StreamedSender
-
-Used to make a one-way tunnel beetween two blocs (from blocA to a StremedValue on blocB).
+![StagedWidget](https://i.imgur.com/nCsbJCy.gif)
 
 #### Usage
 
-1. #### Define a [StreamedValueBase] derived object in the blocB
+1. #### Declare a map <int, Stage>
+   Here the map is in the view and is set in the BLoC class by the setStagesMap.
 
 ```dart
-    final receiverStr = StreamedValue<String>();
+Map<int, Stage> get stagesMap => <int, Stage>{
+  0: Stage(
+      widget: Container(
+        width: 200.0,
+        height: 200.0,
+        color: Colors.indigo[200],
+        alignment: Alignment.center,
+        key: Key('0'),
+        child: ScrollingText(
+          text:
+            'This stage will last 8 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
+          scrollingDuration: 2000,
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 18.0,
+            fontWeight: FontWeight.w500)),
+        ),
+      time: 8000,
+      onShow: () {}),
+  1: Stage(
+      widget: Container(
+        width: 200.0,
+        height: 200.0,
+        color: Colors.indigo[200],
+        alignment: Alignment.center,
+        key: Key('00'),
+        child: ScrollingText(
+              text: 'The next widgets will cross      fade.',
+              scrollingDuration: 2000,
+            ),
+          ),
+      time: 8000,
+      onShow: () {}),
+
+}
 ```
 
-2. #### Define a [StreamedSender] in the blocA
+2. #### In the view:
 
 ```dart
-    final tunnelSenderStr = StreamedSender<String>();
+StagedWidget(
+  stagesMap: stagesMap,
+  onStart: // function to call,
+  onEnd: () {
+    // Function to call at the end of the last stage
+    // (only if relative timing):
+    // e.g. Navigator.pop(context);
+  }),
 ```
 
-3. #### Set the receiver in the sender on the class the holds the instances of the blocs
-
-```dart
-    blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
-```
-
-4. #### To send data from blocA to bloc B then:
-
-```dart
-    tunnelSenderStr.send("Text from blocA to blocB");
-```
-
-## ListSender and MapSender
-
-Like the StreamedSender, but used with collections.
-
-#### Usage
-
-1. #### Define a [StreamedList] or [StreamedMap]object in the blocB
-
-```dart
-    final receiverList = StreamedList<int>();
-    final receiverMap = StreamedMap<int, String>();
-```
-
-2. #### Define a [ListSender]/[MapSender] in the blocA
-
-```dart
-    final tunnelList = ListSender<int>();
-    final tunnelMap = MapSender<int, String>();
-```
-
-3. #### Set the receiver in the sender on the class the holds the instances of the blocs
-
-```dart
-    blocA.tunnelList.setReceiver(blocB.receiverList);
-    blocA.tunnelMap.setReceiver(blocB.receiverMap);
-```
-
-4. #### To send data from blocA to bloc B then:
-
-```dart
-    tunnelList.send(list);
-    tunnelMap.send(map);
-```
-
-# Widgets
+# Widgets for streams and futures
 
 ## StreamedWidget
 
@@ -658,11 +922,13 @@ FuturedWidget<String>(future: future, builder: (BuildContext context, AsyncSnaps
 
 N.B. The callback is executed only if the respective child is not provided.
 
+# Effects
+
 ## LinearTransition
 
 Linear cross fading transition between two widgets, it can be used with the [StagedObject].
 
-![LinearTransition](https://i.imgur.com/mqB3pRA.gif)
+![LinearTransition](https://i.imgur.com/viGPpCu.gif)
 
 #### Usage
 
@@ -680,7 +946,7 @@ LinearTransition(
 
 Cross fading transition between two widgets. This uses the Flutter way to make an animation.
 
-![CurvedTransition](https://i.imgur.com/HMa4mwW.gif)
+![CurvedTransition](https://i.imgur.com/kxWOKMU.gif)
 
 #### Usage
 
@@ -694,6 +960,122 @@ CurvedTransition(
   curve: Curves.bounceInOut,
 ),
 ```
+
+## FadeInWidget
+
+#### Usage
+
+```dart
+FadeInWidget(
+  duration: 7000,
+  child: ScrollingText(
+      text: 'Fade in text',
+      scrollingDuration: 2000,
+      style: TextStyle(
+        color: Colors.blue,
+        fontSize: 94.0,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+),
+```
+
+## FadeOutWidget
+
+#### Usage
+
+```dart
+FadeOutWidget(
+  duration: 7000,
+  child: ScrollingText(
+      text: 'Fade out text',
+      scrollingDuration: 2000,
+      style: TextStyle(
+        color: Colors.blue,
+        fontSize: 94.0,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+),
+```
+
+## BlurWidget
+
+![Blur](https://i.imgur.com/Q8CJboZ.png)
+
+
+#### Usage
+
+```dart
+BlurWidget(
+  sigmaX: 2.0,
+  sigmaY: 3.0,
+  child: Text('Fixed blur')
+)
+```
+
+## BlurInWidget
+
+#### Usage
+
+```dart
+BlurInWidget(
+  initialSigmaX: 2.0,
+  initialSigmaY: 12.0,
+  duration: 5000,
+  refreshTime: 20,
+  child: Text('Blur out'),
+)
+```
+
+## BlurOutWidget
+
+#### Usage
+
+```dart
+BlurOutWidget(
+  finalSigmaX: 2.0,
+  finalSigmaY: 12.0,
+  duration: 5000,
+  refreshTime: 20,
+  child: Text('Blur out'),
+)
+```
+
+## AnimatedBlurWidget
+
+#### Usage
+
+```dart
+AnimatedBlurWidget(
+  initialSigmaX: 2.0,
+  initialSigmaY: 3.0,
+  finalSigmaX: 2.0,
+  finalSigmaY: 3.0,
+  duration: 5000,
+  reverseAnimation: true,
+  loop: true,
+  refreshTime: 20,
+  child: Text('Fixed blur')
+)
+```
+
+
+## WavesWidget
+
+#### Usage
+
+```dart
+WavesWidget(
+  width: 128.0,
+  height: 128.0,
+  color: Colors.red,
+  child: Container(
+    color: Colors.red[400],   
+ ),
+```
+
+# Various
 
 ## ScrollingText
 
@@ -727,6 +1109,7 @@ HorizontalSlider(
   onSliding: (slider) {
     bloc.horizontalSlider(slider);
   },
+)
 
 
 
@@ -741,5 +1124,6 @@ VerticalSlider(
   triangleColor: Colors.red,
   onSliding: (slider) {
     bloc.verticalSlider(slider);
-    },
+  },
+)
 ```

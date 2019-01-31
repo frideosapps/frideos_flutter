@@ -1,12 +1,17 @@
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
+
 import 'streamed_value.dart';
 
+///
+/// Enum to handle the status of the animation.
+///
 enum AnimatedStatus { active, stop, pause }
 
 ///
 ///
-/// This class is used to update a value over a period of time. 
+/// This class is used to update a value over a period of time.
 /// Useful to handle animations using the BLoC pattern.
 ///
 /// From the AnimatedObject example:
@@ -108,16 +113,16 @@ class AnimatedObject<T> {
 
   /// Getter for stream of the [StreamedValue] that holds the animation
   /// value.
-  get animationStream => animation.outStream;
+  ValueObservable<T> get animationStream => animation.outStream;
 
   /// The initial value of the animation
-  final T initialValue;
+  T initialValue;
 
   /// Timer to handle the timing
   final timer = TimerObject();
 
   /// Interval in milliseconds
-  final int interval;
+  int interval;
 
   ///
   /// AnimatedObject status
@@ -125,11 +130,12 @@ class AnimatedObject<T> {
   final _status = StreamedValue<AnimatedStatus>();
 
   /// Getter for the stream of the status of the animation
-  get statusStream => _status.outStream;
+  ValueObservable<AnimatedStatus> get statusStream => _status.outStream;
 
   /// Status getter
   AnimatedStatus get getStatus => _status.value;
 
+  /// Method to check if the animation is playing or not.
   bool isAnimating() {
     if (getStatus == AnimatedStatus.active) {
       return true;
@@ -140,25 +146,28 @@ class AnimatedObject<T> {
 
   // In the callback increase the animation.value!
   start(Function(Timer t) callback) {
-    print('start: ${timer.isTimerActive}');
     if (!timer.isTimerActive) {
       animation.value = initialValue;
       timer.startPeriodic(
           Duration(milliseconds: interval), (Timer t) => callback(t));
-      // 
+      //
       _status.value = AnimatedStatus.active;
     }
   }
 
+  /// Method to stop the animation-
   stop() {
     timer.stopTimer();
     _status.value = AnimatedStatus.stop;
   }
 
+  /// Method to reset the animation. It doesn't stop the animation, it just
+  /// sets the animation.value to the [initialValue].
   reset() {
     animation.value = initialValue;
   }
 
+  /// Method to pause the animation
   pause() {
     _status.value = AnimatedStatus.pause;
   }

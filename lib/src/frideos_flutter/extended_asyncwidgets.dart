@@ -75,7 +75,7 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 ///
 /// FuturedWidget is a wrapper for the [FutureBuilder] widget
 ///
-/// If no [onWaitingWidget] widget or [onWaiting] callback is provided then a [Container] is shown
+/// If no [onWaitingChild] widget or [onWaiting] callback is provided then a [Container] is shown
 ///
 /// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
 ///

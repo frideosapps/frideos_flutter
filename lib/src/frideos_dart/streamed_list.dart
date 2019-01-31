@@ -4,28 +4,54 @@ import 'package:rxdart/rxdart.dart';
 
 ///
 ///
-/// Used when T is a collection, it works like [StreamedValue].
+/// Used when T is a list, it works like [StreamedValue].
 ///
-/// To just add elements to the list it is possibile to use the [addElement]
-/// method and the stream get updated by the [refresh] method called inside 
-/// this function. For other direct actions on the list (e.g. adding, deleting items,
-/// clear the list etc.), call the [refresh] method to update the stream.
-/// 
-/// e.g. 
-/// 
+/// To modify the list (e.g. adding items) and update the stream automatically
+/// use these methods:
+///
+/// - [addElement]
+/// - [removeElement]
+/// - [removeAt]
+/// - [clear]
+///
+/// For other direct actions on the list, to update the stream call
+/// the [refresh] method instead.
+///
+/// #### Usage
+///
+/// e.g. adding an item:
+///
+/// ```dart
+///   streamedList.addElement(item);
+/// ```
+///
+/// it is the same as:
+///
 /// ```dart
 ///   streamedList.value.add(item);
 ///   streamedList.refresh();
 /// ```
-/// 
+///
+/// From the StreamedList example:
+///
 /// ```dart
-///   streamedList.value.clear();
-///   streamedList.refresh();
+/// final streamedList = StreamedList<String>();
+///
+///
+/// // Add to the streamed list the string from the textfield
+/// addText() {
+///   streamedList.addElement(streamedText.value);
+///
+///   // Or, as an alternative:
+///   // streamedList.value.add(streamedText.value);
+///   // streamedList.refresh(); // To refresh the stream with the new value
+/// }
 /// ```
-/// 
+///
+///
 class StreamedList<T> {
   final stream = BehaviorSubject<List<T>>();
-  
+
   StreamedList() {
     stream.value = List<T>();
   }
@@ -37,28 +63,54 @@ class StreamedList<T> {
   Function(List<T>) get inStream => stream.sink.add;
 
   /// Stream getter
-  Stream<List<T>> get outStream => stream.stream;
-
+  ValueObservable<List<T>> get outStream => stream.stream;
 
   List<T> get value => stream.value;
 
-  ///  Clear the list, add all elements of the list passed and update the stream
-  set value(List<T> value) {
+  int get length => stream.value.length;
+
+  /// Clear the list, add all elements of the list passed
+  /// and update the stream
+  set value(List<T> list) {
     value.clear();
-    value.addAll(value);
-    inStream(value);
-  }
-  
-  /// To refresh the stream when data is added without using addElement;
-  refresh() {
-    inStream(value);
+    value.addAll(list);
+    inStream(list);
   }
 
-  /// Used when T is a collection, to add items and update the stream
+  /// Used to add an item to the list and update the stream automatically
   addElement(element) {
     value.add(element);
     refresh();
     timesUpdated++;
+  }
+
+  /// Used to remove an item from the list and update the stream automatically
+  bool removeElement(element) {
+    var result = value.remove(element);
+    refresh();
+    timesUpdated++;
+    return result;
+  }
+
+  /// Used to remove an item from the list and update the stream automatically
+  T removeAt(int index) {
+    T removed = value.removeAt(index);
+    refresh();
+    timesUpdated++;
+    return removed;
+  }
+
+  /// Used to clear the list and update the stream automatically
+  clear() {
+    value.clear();
+    refresh();
+    timesUpdated++;
+  }
+
+  /// To refresh the stream when the list is modified without using the 
+  /// methods of this class.
+  refresh() {
+    inStream(value);
   }
 
   dispose() {
@@ -66,4 +118,3 @@ class StreamedList<T> {
     stream.close();
   }
 }
-
