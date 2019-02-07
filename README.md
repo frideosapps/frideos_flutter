@@ -73,6 +73,9 @@ An example of a medical app built with Flutter for the classification of the art
 ### 4. [Pair game](https://github.com/frideosapps/pair_game)
 A simple pair game (multiple selections, animations, tunnel pattern).
 
+### 5. [Theme changer](https://github.com/frideosapps/theme_changer)
+A starter app with a drawer and a dynamic theme changer, BLoC pattern, settings page.
+
 
 ## Getting started:
 
