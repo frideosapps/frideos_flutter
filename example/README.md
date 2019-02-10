@@ -150,7 +150,7 @@ As you can see the code is more clean, easier to read and to mantain.
 ![Blur](https://i.imgur.com/A7XmY5t.gif?s=150)
 ![LinearTransition](https://i.imgur.com/viGPpCu.gif)
 ![CurvedTransition](https://i.imgur.com/kxWOKMU.gif)
-![AnimatedObject](https://i.imgur.com/jBETLuj.gif)
+![AnimatedObject](https://i.imgur.com/10nfh0R.gif)
 ![MultipleSelection](https://i.imgur.com/nGLRiCY.gif)
 ![Sliders](https://i.imgur.com/H16VE01.gif)
 ![Screenshot](screenshots/streamedmap.png?s=150)

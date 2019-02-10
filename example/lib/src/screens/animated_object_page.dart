@@ -19,7 +19,9 @@ class AnimatedObjectPage extends StatelessWidget {
           color: Colors.blueGrey[100],
           child: Column(
             children: <Widget>[
-              Container(height: 20.0,),
+              Container(
+                height: 20.0,
+              ),
               StreamedWidget<AnimatedStatus>(
                 initialData: AnimatedStatus.stop,
                 stream: bloc.scaleAnimation.statusStream,
@@ -60,7 +62,17 @@ class AnimatedObjectPage extends StatelessWidget {
                     stream: bloc.scaleAnimation.animationStream,
                     builder: (context, snapshot) {
                       return Transform.scale(
-                          scale: snapshot.data, child: FlutterLogo());
+                          scale: snapshot.data,
+                          // No need for StreamBuilder here, the widget
+                          // is already updating
+                          child: Transform.rotate(
+                              angle: bloc.rotationAnimation.value,
+                              // Same here
+                              //
+                              child: Transform(
+                                  transform: Matrix4.rotationY(
+                                      bloc.rotationAnimation.value),
+                                  child: FlutterLogo())));
                     }),
               )
             ],

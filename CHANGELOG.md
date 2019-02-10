@@ -1,3 +1,20 @@
+## Versione 0.1.2 (10-02-19)
+
+#### AnimatedObject
+##### - Added getter and setter for the value of the AnimatedObject:
+
+Intead of animateObject.animation.value, now the current value of the animation it is accessible just by using the 'value' setter/getter:
+
+```dart
+animatedObject.value += 0.1; 
+// It is the same as animatedObject.animation.value += 0.1
+```
+
+#### AnimatedObject example updated
+##### - Added multiple rotations
+
+#### Blur widgets
+##### - Code refactoring
 
 
 ## Version 0.1.1 (29-01-19)

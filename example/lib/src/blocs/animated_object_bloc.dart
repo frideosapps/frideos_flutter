@@ -13,28 +13,41 @@ class AnimatedObjectBloc extends BlocBase {
   final scaleAnimation =
       AnimatedObject<double>(initialValue: 0.5, interval: 20);
 
+      
+  final rotationAnimation =
+      AnimatedObject<double>(initialValue: 0.5, interval: 20);
+
   start() {
     scaleAnimation.start(updateScale);
+    rotationAnimation.start(updateRotation);
   }
 
   updateScale(Timer t) {
-    scaleAnimation.animation.value += 0.02;
+    scaleAnimation.value += 0.03;
 
-    if (scaleAnimation.animation.value > 5.0) {
+    if (scaleAnimation.value > 8.0) {
       scaleAnimation.reset();
     }
   }
 
+  updateRotation(Timer t) {
+    rotationAnimation.value += 0.1;
+  }
+
+
   stop() {
     scaleAnimation.stop();
+    rotationAnimation.stop();
   }
 
   reset() {
     scaleAnimation.reset();
+    rotationAnimation.reset();
   }
 
   dispose() {
     print('-------AnimatedObject BLOC DISPOSE--------');
     scaleAnimation.dispose();
+    rotationAnimation.dispose();
   }
 }

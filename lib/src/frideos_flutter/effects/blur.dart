@@ -13,7 +13,11 @@ const blurRefreshTime = 20;
 ///
 class BlurWidget extends StatelessWidget {
   BlurWidget(
-      {@required this.child, @required this.sigmaX, @required this.sigmaY});
+      {Key key,
+      @required this.child,
+      @required this.sigmaX,
+      @required this.sigmaY})
+      : super(key: key);
 
   ///
   /// Child to blur
@@ -57,7 +61,8 @@ class BlurWidget extends StatelessWidget {
 ///
 class AnimatedBlurWidget extends StatefulWidget {
   AnimatedBlurWidget(
-      {@required this.child,
+      {Key key,
+      @required this.child,
       this.initialSigmaX = 0.0,
       this.initialSigmaY = 0.0,
       this.finalSigmaX = 4.0,
@@ -65,7 +70,8 @@ class AnimatedBlurWidget extends StatefulWidget {
       this.duration = 5000,
       this.reverseAnimation = true,
       this.loop = true,
-      this.refreshTime = blurRefreshTime});
+      this.refreshTime = blurRefreshTime})
+      : super(key: key);
 
   ///
   /// Child to blur
@@ -127,9 +133,10 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
   void initState() {
     super.initState();
 
-    blur = AnimatedObject(initialValue: 0.0, interval: widget.refreshTime);
+    blur = AnimatedObject(
+        initialValue: widget.initialSigmaX, interval: widget.refreshTime);
 
-    blur.animation.value = widget.initialSigmaX;
+    //blur.animation.value = widget.initialSigmaX;
     blurSigmaY = widget.initialSigmaY;
 
     // Calculate the step of the blur
@@ -142,12 +149,12 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
     blur.start((t) {
       // Update the blur.
       //
-      blur.animation.value += blurVelX;
+      blur.value += blurVelX;
       blurSigmaY += blurVelY;
 
       // Check if limit reached.
       //
-      if (blur.animation.value > widget.finalSigmaX) {
+      if (blur.value > widget.finalSigmaX) {
         // If the reverseAnimation flag is set to true (default)
         // then invert the direction.
         //
@@ -159,7 +166,7 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
           // then reset the blur values
           //
           if (widget.loop) {
-            blur.animation.value = 0.0;
+            blur.value = 0.0;
             blurSigmaY = 0.0;
           }
           // Otherwise, stop the animation.
@@ -200,6 +207,7 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
           StreamedWidget(
+              initialData: blur.initialValue,
               stream: blur.animationStream,
               builder: (context, AsyncSnapshot<double> snapshot) {
                 return Stack(
@@ -228,11 +236,13 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
 ///
 class BlurInWidget extends StatefulWidget {
   BlurInWidget(
-      {@required this.child,
+      {Key key,
+      @required this.child,
       this.initialSigmaX = 4.0,
       this.initialSigmaY = 6.0,
       this.duration = 5000,
-      this.refreshTime = blurRefreshTime});
+      this.refreshTime = blurRefreshTime})
+      : super(key: key);
 
   ///
   /// Child to blur
@@ -274,7 +284,7 @@ class _BlurInWidgetState extends State<BlurInWidget> {
     super.initState();
     blur = AnimatedObject(
         initialValue: widget.initialSigmaX, interval: blurRefreshTime);
-    blur.animation.value = widget.initialSigmaX;
+    blur.value = widget.initialSigmaX;
     blurSigmaY = widget.initialSigmaY;
 
     // Calculate the step of the blur
@@ -283,10 +293,10 @@ class _BlurInWidgetState extends State<BlurInWidget> {
     var blurVelY = widget.initialSigmaY / (widget.duration / blurRefreshTime);
 
     blur.start((t) {
-      blur.animation.value -= blurVelX;
+      blur.value -= blurVelX;
       blurSigmaY -= blurVelY;
 
-      if (blur.animation.value < 0.0) {
+      if (blur.value < 0.0) {
         blurVelX = 0.0;
         blurSigmaY = 0.0;
         blur.stop();
@@ -305,6 +315,7 @@ class _BlurInWidgetState extends State<BlurInWidget> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
           StreamedWidget(
+              initialData: blur.initialValue,
               stream: blur.animationStream,
               builder: (context, AsyncSnapshot snapshot) {
                 return Stack(
@@ -333,11 +344,13 @@ class _BlurInWidgetState extends State<BlurInWidget> {
 ///
 class BlurOutWidget extends StatefulWidget {
   BlurOutWidget(
-      {@required this.child,
+      {Key key,
+      @required this.child,
       this.finalSigmaX = 4.0,
       this.finalSigmaY = 6.0,
       this.duration = 5000,
-      this.refreshTime = blurRefreshTime});
+      this.refreshTime = blurRefreshTime})
+      : super(key: key);
 
   ///
   /// Child to blur
@@ -379,7 +392,7 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
     super.initState();
 
     blur = AnimatedObject(initialValue: 0.0, interval: blurRefreshTime);
-    blur.animation.value = 0.0;
+    //blur.animation.value = 0.0;
 
     // Calculate the step of the blur
     //
@@ -387,10 +400,10 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
     var blurVelY = widget.finalSigmaY / (widget.duration / blurRefreshTime);
 
     blur.start((t) {
-      blur.animation.value += blurVelX;
+      blur.value += blurVelX;
       blurSigmaY += blurVelY;
 
-      if (blur.animation.value > widget.finalSigmaX) {
+      if (blur.value > widget.finalSigmaX) {
         blurVelX = widget.finalSigmaX;
         blurSigmaY = widget.finalSigmaY;
         blur.stop();
@@ -409,6 +422,7 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
           StreamedWidget(
+              initialData: blur.initialValue,
               stream: blur.animationStream,
               builder: (context, AsyncSnapshot<double> snapshot) {
                 return Stack(

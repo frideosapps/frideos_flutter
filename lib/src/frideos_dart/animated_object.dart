@@ -115,6 +115,12 @@ class AnimatedObject<T> {
   /// value.
   ValueObservable<T> get animationStream => animation.outStream;
 
+  /// Getter for the AnimatedObject value
+  T get value => animation.value;
+
+  /// Setter for the AnimatedObject value
+  set value(T value) => animation.value = value;
+
   /// The initial value of the animation
   T initialValue;
 

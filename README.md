@@ -613,35 +613,47 @@ This class is used to update a value over a period of time. Useful to handle ani
 
 From the AnimatedObject example:
 
-![AnimatedObject](https://i.imgur.com/jBETLuj.gif)
+![AnimatedObject](https://i.imgur.com/10nfh0R.gif)
 
 #### Usage
 
 - #### In the BLoC:
 
 ```dart
- // Initial value 0.5, updating interval 20 milliseconds
+// Initial value 0.5, updating interval 20 milliseconds
   final scaleAnimation =
+      AnimatedObject<double>(initialValue: 0.5, interval: 20);
+
+      
+  final rotationAnimation =
       AnimatedObject<double>(initialValue: 0.5, interval: 20);
 
   start() {
     scaleAnimation.start(updateScale);
+    rotationAnimation.start(updateRotation);
   }
 
   updateScale(Timer t) {
-    scaleAnimation.animation.value += 0.02;
+    scaleAnimation.value += 0.03;
 
-    if (scaleAnimation.animation.value > 5.0) {
+    if (scaleAnimation.value > 8.0) {
       scaleAnimation.reset();
     }
   }
 
+  updateRotation(Timer t) {
+    rotationAnimation.value += 0.1;
+  }
+
+
   stop() {
     scaleAnimation.stop();
+    rotationAnimation.stop();
   }
 
   reset() {
     scaleAnimation.reset();
+    rotationAnimation.reset();
   }
 ```
 
@@ -693,7 +705,17 @@ From the AnimatedObject example:
                     stream: bloc.scaleAnimation.animationStream,
                     builder: (context, snapshot) {
                       return Transform.scale(
-                          scale: snapshot.data, child: FlutterLogo());
+                          scale: snapshot.data,
+                          // No need for StreamBuilder here, the widget
+                          // is already updating
+                          child: Transform.rotate(
+                              angle: bloc.rotationAnimation.value,
+                              // Same here
+                              //
+                              child: Transform(
+                                  transform: Matrix4.rotationY(
+                                      bloc.rotationAnimation.value),
+                                  child: FlutterLogo())));
                     }),
               )
             ],
