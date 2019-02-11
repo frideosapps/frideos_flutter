@@ -4,8 +4,6 @@ import 'package:frideos/frideos_dart.dart';
 
 import '../blocs/bloc.dart';
 
-
-
 class Counter {
   int counter;
   String text;
@@ -14,17 +12,20 @@ class Counter {
 
 class StreamedValuesBloc extends BlocBase {
   StreamedValuesBloc() {
-    print('-------StreamedValueS BLOC--------');
+    print('-------StreamedValues BLOC--------');
+
+    // Activate the debug console messages on disposing
+    count.debugMode();
+    countMemory.debugMode();
+    countHistory.debugMode();
+    timerObject.debugMode();
+    counterObj.debugMode();
   }
 
   final count = StreamedValue<int>();
   final countMemory = MemoryValue<int>();
   final countHistory = HistoryObject<int>();
   final timerObject = TimerObject();
-
-  final tunWidget = StreamedValue<Widget>();
-  final tunStr = StreamedValue<String>();
-
   final counterObj = StreamedValue<Counter>();
 
   incrementCounter() {
@@ -71,10 +72,8 @@ class StreamedValuesBloc extends BlocBase {
     timerObject.getLapTime();
   }
 
-
-
   dispose() {
-    print('-------StreamedValueS BLOC DISPOSE--------');
+    print('-------StreamedValues BLOC DISPOSE--------');
     count.dispose();
     countMemory.dispose();
     countHistory.dispose();

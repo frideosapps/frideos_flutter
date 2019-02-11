@@ -15,6 +15,14 @@ class _StreamedValueBase<T> {
   /// timesUpdate shows how many times the got updated
   int timesUpdated = 0;
 
+  /// Debug mode (Default: false)
+  bool _debugMode = false;
+
+  /// To enable the debug mode
+  void debugMode() {
+    _debugMode = true;
+  }
+
   /// Sink for the stream
   Function get inStream => stream.sink.add;
 
@@ -32,7 +40,9 @@ class _StreamedValueBase<T> {
   }
 
   dispose() {
-    print('---------- Closing Stream ------ type: $T');
+    if (_debugMode) {
+      print('---------- Closing Stream ------ type: $T');
+    }
     stream.close();
   }
 }
@@ -122,7 +132,7 @@ class StreamedValue<T> extends _StreamedValueBase<T> {
 ///
 ///
 /// A special StreamedValue that is used when there is the need to use
-/// a StreamTransformer (e.g. stream transformation, validation of input 
+/// a StreamTransformer (e.g. stream transformation, validation of input
 /// fields, etc.).
 ///
 ///
@@ -201,16 +211,18 @@ class StreamedTransformed<T, S> {
   /// Getter for the stream transformed
   Observable<S> get outTransformed => stream.transform(_transformer);
 
+  /// Debug mode (Default: false)
+  bool _debugMode = false;
+
+  /// To enable the debug mode
+  void debugMode() {
+    _debugMode = true;
+  }
 
   /// Method to refresh the stream (e.g to use when the type it is not
   /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
-  }
-
-  dispose() {
-    print('---------- Closing Stream ------ type: $T');
-    stream.close();
   }
 
   set value(T value) {
@@ -224,6 +236,12 @@ class StreamedTransformed<T, S> {
     _transformer = transformer;
   }
 
+  dispose() {
+    if (_debugMode) {
+      print('---------- Closing Stream ------ type: $T');
+    }
+    stream.close();
+  }
 }
 
 ///
@@ -258,7 +276,7 @@ class MemoryValue<T> extends _StreamedValueBase<T> {
 ///
 /// HistoryObject extends the [MemoryValue] class, adding a [StreamedList].
 ///
-/// When the current value needs to be stored, the [saveValue] function is called 
+/// When the current value needs to be stored, the [saveValue] function is called
 /// to send it to the [_historyStream].
 ///
 class HistoryObject<T> extends MemoryValue<T> {
@@ -288,6 +306,13 @@ class HistoryObject<T> extends MemoryValue<T> {
   ///
   saveValue() {
     _historyStream.addElement(value);
+  }
+
+  /// To enable the debug mode
+  @override
+  void debugMode() {
+    _debugMode = true;
+    _historyStream.debugMode();
   }
 
   @override
@@ -405,7 +430,7 @@ class TimerObject extends _StreamedValueBase<int> {
   getLapTime() {
     if (isStopwatchActive) {
       var milliseconds = _stopwatch.elapsedMilliseconds;
-      _stopwatchStreamed.value = milliseconds;      
+      _stopwatchStreamed.value = milliseconds;
       _stopwatch.reset();
       _stopwatch.start();
     }
@@ -413,7 +438,7 @@ class TimerObject extends _StreamedValueBase<int> {
 
   /// Stop timer and stopwatch, and set to false the booleans
   stopTimer() {
-    if (isTimerActive) {      
+    if (isTimerActive) {
       _timer.cancel();
       _time = 0;
       inStream(null);

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:rxdart/rxdart.dart';
 
 ///
@@ -77,6 +75,14 @@ class StreamedList<T> {
     inStream(list);
   }
 
+  /// Debug mode (Default: false)
+  bool _debugMode = false;
+
+  /// To enable the debug mode
+  void debugMode() {
+    _debugMode = true;
+  }
+
   /// Used to add an item to the list and update the stream automatically
   addElement(element) {
     value.add(element);
@@ -107,14 +113,16 @@ class StreamedList<T> {
     timesUpdated++;
   }
 
-  /// To refresh the stream when the list is modified without using the 
+  /// To refresh the stream when the list is modified without using the
   /// methods of this class.
   refresh() {
     inStream(value);
   }
 
   dispose() {
-    print('---------- Closing Stream ------ type: $T');
+    if (_debugMode) {
+      print('---------- Closing Stream ------ type: List<$T>');
+    }
     stream.close();
   }
 }

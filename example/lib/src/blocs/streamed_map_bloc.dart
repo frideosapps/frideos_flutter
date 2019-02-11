@@ -11,8 +11,12 @@ class StreamedMapBloc extends BlocBase with Validators {
     print('-------StreamedMap BLOC--------');
 
     // Set the validation transformers for the textfields
-    streamedText.setTransformer(validateText);    
+    streamedText.setTransformer(validateText);
     streamedKey.setTransformer(validateKey);
+
+    // Activate the debug console messages on disposing
+    streamedKey.debugMode();
+    streamedMap.debugMode();
   }
 
   final streamedMap = StreamedMap<int, String>();
@@ -22,7 +26,7 @@ class StreamedMapBloc extends BlocBase with Validators {
   Observable<bool> get isFilled => Observable.combineLatest2(
       streamedText.outTransformed, streamedKey.outTransformed, (a, b) => true);
 
-  // Add to the streamed map the key/value pair put by the user 
+  // Add to the streamed map the key/value pair put by the user
   addText() {
     var key = int.parse(streamedKey.value);
     var value = streamedText.value;

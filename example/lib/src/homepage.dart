@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               _expansionTile('Streams', [
-                _tile('Streamed objects', () {
+                _tile('StreamedObjects', () {
                   Navigator.pop(context);
 
                   final bloc = StreamedValuesBloc();

@@ -10,10 +10,10 @@ import 'package:rxdart/rxdart.dart';
 /// - [addKey]
 /// - [removeKey]
 /// - [clear]
-/// 
+///
 /// For other direct actions on the map, to update the stream call
 /// the [refresh] method instead.
-/// 
+///
 /// #### Usage
 ///
 /// e.g. adding a key/value pair:
@@ -29,20 +29,20 @@ import 'package:rxdart/rxdart.dart';
 ///   streamedList.refresh();
 /// ```
 ///
-/// 
+///
 /// From the streamed map example:
-/// 
+///
 /// ```dart
 ///  final streamedMap = StreamedMap<int, String>();
-/// 
-/// 
+///
+///
 ///  // Add to the streamed map the key/value pair put by the user
 ///  addText() {
 ///     var key = int.parse(streamedKey.value);
 ///     var value = streamedText.value;
-/// 
+///
 ///     streamedMap.addKey(key, value);
-/// 
+///
 ///     // Or, as an alternative:
 ///     //streamedMap.value[key] = value;
 ///     //streamedMap.refresh();
@@ -78,6 +78,14 @@ class StreamedMap<K, V> {
     inStream(map);
   }
 
+  /// Debug mode (Default: false)
+  bool _debugMode = false;
+
+  /// To enable the debug mode
+  void debugMode() {
+    _debugMode = true;
+  }
+
   /// Used to add key/value pair to the map and update the stream automatically
   addKey(K key, V val) {
     value[key] = val;
@@ -107,7 +115,9 @@ class StreamedMap<K, V> {
   }
 
   dispose() {
-    print('---------- Closing Stream ------ type: $K, $V');
+    if (_debugMode) {
+      print('---------- Closing Stream ------ type: Map<$K, $V>');
+    }
     stream.close();
   }
 }
