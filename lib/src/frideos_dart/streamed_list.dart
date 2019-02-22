@@ -11,6 +11,8 @@ import 'package:rxdart/rxdart.dart';
 /// - [removeElement]
 /// - [removeAt]
 /// - [clear]
+/// - [replace]
+/// - [replaceAt]
 ///
 /// For other direct actions on the list, to update the stream call
 /// the [refresh] method instead.
@@ -104,6 +106,18 @@ class StreamedList<T> {
     refresh();
     timesUpdated++;
     return removed;
+  }
+
+  /// To replace an element at a given index
+  replaceAt(int index, T element) {
+    stream.value[index] = element;
+    refresh();
+  }
+
+  /// To replace an element
+  replace(T oldElement, T newElement) {
+    var index = stream.value.indexOf(oldElement);
+    replaceAt(index, newElement);
   }
 
   /// Used to clear the list and update the stream automatically

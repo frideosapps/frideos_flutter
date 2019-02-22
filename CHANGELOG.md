@@ -1,3 +1,13 @@
+## Version 0.2.0 (22-02-19)
+
+#### - StreamedList class
+
+##### Methods added:
+
+- replaceAt
+- replace
+
+
 ## Version 0.1.3 (11-02-19)
 
 #### - Changed console messages behavior and added `debugMode` method.

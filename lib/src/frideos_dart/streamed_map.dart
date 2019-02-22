@@ -90,7 +90,7 @@ class StreamedMap<K, V> {
   addKey(K key, V val) {
     value[key] = val;
     refresh();
-    timesUpdated++;
+    timesUpdated++;    
   }
 
   /// Used to remove a key from the map and update the stream automatically
