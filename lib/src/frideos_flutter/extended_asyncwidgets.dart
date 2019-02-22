@@ -71,7 +71,6 @@ class StreamedWidget<T> extends StreamBuilder<T> {
   }
 }
 
-
 ///
 /// FuturedWidget is a wrapper for the [FutureBuilder] widget
 ///

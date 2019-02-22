@@ -4,7 +4,6 @@ import 'package:flutter/scheduler.dart';
 import '../frideos_dart/streamed_value.dart';
 import '../frideos_dart/utils.dart';
 
-
 ///
 /// A simple horizontal slider
 ///

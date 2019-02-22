@@ -390,9 +390,11 @@ To modify the list (e.g. adding items) and update the stream automatically
 use these methods:
 
 - [addElement]
-- [removeElement]
-- [removeAt]
 - [clear]
+- [removeAt]
+- [removeElement]
+- [replaceAt]
+- [replace]
 
 For other direct actions on the list, to update the stream call
 the [refresh] method instead.

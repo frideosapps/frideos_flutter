@@ -6,7 +6,6 @@ import '../extended_asyncwidgets.dart';
 import '../../frideos_dart/streamed_value.dart';
 import '../../frideos_dart/models/stage.dart';
 
-
 ///
 ///
 /// Fade out transition widget.
@@ -70,7 +69,6 @@ class _FadeOutWidgetState extends State<FadeOutWidget>
   }
 }
 
-
 ///
 ///
 /// Fade in transition widget.
@@ -133,8 +131,6 @@ class _FadeInWidgetState extends State<FadeInWidget>
     ));
   }
 }
-
-
 
 ///
 /// Class used in the cross fading between two stages

@@ -29,9 +29,9 @@ class _ScrollingTextState extends State<ScrollingText> {
   final textStream = StreamedValue<String>();
   Timer timer;
 
-  showText(String str) {    
+  showText(String str) {
     if (timer != null) {
-      if (timer.isActive) {        
+      if (timer.isActive) {
       } else {
         startShowingText(str);
       }
@@ -40,12 +40,12 @@ class _ScrollingTextState extends State<ScrollingText> {
     }
   }
 
-  startShowingText(String str) {    
-    timer = Utils.sendText(str, textStream, null, widget.scrollingDuration);    
+  startShowingText(String str) {
+    timer = Utils.sendText(str, textStream, null, widget.scrollingDuration);
   }
 
   @override
-  void initState() {    
+  void initState() {
     super.initState();
     showText(widget.text);
   }
@@ -74,5 +74,3 @@ class _ScrollingTextState extends State<ScrollingText> {
     );
   }
 }
-
-
