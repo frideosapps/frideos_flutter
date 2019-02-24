@@ -1,4 +1,4 @@
-import 'dart:core';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
