@@ -146,6 +146,7 @@ class MapSender<K, V> {
   /// Method to send the data to the StreamedMap set by the [setReceiver]
   /// method.
   send(Map<K, V> data) {
+    _receiver.value = {};
     _receiver.value.clear();
     _receiver.value.addAll(data);
     _receiver.refresh();

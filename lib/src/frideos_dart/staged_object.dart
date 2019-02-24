@@ -132,8 +132,7 @@ const updateTimeStaged = 100;
 ///
 class StagedObject {
   // Default constructor
-  StagedObject(
-      {this.absoluteTiming = false, this.callbackOnStart = true}) {
+  StagedObject({this.absoluteTiming = false, this.callbackOnStart = true}) {
     if (absoluteTiming) {
       periodic = checkAbsolute;
     } else {
@@ -288,33 +287,35 @@ class StagedObject {
   }
 
   startStages() {
-    if (!_timerObject.isTimerActive && _stagesMap != null) {
-      // Buffer the list
-      if (_stagesBuffer.length > 0) _stagesBuffer.clear();
-      _stagesBuffer.addAll(_stages);
+    if (_stagesMap != null) {
+      if (!_timerObject.isTimerActive && _stagesMap.length > 0) {
+        // Buffer the list
+        if (_stagesBuffer.length > 0) _stagesBuffer.clear();
+        _stagesBuffer.addAll(_stages);
 
-      // Show the first element of the list of widgets
-      _widgetStream.value = _stagesMap[0].widget;
+        // Show the first element of the list of widgets
+        _widgetStream.value = _stagesMap[0].widget;
 
-      // Set the stage index to the first element
-      stageIndex = 0;
+        // Set the stage index to the first element
+        stageIndex = 0;
 
-      var interval = Duration(milliseconds: updateTimeStaged);
+        var interval = Duration(milliseconds: updateTimeStaged);
 
-      // The implementation of the periodic function is set by setting
-      // the absoluteTiming flag to true (absolute) or false (relative).
-      _timerObject.startPeriodic(interval, periodic);
+        // The implementation of the periodic function is set by setting
+        // the absoluteTiming flag to true (absolute) or false (relative).
+        _timerObject.startPeriodic(interval, periodic);
 
-      _status.value = StageStatus.active;
+        _status.value = StageStatus.active;
 
-      // Call the onShow function
-      if (_stagesMap[stageIndex].onShow != null) {
-        _stagesMap[stageIndex].onShow();
-      }
+        // Call the onShow function
+        if (_stagesMap[stageIndex].onShow != null) {
+          _stagesMap[stageIndex].onShow();
+        }
 
-      // Calling the callback on start if the flag isn't set to false
-      if (callbackOnStart) {
-        _callback();
+        // Calling the callback on start if the flag isn't set to false
+        if (callbackOnStart) {
+          _callback();
+        }
       }
     }
   }
@@ -429,7 +430,7 @@ class StagedObject {
 
     // Calling the callback
     // If no callback is set then this is -> () {}
-    _callback();    
+    _callback();
   }
 
   dispose() {

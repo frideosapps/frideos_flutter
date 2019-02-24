@@ -52,11 +52,13 @@ import 'package:rxdart/rxdart.dart';
 class StreamedList<T> {
   final stream = BehaviorSubject<List<T>>();
 
-  StreamedList() {
-    stream.value = List<T>();
+  StreamedList({List<T> initialData}) {
+    if (initialData != null) {
+      stream.value = initialData;
+    }
   }
 
-  /// timesUpdate shows how many times the got updated
+  /// timesUpdated shows how many times the stream got updated
   int timesUpdated = 0;
 
   /// Sink for the stream
@@ -72,9 +74,11 @@ class StreamedList<T> {
   /// Clear the list, add all elements of the list passed
   /// and update the stream
   set value(List<T> list) {
-    value.clear();
-    value.addAll(list);
+    if (value == null) {
+      stream.value = [];
+    }
     inStream(list);
+    timesUpdated++;
   }
 
   /// Debug mode (Default: false)
@@ -89,14 +93,12 @@ class StreamedList<T> {
   addElement(element) {
     value.add(element);
     refresh();
-    timesUpdated++;
   }
 
   /// Used to remove an item from the list and update the stream automatically
   bool removeElement(element) {
     var result = value.remove(element);
     refresh();
-    timesUpdated++;
     return result;
   }
 
@@ -104,7 +106,6 @@ class StreamedList<T> {
   T removeAt(int index) {
     T removed = value.removeAt(index);
     refresh();
-    timesUpdated++;
     return removed;
   }
 
@@ -124,13 +125,13 @@ class StreamedList<T> {
   clear() {
     value.clear();
     refresh();
-    timesUpdated++;
   }
 
   /// To refresh the stream when the list is modified without using the
   /// methods of this class.
   refresh() {
     inStream(value);
+    timesUpdated++;
   }
 
   dispose() {

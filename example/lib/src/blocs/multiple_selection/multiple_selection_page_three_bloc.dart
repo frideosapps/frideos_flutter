@@ -4,8 +4,8 @@ import '../../blocs/bloc.dart';
 import '../../models/item_model.dart';
 
 class PageThreeBloc extends BlocBase {
-  final items = StreamedList<Item>();
-  final tunnelReceiverSelectedItems = StreamedList<Item>();
+  final items = StreamedList<Item>(initialData: []);
+  final tunnelReceiverSelectedItems = StreamedList<Item>(initialData: []);
 
   // SENDERS
   final tunnelSenderMessage = StreamedSender<String>();
@@ -18,17 +18,7 @@ class PageThreeBloc extends BlocBase {
   PageThreeBloc() {
     print('-------PAGE THREE BLOC--------');
 
-/*
-    tunnelReceiverItem.outStream.listen((element) {
-      items.addElement(element);
-      print(element);
-      print('length: ${items.value.length}');
-    });
-
-*/
-    /// Why this is getting fired only the first time?!?!?!?
-    tunnelReceiverSelectedItems.outStream.listen((selectedItems) {
-      print('LISTEN SELECTED ITEMS');
+    tunnelReceiverSelectedItems.outStream.listen((selectedItems) {      
       print('length: ${selectedItems.length}');
       items.value.addAll(selectedItems);
       send(selectedItems.length);

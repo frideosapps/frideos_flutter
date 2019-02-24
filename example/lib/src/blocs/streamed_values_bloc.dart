@@ -19,7 +19,7 @@ class StreamedValuesBloc extends BlocBase {
     countMemory.debugMode();
     countHistory.debugMode();
     timerObject.debugMode();
-    counterObj.debugMode();
+    counterObj.debugMode();    
   }
 
   final count = StreamedValue<int>();

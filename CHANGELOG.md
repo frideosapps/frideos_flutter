@@ -1,3 +1,13 @@
+## Version 0.3.0 (24-02-19)
+
+#### - StreamedList and StreamedMap classes
+- <strong>*Breaking change*</strong>: StreamedList and StreamedMap by default aren't initialiazed (to avoid that when using them along with a StreamBuilder/StreamedWidget the `snaphost.hasData` is true from the beginning, becoming harder to show for example a loading spinner without using a workaround). 
+
+#### - "initialData" parameter
+- Added `initialData` parameter to the constructor to all the streamed classes to initialize the stream with an initial data.
+
+#### - Code refactoring
+
 ## Version 0.2.0 (22-02-19)
 
 #### - StreamedList class

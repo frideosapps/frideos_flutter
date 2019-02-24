@@ -5,7 +5,7 @@ import 'package:frideos/frideos_dart.dart';
 void main() {
   test('StreamedMap', () {
 
-    final streamedMap = StreamedMap<int, String>();
+    final streamedMap = StreamedMap<int, String>(initialData: {});
 
     streamedMap.addKey(1, 'first');
     expect(streamedMap.value[1], 'first');

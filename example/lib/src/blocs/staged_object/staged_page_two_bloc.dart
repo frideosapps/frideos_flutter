@@ -10,7 +10,7 @@ class StagedPageTwoBloc extends BlocBase {
     });
   }
 
-  final receiverWidget = StreamedMap<int, Stage>();
+  final receiverWidget = StreamedMap<int, Stage>(initialData: {});
   final receiverStr = StreamedValue<String>();
 
   // Create an instance with the setStagesMap constructor
@@ -21,19 +21,6 @@ class StagedPageTwoBloc extends BlocBase {
 
   final timerObject = TimerObject();
 
-  final map = Map<int, Stage>();
-
-  startTimer() {
-    timerObject.startTimer();
-  }
-
-  stopTimer() {
-    timerObject.stopTimer();
-  }
-
-  getLapTime() {
-    timerObject.getLapTime();
-  }
 
   dispose() {
     print('-------StagedPageTwo BLOC DISPOSE--------');

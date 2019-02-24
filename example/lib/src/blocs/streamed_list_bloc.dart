@@ -13,7 +13,7 @@ class StreamedListBloc extends BlocBase {
   }
 
   final streamedText = StreamedTransformed<String, String>();
-  final streamedList = StreamedList<String>();
+  final streamedList = StreamedList<String>(initialData: []);
 
   final validateText =
       StreamTransformer<String, String>.fromHandlers(handleData: (str, sink) {

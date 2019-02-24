@@ -4,8 +4,8 @@ import '../../blocs/bloc.dart';
 import '../../models/item_model.dart';
 
 class PageTwoBloc extends BlocBase {
-  final items = StreamedList<Item>();
-  final tunnelReceiverSelectedItems = StreamedList<Item>();
+  final items = StreamedList<Item>(initialData: []);
+  final tunnelReceiverSelectedItems = StreamedList<Item>(initialData: []);
 
   // SENDERS
   final tunnelSenderMessage = StreamedSender<String>();

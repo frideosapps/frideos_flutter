@@ -53,8 +53,13 @@ import 'package:rxdart/rxdart.dart';
 class StreamedMap<K, V> {
   final stream = BehaviorSubject<Map<K, V>>();
 
-  StreamedMap() {
-    stream.value = Map<K, V>();
+  //StreamedMap() {
+  //  stream.value = Map<K, V>();
+  //}
+  StreamedMap({Map<K, V> initialData}) {
+    if (initialData != null) {
+      stream.value = initialData;
+    }
   }
 
   /// timesUpdate shows how many times the got updated
@@ -73,9 +78,14 @@ class StreamedMap<K, V> {
   /// Clear the map, add all the key/value pairs of the map passed
   /// and update the stream
   set value(Map<K, V> map) {
-    value.clear();
+    if (value == null) {
+      stream.value = {};
+    } else {
+      value.clear();
+    }
     value.addAll(map);
     inStream(map);
+    timesUpdated++;
   }
 
   /// Debug mode (Default: false)
@@ -90,14 +100,12 @@ class StreamedMap<K, V> {
   addKey(K key, V val) {
     value[key] = val;
     refresh();
-    timesUpdated++;    
   }
 
   /// Used to remove a key from the map and update the stream automatically
   V removeKey(K key) {
     V removed = value.remove(key);
     refresh();
-    timesUpdated++;
     return removed;
   }
 
@@ -105,13 +113,13 @@ class StreamedMap<K, V> {
   clear() {
     value.clear();
     refresh();
-    timesUpdated++;
   }
 
   /// To refresh the stream when the map is modified without using the
   /// methods of this class.
   refresh() {
     inStream(value);
+    timesUpdated++;
   }
 
   dispose() {

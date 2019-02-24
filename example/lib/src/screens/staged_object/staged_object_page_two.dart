@@ -41,8 +41,7 @@ class StagedPageTwo extends StatelessWidget {
                               color: Colors.lightBlueAccent,
                               child: Text('Start'),
                               onPressed: () {
-                                bloc.staged.startStages();
-                                //bloc.showText();
+                                bloc.staged.startStages();                                
                               })
                           : Container(),
                       snapshot.data == StageStatus.active

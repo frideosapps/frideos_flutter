@@ -29,7 +29,7 @@ class PageOneBloc extends BlocBase {
     print('-------PAGE ONE BLOC--------');    
   }
 
-  final selectedCollection = StreamedList<int>();
+  final selectedCollection = StreamedList<int>(initialData: []);
   final mockItems = globalMockItems;
   int lastSelectedItem = -1;
   

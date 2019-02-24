@@ -12,7 +12,7 @@ import 'streamed_list.dart';
 class _StreamedValueBase<T> {
   final stream = BehaviorSubject<T>();
 
-  /// timesUpdate shows how many times the got updated
+  /// timesUpdate shows how many times the stream got updated
   int timesUpdated = 0;
 
   /// Debug mode (Default: false)
@@ -37,6 +37,7 @@ class _StreamedValueBase<T> {
   /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
+    timesUpdated++;
   }
 
   dispose() {
@@ -121,6 +122,12 @@ class _StreamedValueBase<T> {
 ///
 ///
 class StreamedValue<T> extends _StreamedValueBase<T> {
+  StreamedValue({T initialData}) {
+    if (initialData != null) {
+      value = initialData;
+    }
+  }
+
   set value(T value) {
     if (stream.value != value) {
       inStream(value);
@@ -195,7 +202,16 @@ class StreamedValue<T> extends _StreamedValueBase<T> {
 ///
 ///
 class StreamedTransformed<T, S> {
+  StreamedTransformed({T initialData}) {
+    if (initialData != null) {
+      value = initialData;
+    }
+  }
+
   final stream = BehaviorSubject<T>();
+
+  /// timesUpdate shows how many times the stream got updated
+  int timesUpdated = 0;
 
   /// Sink for the stream
   Function(T) get inStream => stream.sink.add;
@@ -223,11 +239,13 @@ class StreamedTransformed<T, S> {
   /// a basic type, and a property of an object has changed).
   refresh() {
     inStream(value);
+    timesUpdated++;
   }
 
   set value(T value) {
     if (stream.value != value) {
       inStream(value);
+      timesUpdated++;
     }
   }
 
@@ -255,6 +273,12 @@ class StreamedTransformed<T, S> {
 ///
 ///
 class MemoryValue<T> extends _StreamedValueBase<T> {
+  MemoryValue({T initialData}) {
+    if (initialData != null) {
+      value = initialData;
+    }
+  }
+
   T _oldValue;
 
   T get oldValue => _oldValue;
@@ -262,7 +286,6 @@ class MemoryValue<T> extends _StreamedValueBase<T> {
   set value(T value) {
     if (stream.value != value) {
       _oldValue = stream.value;
-      stream.value = value;
       inStream(value);
       timesUpdated++;
     }
@@ -280,14 +303,19 @@ class MemoryValue<T> extends _StreamedValueBase<T> {
 /// to send it to the [_historyStream].
 ///
 class HistoryObject<T> extends MemoryValue<T> {
-  final _historyStream = StreamedList<T>();
+  HistoryObject({T initialData}) {
+    if (initialData != null) {
+      value = initialData;
+    }
+  }
+
+  final _historyStream = StreamedList<T>(initialData: []);
 
   set value(T value) {
     if (stream.value != value) {
       _oldValue = stream.value;
-      stream.value = value;
-      timesUpdated++;
       inStream(value);
+      timesUpdated++;
     }
   }
 
@@ -381,9 +409,8 @@ class TimerObject extends _StreamedValueBase<int> {
   ///
   set value(int value) {
     if (stream.value != value) {
-      stream.value = value;
-      timesUpdated++;
       inStream(value);
+      timesUpdated++;
     }
   }
 
