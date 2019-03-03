@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../frideos_dart.dart';
+
 ///
 ///
 ///
@@ -133,5 +135,60 @@ class FuturedWidget<T> extends StatelessWidget {
             return onWaiting != null ? onWaiting() : Container();
           }
         });
+  }
+}
+
+class ValueBuilder<T> extends StreamBuilder<T> {
+  ValueBuilder(
+      {Key key,
+      StreamedObject<T> stream,
+      @required this.builder,
+      this.noDataChild,
+      this.onNoData,
+      this.errorChild,
+      this.onError})
+      : super(
+            key: key,
+            initialData: stream.value,
+            stream: stream.outStream,
+            builder: builder);
+
+  final AsyncWidgetBuilder<T> builder;
+
+  ///
+  /// If the snapshot has no data then this widget is shown
+  final Widget noDataChild;
+
+  ///
+  /// If no [noDataChild] is provided then the [onNoData] callback is called
+  final WaitingCallback onNoData;
+
+  ///
+  /// This widget is shown if there is an error
+  final Widget errorChild;
+
+  ///
+  /// If no [errorChild] is provided then the [onError] callback is called
+  final ErrorCallback onError;
+
+  @override
+  Widget build(BuildContext context, AsyncSnapshot<T> currentSummary) {
+    if (currentSummary.hasData) {
+      return builder(context, currentSummary);
+    }
+
+    if (currentSummary.hasError) {
+      if (errorChild != null) {
+        return errorChild;
+      } else {
+        return onError != null ? onError(currentSummary.error) : Container();
+      }
+    }
+
+    if (noDataChild != null) {
+      return noDataChild;
+    } else {
+      return onNoData != null ? onNoData() : Container();
+    }
   }
 }

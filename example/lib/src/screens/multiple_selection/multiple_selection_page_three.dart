@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos/frideos_flutter.dart';
+import 'package:frideos/frideos.dart';
 
 import '../../blocs/multiple_selection/multiple_selection_page_three_bloc.dart';
 import '../../models/item_model.dart';
@@ -21,8 +21,8 @@ class MultipleSelectionPageThree extends StatelessWidget {
           child: Column(
             children: <Widget>[  
               Expanded(
-                child: StreamedWidget<List<Item>>(
-                  stream: bloc.items.outStream,
+                child: ValueBuilder<List<Item>>(
+                  stream: bloc.items,
                   builder: (c, s) {
                     return GridView.builder(
                         itemCount: s.data.length,

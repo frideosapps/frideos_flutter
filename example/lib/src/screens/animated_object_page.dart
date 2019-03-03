@@ -22,9 +22,8 @@ class AnimatedObjectPage extends StatelessWidget {
               Container(
                 height: 20.0,
               ),
-              StreamedWidget<AnimatedStatus>(
-                initialData: AnimatedStatus.stop,
-                stream: bloc.scaleAnimation.statusStream,
+              ValueBuilder<AnimatedStatus>(                
+                stream: bloc.scaleAnimation.status,
                 builder: (context, AsyncSnapshot<AnimatedStatus> snapshot) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,8 +57,8 @@ class AnimatedObjectPage extends StatelessWidget {
                 },
               ),
               Expanded(
-                child: StreamedWidget(
-                    stream: bloc.scaleAnimation.animationStream,
+                child: ValueBuilder(
+                    stream: bloc.scaleAnimation.animation,
                     builder: (context, snapshot) {
                       return Transform.scale(
                           scale: snapshot.data,

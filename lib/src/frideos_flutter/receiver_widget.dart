@@ -7,7 +7,7 @@ import 'extended_asyncwidgets.dart';
 ///
 /// Used with a StreamedValue when the type is a widget to
 /// directly stream a widget to the view. Under the hood
-/// a StreamedWidget handles the stream and shows
+/// a ValueBuilder handles the stream and shows
 /// the widget.
 ///
 ///

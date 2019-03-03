@@ -1,4 +1,6 @@
-import 'package:rxdart/rxdart.dart';
+import 'dart:async';
+
+import '../../frideos_dart.dart';
 
 ///
 ///
@@ -50,41 +52,47 @@ import 'package:rxdart/rxdart.dart';
 /// ```
 ///
 ///
-class StreamedMap<K, V> {
-  final stream = BehaviorSubject<Map<K, V>>();
-
-  //StreamedMap() {
-  //  stream.value = Map<K, V>();
-  //}
+class StreamedMap<K, V> extends StreamedObject<Map<K, V>> {
   StreamedMap({Map<K, V> initialData}) {
+    stream = StreamedValue<Map<K, V>>();
+
     if (initialData != null) {
       stream.value = initialData;
     }
+
+    stream.onChange((data) {
+      _onChange(data);
+    });
   }
+
+  StreamedValue<Map<K, V>> stream;
+
+  /// Sink for the stream
+  Function(Map<K, V>) get inStream => stream.inStream;
+
+  /// Stream getter
+  Stream<Map<K, V>> get outStream => stream.outStream;
+
+  /// The initial event of the stream
+  Map<K, V> initialData;
+
+  /// Last value emitted by the stream
+  Map<K, V> lastValue;
 
   /// timesUpdate shows how many times the got updated
   int timesUpdated = 0;
-
-  /// Sink for the stream
-  Function(Map<K, V>) get inStream => stream.sink.add;
-
-  /// Stream getter
-  ValueObservable<Map<K, V>> get outStream => stream.stream;
 
   Map<K, V> get value => stream.value;
 
   int get length => stream.value.length;
 
+  /// This function will be called every time the stream updates.
+  void Function(Map<K, V> data) _onChange = (map) {};
+
   /// Clear the map, add all the key/value pairs of the map passed
   /// and update the stream
   set value(Map<K, V> map) {
-    if (value == null) {
-      stream.value = {};
-    } else {
-      value.clear();
-    }
-    value.addAll(map);
-    inStream(map);
+    stream.value = map;    
     timesUpdated++;
   }
 
@@ -96,8 +104,13 @@ class StreamedMap<K, V> {
     _debugMode = true;
   }
 
+  /// To set a function that will be called every time the stream updates.
+  onChange(Function(Map<K, V>) onDataChanged) {
+    _onChange = onDataChanged;
+  }
+
   /// Used to add key/value pair to the map and update the stream automatically
-  addKey(K key, V val) {
+  addKey(K key, V val) {   
     value[key] = val;
     refresh();
   }
@@ -122,10 +135,13 @@ class StreamedMap<K, V> {
     timesUpdated++;
   }
 
+  /// Dispose the stream.
   dispose() {
     if (_debugMode) {
       print('---------- Closing Stream ------ type: Map<$K, $V>');
+      print('Value: $value');
+      print('Updated times: $timesUpdated');
     }
-    stream.close();
+    stream.dispose();
   }
 }

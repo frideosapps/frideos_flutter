@@ -19,7 +19,7 @@ Example app to show how to use this library:
 
 
 
-### StramedMap example
+### StreamedMap example
 This example shows how to use some classes of this library, and a comparison code without it. It is just a page with two textfields to add a key/value pair to a map. The map is then used to drive a ListView.builder showing all the pairs.
 
 

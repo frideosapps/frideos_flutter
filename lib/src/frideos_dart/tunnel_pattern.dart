@@ -93,9 +93,8 @@ class ListSender<T> {
   }
 
   send(List<T> data) {
-    _receiver.value.clear();
-    _receiver.value.addAll(data);
-    _receiver.refresh();
+    _receiver.value = data;    
+    //_receiver.refresh();
   }
 }
 

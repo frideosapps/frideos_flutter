@@ -12,7 +12,6 @@ import 'staged_object_page_two.dart';
 class StagedHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Setting the map in the build method
     StagedObjectBloc bloc = BlocProvider.of(context);
 
     var width = MediaQuery.of(context).size.width * 0.7;
@@ -43,7 +42,6 @@ class StagedHomePage extends StatelessWidget {
       _background(Colors.blueGrey),
       _background(Colors.orange),
     ];
-
 
     var stagesMap = <int, Stage>{
       0: Stage(
@@ -156,6 +154,7 @@ class StagedHomePage extends StatelessWidget {
           onShow: () {}),
     };
 
+    // Setting the map in the build method
     bloc.setMap(stagesMap);
 
     return Scaffold(
@@ -206,9 +205,8 @@ class StagedHomePage extends StatelessWidget {
             Container(
               height: 16.0,
             ),
-            StreamedWidget<StageStatus>(
-                initialData: StageStatus.stop,
-                stream: bloc.staged.statusStream,
+            ValueBuilder<StageStatus>(
+                stream: bloc.staged.getStatus,
                 builder: (context, AsyncSnapshot<StageStatus> snapshot) {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +237,7 @@ class StagedHomePage extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.fill,
                     child: ReceiverWidget(
-                      stream: bloc.staged.widgetStream,
+                      stream: bloc.staged.outStream,
                     ),
                   ),
                 ),
@@ -249,8 +247,8 @@ class StagedHomePage extends StatelessWidget {
               height: 16.0,
             ),
             Center(
-                child: StreamedWidget(
-                    stream: bloc.text.outStream,
+                child: ValueBuilder(
+                    stream: bloc.text,
                     builder: (context, snapshot) => Text(snapshot.data))),
             SizedBox(
               height: 80.0,
@@ -259,16 +257,15 @@ class StagedHomePage extends StatelessWidget {
                 fit: BoxFit.contain,
                 child: Padding(
                   padding: const EdgeInsets.all(28.0),
-                  child: StreamedWidget(
-                    stream: bloc.widget.outStream,
+                  child: ValueBuilder(
+                    stream: bloc.widget,
                     builder: (context, snapshot) => snapshot.data,
                   ),
                 ),
               ),
             ),
-            StreamedWidget<StageStatus>(
-              initialData: StageStatus.stop,
-              stream: bloc.staged.statusStream,
+            ValueBuilder<StageStatus>(
+              stream: bloc.staged.getStatus,
               builder: (context, AsyncSnapshot<StageStatus> snapshot) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

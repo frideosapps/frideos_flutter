@@ -4,6 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frideos/frideos.dart';
 
 void main() {
+  //
+  // StreamedWidget
+  //
   testWidgets('StreamedWidget NoDataChild', (WidgetTester tester) async {
     final streamedValue = StreamedValue<Widget>();
 
@@ -63,5 +66,31 @@ void main() {
     expect(find.text('testwidget'), findsOneWidget);
 
     streamedValue.dispose();
+  });
+  //
+  // ValueBuilder
+  //
+  testWidgets('ValueBuilder widget', (WidgetTester tester) async {
+    final streamedValue = StreamedValue<String>();
+
+    streamedValue.value = 'ValueBuilder';
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: ValueBuilder(
+            stream: streamedValue,
+            builder: (context, snapshot) {
+              return Text(snapshot.data);
+            }),
+      ),
+    ));
+
+    expect(find.text('ValueBuilder'), findsOneWidget);
+
+    streamedValue.value = 'Text changed';
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('Text changed'), findsOneWidget);
   });
 }

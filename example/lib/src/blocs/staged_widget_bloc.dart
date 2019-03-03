@@ -49,8 +49,7 @@ class StagedWidgetBloc extends BlocBase {
     scaleAnimation.animation.value -= 0.002;
 
     if (scaleAnimation.animation.value < 0.1) {
-      scaleAnimation.animation.value = 0.1;
-      //scaleAnimation.reset();
+      scaleAnimation.animation.value = 0.1;      
     }
   }
 
@@ -69,5 +68,6 @@ class StagedWidgetBloc extends BlocBase {
   dispose() {
     print('-------StagedWidget BLOC DISPOSE--------');
     rotateAnimation.dispose();
+    scaleAnimation.dispose();
   }
 }

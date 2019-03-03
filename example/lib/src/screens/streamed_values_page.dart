@@ -55,16 +55,14 @@ class StreamedValueWidget extends StatelessWidget {
             children: <Widget>[
               Text('StreamedValue', style: styleHeader),
               Container(height: 20.0),
-              StreamedWidget<int>(
-                initialData: bloc.count.value,
-                stream: bloc.count.outStream,
+              ValueBuilder<int>(                
+                stream: bloc.count,
                 builder: (BuildContext context, AsyncSnapshot<int> snapshot) =>
                     Text('Value: ${snapshot.data}', style: styleValue),
                 noDataChild: Text('NO DATA'),
               ),
-              StreamedWidget<Counter>(
-                initialData: bloc.counterObj.value,
-                stream: bloc.counterObj.outStream,
+              ValueBuilder<Counter>(
+                stream: bloc.counterObj,
                 builder:
                     (BuildContext context, AsyncSnapshot<Counter> snapshot) {
                   return Column(
@@ -88,6 +86,8 @@ class StreamedValueWidget extends StatelessWidget {
   }
 }
 
+
+
 class MemoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -101,9 +101,8 @@ class MemoryWidget extends StatelessWidget {
           children: <Widget>[
             Text('MemoryObject', style: styleHeader),
             Container(height: 20.0),
-            StreamedWidget<int>(
-              initialData: bloc.countMemory.value,
-              stream: bloc.countMemory.outStream,
+            ValueBuilder<int>(              
+              stream: bloc.countMemory,
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) =>
                   Column(
                     children: <Widget>[
@@ -141,9 +140,8 @@ class HistoryWidget extends StatelessWidget {
           children: <Widget>[
             Text('HistoryObject', style: styleHeader),
             Container(height: 20.0),
-            StreamedWidget<int>(
-              initialData: bloc.countHistory.value,
-              stream: bloc.countHistory.outStream,
+            ValueBuilder<int>(              
+              stream: bloc.countHistory,
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) =>
                   Column(
                     children: <Widget>[
@@ -155,8 +153,7 @@ class HistoryWidget extends StatelessWidget {
                   ),
               noDataChild: Text('NO DATA'),
             ),
-            StreamedWidget<List<int>>(
-              initialData: bloc.countHistory.history,
+            ValueBuilder<List<int>>(              
               stream: bloc.countHistory.historyStream,
               builder:
                   (BuildContext context, AsyncSnapshot<List<int>> snapshot) =>
@@ -179,8 +176,8 @@ class HistoryWidget extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    StreamedWidget(
-                      stream: bloc.countHistory.outStream,
+                    ValueBuilder(
+                      stream: bloc.countHistory,
                       builder: (context, AsyncSnapshot snapshot) =>
                           RaisedButton(
                             color: buttonColor,

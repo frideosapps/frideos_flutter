@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'receiver_widget.dart';
+import 'extended_asyncwidgets.dart';
 import '../frideos_dart/models/stage.dart';
 import '../frideos_dart/staged_object.dart';
 
@@ -65,8 +65,12 @@ class _StagedWidgetState extends State<StagedWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ReceiverWidget(
-      stream: staged.widgetStream,
+    final stage = staged.getStage(0);
+    assert(stage != null);
+    return StreamedWidget(
+      initialData: stage.widget,
+      stream: staged.outStream,
+      builder: (context, snapshot) => snapshot.data
     );
   }
 }

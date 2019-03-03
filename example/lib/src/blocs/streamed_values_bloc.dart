@@ -15,68 +15,37 @@ class StreamedValuesBloc extends BlocBase {
     print('-------StreamedValues BLOC--------');
 
     // Activate the debug console messages on disposing
-    count.debugMode();
+     count.debugMode();
     countMemory.debugMode();
-    countHistory.debugMode();
-    timerObject.debugMode();
-    counterObj.debugMode();    
+    countHistory.debugMode();    
+    counterObj.debugMode(); 
   }
 
-  final count = StreamedValue<int>();
-  final countMemory = MemoryValue<int>();
-  final countHistory = HistoryObject<int>();
-  final timerObject = TimerObject();
-  final counterObj = StreamedValue<Counter>();
+  final count = StreamedValue<int>(initialData: 0);
+  final countMemory = MemoryValue<int>(initialData: 2);
+  final countHistory = HistoryObject<int>(initialData: 4);  
+  final counterObj =
+      StreamedValue<Counter>(initialData: Counter(1, 'First hit!'));
 
   incrementCounter() {
-    if (count.value != null) {
-      count.value++;
-      counterObj.value.counter++;
-      counterObj.value.text = 'Counter: ${counterObj.value.counter}';
-      counterObj.refresh();
-    } else {
-      count.value = 1;
-      counterObj.value = Counter(1, 'First hit!');
-    }
+    count.value++;
+    counterObj.value.counter++;
+    counterObj.value.text = 'Counter: ${counterObj.value.counter}';
+    counterObj.refresh();
   }
 
-  incrementCounterMemory() {
-    if (countMemory.value != null) {
-      countMemory.value++;
-    } else {
-      countMemory.value = 1;
-    }
-  }
+  incrementCounterMemory() => countMemory.value++;
 
-  incrementCounterHistory() {
-    if (countHistory.value != null) {
-      countHistory.value++;
-    } else {
-      countHistory.value = 1;
-    }
-  }
+  incrementCounterHistory() => countHistory.value++;
 
-  saveToHistory() {
-    countHistory.saveValue();
-  }
+  saveToHistory() => countHistory.saveValue();
 
-  startTimer() {
-    timerObject.startTimer();
-  }
-
-  stopTimer() {
-    timerObject.stopTimer();
-  }
-
-  getLapTime() {
-    timerObject.getLapTime();
-  }
+  
 
   dispose() {
     print('-------StreamedValues BLOC DISPOSE--------');
     count.dispose();
     countMemory.dispose();
-    countHistory.dispose();
-    timerObject.dispose();
+    countHistory.dispose();    
   }
 }

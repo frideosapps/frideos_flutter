@@ -1,7 +1,242 @@
+## Version 0.4.0 (03-03-19)
+
+### BREAKING CHANGES
+Due to various changes in the code this version could cause issues on apps based on a previous version. Now, all the StreamedObjects need to have passed their value to the `initialData` parameter of the StreamBuilder/StreamedWidget (e.g. using the getter `value` of the StreamedObjects). As an alternative, they can be used with the new `ValueBuilder` widget, it extends the StreamBuilder class and get the value from the StreamedObject to pass to the `initialData` parameter.
+
+
+### - AppStateModel
+By extending the AppStateModel interface it is possible to create a class to drive the AppStateProvider in order to provide the data to the widgets.
+
+
+### - AppStateProvider
+Simple state provider that extends a StatefulWidget and use an InheritedWidget 
+to share the state with the widgets on the tree. Used along with streams, it is possibile for the widgets the access this data to modify it and propagates the changes on the entire widgets tree.
+
+From the "theme changer" example:
+
+#### 1. Create a model for the app state:
+```dart
+class AppState extends AppStateModel {
+  List<MyTheme> themes;
+  StreamedValue<MyTheme> currentTheme;
+
+  AppState() {
+    print('-------APP STATE INIT--------');
+
+    themes = List<MyTheme>();
+
+    themes.addAll([
+      MyTheme(
+        name: 'Default',
+        brightness: Brightness.light,
+        backgroundColor: Colors.blue[50],
+        scaffoldBackgroundColor: Colors.blue[50],
+        primaryColor: Colors.blue,
+        primaryColorBrightness: Brightness.dark,
+        accentColor: Colors.blue[300],
+      ),
+      MyTheme(
+        name: 'Teal',
+        brightness: Brightness.light,
+        backgroundColor: Colors.teal[50],
+        scaffoldBackgroundColor: Colors.teal[50],
+        primaryColor: Colors.teal[600],
+        primaryColorBrightness: Brightness.dark,
+        accentColor: Colors.teal[300],
+      ),
+      MyTheme(
+        name: 'Orange',
+        brightness: Brightness.light,
+        backgroundColor: Colors.orange[50],
+        scaffoldBackgroundColor: Colors.orange[50],
+        primaryColor: Colors.orange[600],
+        primaryColorBrightness: Brightness.dark,
+        accentColor: Colors.orange[300],
+      ),
+    ]);
+
+    currentTheme = StreamedValue();
+  }
+
+  void setTheme(MyTheme theme) {
+    currentTheme.value = theme;
+    Prefs.savePref<String>('theme', theme.name);
+  }
+
+  @override
+  void init() async {    
+    String lastTheme = await Prefs.getPref('theme');
+    if (lastTheme != null) {
+      currentTheme.value =
+          themes.firstWhere((theme) => theme.name == lastTheme);
+    } else {
+      currentTheme.value = themes[1];
+    }
+  }
+
+  @override
+  dispose() {
+    print('---------APP STATE DISPOSE-----------');
+    currentTheme.dispose();
+  }
+}
+```
+
+#### 2. Wrap the MaterialApp in the AppStateProvider:
+```dart
+void main() => runApp(App());
+
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  AppState appState;
+
+  @override
+  void initState() {
+    super.initState();
+    appState = AppState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppStateProvider<AppState>(
+      appState: appState,
+      child: MaterialPage(),
+    );
+  }
+}
+```
+
+#### 3. Consume the data:
+```dart
+class MaterialPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var theme = AppStateProvider.of<AppState>(context).currentTheme;
+
+    return ValueBuilder<MyTheme>(
+        stream: theme,
+        builder: (context, snapshot) {
+          return MaterialApp(
+              title: "Theme and drawer starter app",
+              theme: _buildThemeData(snapshot.data),                  
+              home: HomePage());
+        });
+  }
+
+  _buildThemeData(MyTheme appTheme) {
+    return ThemeData(
+      brightness: appTheme.brightness,
+      backgroundColor: appTheme.backgroundColor,
+      scaffoldBackgroundColor: appTheme.scaffoldBackgroundColor,
+      primaryColor: appTheme.primaryColor,
+      primaryColorBrightness: appTheme.primaryColorBrightness,
+      accentColor: appTheme.accentColor,
+    );
+  }
+}
+```
+
+
+#### 4. Change the data (using a stream):
+```dart
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = AppStateProvider.of<AppState>(context);
+
+    _buildThemesList() {
+      return appState.themes.map((MyTheme appTheme) {
+        return DropdownMenuItem<MyTheme>(
+          value: appTheme,
+          child: Text(appTheme.name, style: TextStyle(fontSize: 14.0)),
+        );
+      }).toList();
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Settings",
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Choose a theme:',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ),         
+                ValueBuilder<MyTheme>(
+                    stream: appState.currentTheme,
+                    builder: (context, snapshot) {
+                      return DropdownButton<MyTheme>(
+                        hint: Text("Status"),
+                        value: snapshot.data,
+                        items: _buildThemesList(),
+                        onChanged: appState.setTheme,
+                      );
+                    }),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### - ValueBuilder widget
+Similar to the StreamedWidget, it extends the StreamBuilder class but takes as a stream parameter an object that implements the StreamedObject interface.
+
+From the previous example:
+```dart
+ValueBuilder<MyTheme>(
+  stream: theme,        
+  builder: (context, snapshot) {
+    return MaterialApp(
+      title: "Theme and drawer starter app",
+      theme: _buildThemeData(snapshot.data),
+      home: HomePage(),
+    );
+  }
+)
+```
+
+
+### - Helper class with static metods for the SharedPreferences package
+
+#### 1. savePrefs(String Key, T value)
+#### 2. saveStringList(String Key, List<String> list)
+#### 3. getPref(String key)
+#### 3. getKeys()
+#### 3. remove(String key)
+
+
+### StreamedObjects
+#### - Added the `onChange` method. It calls a function every time the stream updates.
+#### - More details in the debugMode. 
+
+### - Code refactoring
+
+
 ## Version 0.3.0 (24-02-19)
 
 #### - StreamedList and StreamedMap classes
-- <strong>*Breaking change*</strong>: StreamedList and StreamedMap by default aren't initialiazed (to avoid that when using them along with a StreamBuilder/StreamedWidget the `snaphost.hasData` is true from the beginning, becoming harder to show for example a loading spinner without using a workaround). 
+##### *Breaking change*: 
+StreamedList and StreamedMap by default aren't initialiazed (to avoid that when using them along with a StreamBuilder/StreamedWidget the `snaphost.hasData` is true from the beginning,becoming harder to show for example a loading spinner without using a workaround). 
 
 #### - "initialData" parameter
 - Added `initialData` parameter to the constructor to all the streamed classes to initialize the stream with an initial data.

@@ -180,8 +180,8 @@ class StagedPageOne extends StatelessWidget {
                         'Go to page two to play the staged widgets animation.'),
                   ),
                   Container(height: 12.0),
-                  StreamedWidget(
-                      stream: bloc.totalWidgets.outStream,
+                  ValueBuilder(
+                      stream: bloc.totalWidgets,
                       builder: (context, snapshot) => Text(
                             'Widgets added: ${snapshot.data}',
                             style: TextStyle(

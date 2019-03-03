@@ -21,9 +21,8 @@ class StagedPageTwo extends StatelessWidget {
           padding: EdgeInsets.all(12.0),
           child: Column(
             children: <Widget>[
-              StreamedWidget<StageStatus>(
-                initialData: StageStatus.stop,
-                stream: bloc.staged.statusStream,
+              ValueBuilder<StageStatus>(                
+                stream: bloc.staged.getStatus,
                 builder: (context, AsyncSnapshot<StageStatus> snapshot) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,8 +57,8 @@ class StagedPageTwo extends StatelessWidget {
               ),              
               Expanded(
                 child: Center(
-                  child: StreamedWidget(
-                    stream: bloc.staged.widgetStream,
+                  child: ValueBuilder(                    
+                    stream: bloc.staged,
                     builder: (context, snapshot) => snapshot.data,
                   ),
                 ),

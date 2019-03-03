@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:rxdart/rxdart.dart';
-
 import 'streamed_value.dart';
 import 'models/stage.dart';
+import 'interfaces/streamed_object.dart';
 
 ///
 /// Enum to handle the Status of the StagedObject
@@ -123,14 +122,14 @@ const updateTimeStaged = 100;
 ///
 ///
 ///   // To show the current widget on the view using the ReceiverWidget.
-///   // As an alternative it can be used the StreamedWidget/StreamBuilder.
+///   // As an alternative it can be used the ValueBuilder/StreamBuilder.
 ///   ReceiverWidget(
 ///     stream: bloc.staged.widgetStream,
 ///   ),
 /// ```
 ///
 ///
-class StagedObject {
+class StagedObject implements StreamedObject {
   // Default constructor
   StagedObject({this.absoluteTiming = false, this.callbackOnStart = true}) {
     if (absoluteTiming) {
@@ -163,10 +162,10 @@ class StagedObject {
   ///
   /// Stage status
   ///
-  final _status = StreamedValue<StageStatus>();
+  final _status = StreamedValue<StageStatus>(initialData: StageStatus.stop);
 
   /// Getters for the stream of status
-  ValueObservable<StageStatus> get statusStream => _status.outStream;
+  Stream<StageStatus> get statusStream => _status.outStream;
 
   /// Status of the StagedObject
   StreamedValue<StageStatus> get getStatus => _status;
@@ -213,7 +212,13 @@ class StagedObject {
 
   /// WidgetStream getter
   ///
-  ValueObservable<Widget> get widgetStream => _widgetStream.outStream;
+  // Stream<Widget> get widgetStream => _widgetStream.outStream;
+
+  /// Implementation of the getter outStream for the [Value[Builder]
+  Stream<Widget> get outStream => _widgetStream.outStream;
+
+  /// Getter
+  Widget get value => _widgetStream.value;
 
   /// This callback it is not stage specific and it is called
   /// everytime the stage changes. Setting the [callbackOnStart]
@@ -281,8 +286,8 @@ class StagedObject {
     }
   }
 
-  Stage getStage(int index) {
-    // Adding check?
+  Stage getStage(int index) { 
+    assert(_stagesMap[index] != null);
     return _stagesMap[index];
   }
 

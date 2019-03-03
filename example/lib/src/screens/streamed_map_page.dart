@@ -57,7 +57,7 @@ class StreamedMapWidget extends StatelessWidget {
           },
         ),
         Text('StreamedMap', style: styleHeader),
-        StreamBuilder<String>(           
+        StreamBuilder<String>(
             stream: bloc.streamedText.outTransformed,
             builder: (context, AsyncSnapshot<String> snapshot) {
               return Column(
@@ -112,7 +112,7 @@ class StreamedMapWidget extends StatelessWidget {
                 ],
               );
             }),
-        StreamBuilder<bool>(            
+        StreamBuilder<bool>(
             stream: bloc.isFilled,
             builder: (context, AsyncSnapshot<bool> snapshot) {
               return RaisedButton(
@@ -123,8 +123,8 @@ class StreamedMapWidget extends StatelessWidget {
             }),
         Container(height: 20.0),
         Expanded(
-          child: StreamedWidget<Map<int, String>>(            
-            stream: bloc.streamedMap.outStream,
+          child: ValueBuilder<Map<int, String>>(
+            stream: bloc.streamedMap,
             builder: (BuildContext context,
                 AsyncSnapshot<Map<int, String>> snapshot) {
               return ListView.builder(

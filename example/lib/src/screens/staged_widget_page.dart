@@ -75,8 +75,8 @@ class StagedWidgetPage extends StatelessWidget {
                   // FOREGROUND TRANSITION
                   FadeInWidget(
                     child: Center(
-                      child: StreamedWidget(
-                          stream: bloc.rotateAnimation.animationStream,
+                      child: ValueBuilder(
+                          stream: bloc.rotateAnimation.animation,
                           builder: (context, snapshot) {
                             return Transform.rotate(
                                 angle: snapshot.data,
@@ -133,8 +133,8 @@ class StagedWidgetPage extends StatelessWidget {
                       ),
                     ),
                     secondWidget: Center(
-                      child: StreamedWidget(
-                          stream: bloc.scaleAnimation.animationStream,
+                      child: ValueBuilder(
+                          stream: bloc.scaleAnimation.animation,
                           builder: (context, snapshot) {
                             return FadeInWidget(
                               duration: 2000,
@@ -143,8 +143,7 @@ class StagedWidgetPage extends StatelessWidget {
                                 child: FadeOutWidget(
                                   duration: 6000,
                                   child: Text('Flutter',
-                                      style: TextStyle(
-                                          //color: Colors.white,
+                                      style: TextStyle(                                          
                                           fontSize: 94.0,
                                           fontWeight: FontWeight.w500,
                                           foreground: Paint()

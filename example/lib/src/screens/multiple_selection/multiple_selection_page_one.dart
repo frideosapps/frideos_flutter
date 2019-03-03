@@ -33,8 +33,8 @@ class MultipleSelectionPageOne extends StatelessWidget {
                   onPressed: () {
                     bloc.sendPageThree();
                   }),
-              StreamedWidget<String>(
-                stream: bloc.tunnelReceiverMessage.outStream,
+              ValueBuilder<String>(
+                stream: bloc.tunnelReceiverMessage,
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
                   return Row(
@@ -54,9 +54,8 @@ class MultipleSelectionPageOne extends StatelessWidget {
                 height: 20.0,
               ),
               Expanded(
-                child: StreamedWidget(
-                  initialData: bloc.mockItems,
-                  stream: bloc.selectedCollection.outStream,
+                child: ValueBuilder(                  
+                  stream: bloc.selectedCollection,
                   builder: (c, s) {
                     return GridView.builder(
                         itemCount: bloc.mockItems.length,
@@ -67,9 +66,9 @@ class MultipleSelectionPageOne extends StatelessWidget {
                           return Stack(
                             alignment: Alignment.center,
                             children: <Widget>[
-                              StreamedWidget<double>(
+                              ValueBuilder<double>(
                                 stream:
-                                    bloc.borderAnimation.animation.outStream,
+                                    bloc.borderAnimation.animation,
                                 builder: (BuildContext context,
                                     AsyncSnapshot<double> snapshot) {
                                   return Opacity(

@@ -37,9 +37,8 @@ class TimerObjectPage extends StatelessWidget {
                           children: <Widget>[
                             Text('TimerObject', style: styleHeader),
                             Container(height: 20.0),
-                            StreamedWidget<int>(
-                              initialData: bloc.timerObject.value,
-                              stream: bloc.timerObject.outStream,
+                            ValueBuilder<int>(                              
+                              stream: bloc.timerObject,
                               builder: (BuildContext context,
                                       AsyncSnapshot<int> snapshot) =>
                                   Text(
@@ -47,9 +46,8 @@ class TimerObjectPage extends StatelessWidget {
                                       style: styleValue),
                               noDataChild: Text('NO DATA'),
                             ),
-                            StreamedWidget<int>(
-                              //initialData: 0,
-                              stream: bloc.timerObject.stopwatchStream,
+                            ValueBuilder<int>(                              
+                              stream: bloc.timerObject.stopwatch,
                               builder: (BuildContext context,
                                       AsyncSnapshot<int> snapshot) =>
                                   Text(
@@ -57,9 +55,8 @@ class TimerObjectPage extends StatelessWidget {
                                       style: styleValue),
                               noDataChild: Text('NO DATA'),
                             ),
-                            StreamedWidget<int>(
-                              initialData: bloc.timerObject.value,
-                              stream: bloc.timerObject.outStream,
+                            ValueBuilder<int>(                              
+                              stream: bloc.timerObject,
                               builder: (BuildContext context,
                                   AsyncSnapshot<int> snapshot) {
                                 return Row(

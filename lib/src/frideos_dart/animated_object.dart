@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
-
 import 'streamed_value.dart';
 
 ///
@@ -54,7 +52,7 @@ enum AnimatedStatus { active, stop, pause }
 ///          child: Column(
 ///            children: <Widget>[
 ///              Container(height: 20.0,),
-///              StreamedWidget<AnimatedStatus>(
+///              ValueBuilder<AnimatedStatus>(
 ///                initialData: AnimatedStatus.stop,
 ///                stream: bloc.scaleAnimation.statusStream,
 ///                builder: (context, AsyncSnapshot<AnimatedStatus> snapshot) {
@@ -90,7 +88,7 @@ enum AnimatedStatus { active, stop, pause }
 ///                },
 ///              ),
 ///              Expanded(
-///                child: StreamedWidget(
+///                child: ValueBuilder(
 ///                    stream: bloc.scaleAnimation.animationStream,
 ///                    builder: (context, snapshot) {
 ///                      return Transform.scale(
@@ -105,7 +103,7 @@ enum AnimatedStatus { active, stop, pause }
 ///
 class AnimatedObject<T> {
   AnimatedObject({this.initialValue, this.interval}) {
-    _status.value = AnimatedStatus.stop;
+    status.value = AnimatedStatus.stop;
   }
 
   /// [StreamedValue] object that holds the animation value
@@ -113,7 +111,7 @@ class AnimatedObject<T> {
 
   /// Getter for stream of the [StreamedValue] that holds the animation
   /// value.
-  ValueObservable<T> get animationStream => animation.outStream;
+  Stream<T> get animationStream => animation.outStream;
 
   /// Getter for the AnimatedObject value
   T get value => animation.value;
@@ -133,13 +131,13 @@ class AnimatedObject<T> {
   ///
   /// AnimatedObject status
   ///
-  final _status = StreamedValue<AnimatedStatus>();
+  final status = StreamedValue<AnimatedStatus>();
 
   /// Getter for the stream of the status of the animation
-  ValueObservable<AnimatedStatus> get statusStream => _status.outStream;
+  Stream<AnimatedStatus> get statusStream => status.outStream;
 
   /// Status getter
-  AnimatedStatus get getStatus => _status.value;
+  AnimatedStatus get getStatus => status.value;
 
   /// Method to check if the animation is playing or not.
   bool isAnimating() {
@@ -157,14 +155,14 @@ class AnimatedObject<T> {
       timer.startPeriodic(
           Duration(milliseconds: interval), (Timer t) => callback(t));
       //
-      _status.value = AnimatedStatus.active;
+      status.value = AnimatedStatus.active;
     }
   }
 
   /// Method to stop the animation-
   stop() {
     timer.stopTimer();
-    _status.value = AnimatedStatus.stop;
+    status.value = AnimatedStatus.stop;
   }
 
   /// Method to reset the animation. It doesn't stop the animation, it just
@@ -175,7 +173,7 @@ class AnimatedObject<T> {
 
   /// Method to pause the animation
   pause() {
-    _status.value = AnimatedStatus.pause;
+    status.value = AnimatedStatus.pause;
   }
 
   dispose() {

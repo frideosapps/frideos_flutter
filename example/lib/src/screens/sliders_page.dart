@@ -25,11 +25,11 @@ class SlidersPage extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: StreamedWidget<double>(
-                        stream: bloc.scale.outStream,
+                    child: ValueBuilder<double>(
+                        stream: bloc.scale,
                         builder: (context, snapshotScale) {
-                          return StreamedWidget<double>(
-                              stream: bloc.angle.outStream,
+                          return ValueBuilder<double>(
+                              stream: bloc.angle,
                               builder: (context, snapshot) {
                                 return Container(
                                   width:

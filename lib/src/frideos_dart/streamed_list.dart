@@ -1,4 +1,7 @@
-import 'package:rxdart/rxdart.dart';
+//import 'package:rxdart/rxdart.dart';
+import 'dart:async';
+
+import '../../frideos_dart.dart';
 
 ///
 ///
@@ -49,35 +52,47 @@ import 'package:rxdart/rxdart.dart';
 /// ```
 ///
 ///
-class StreamedList<T> {
-  final stream = BehaviorSubject<List<T>>();
-
+class StreamedList<T> extends StreamedObject<List<T>> {
   StreamedList({List<T> initialData}) {
-    if (initialData != null) {
-      stream.value = initialData;
+    stream = StreamedValue<List<T>>();
+
+    if (initialData != null) {      
+      stream.value = initialData;      
     }
+
+    stream.onChange((data) {
+      _onChange(data);
+    });
   }
+
+  /// Stream
+  StreamedValue<List<T>> stream;
+
+  /// Sink for the stream
+  Function(List<T>) get inStream => stream.inStream;
+
+  /// Stream getter
+  Stream<List<T>> get outStream => stream.outStream;
+
+  /// The initial event of the stream
+  List<T> initialData;
+
+  /// Last value emitted by the stream
+  List<T> lastValue;
 
   /// timesUpdated shows how many times the stream got updated
   int timesUpdated = 0;
-
-  /// Sink for the stream
-  Function(List<T>) get inStream => stream.sink.add;
-
-  /// Stream getter
-  ValueObservable<List<T>> get outStream => stream.stream;
 
   List<T> get value => stream.value;
 
   int get length => stream.value.length;
 
-  /// Clear the list, add all elements of the list passed
-  /// and update the stream
-  set value(List<T> list) {
-    if (value == null) {
-      stream.value = [];
-    }
-    inStream(list);
+  /// This function will be called every time the stream updates.
+  void Function(List<T> data) _onChange = (list) {};
+
+  /// Set the new value and update the stream
+  set value(List<T> list) {    
+    stream.value = list;    
     timesUpdated++;
   }
 
@@ -89,9 +104,14 @@ class StreamedList<T> {
     _debugMode = true;
   }
 
+  /// To set a function that will be called every time the stream updates.
+  void onChange(Function(List<T>) onDataChanged) {
+    _onChange = onDataChanged;
+  }
+
   /// Used to add an item to the list and update the stream automatically
-  addElement(element) {
-    value.add(element);
+  void addElement(T element) {
+    stream.value.add(element);
     refresh();
   }
 
@@ -134,10 +154,13 @@ class StreamedList<T> {
     timesUpdated++;
   }
 
+  /// Dispose the stream.
   dispose() {
     if (_debugMode) {
       print('---------- Closing Stream ------ type: List<$T>');
+      print('Value: $value');
+      print('Updated times: $timesUpdated');
     }
-    stream.close();
+    stream.dispose();
   }
 }

@@ -9,16 +9,19 @@ void main() {
     //
     // StreamedValue test
     //
-    test('StreamedValue', () {
+    test('StreamedValue', () async {
       final streamedValue = StreamedValue<int>();
 
-      streamedValue.value = 10;
-
-      streamedValue.outStream.listen((value) {
-        expect(value, 10);
+      Timer.run(() {
+        streamedValue.value = 1;
+        streamedValue.value = 2;
+        streamedValue.value = 8;
       });
 
-      streamedValue.dispose();
+      expect(
+        streamedValue.outStream,
+        emitsInOrder(<int>[1, 2, 8]),
+      );
     });
 
     //
@@ -44,25 +47,27 @@ void main() {
       streamedTransformed.outTransformed.listen((value) {
         expect(value, 157);
       });
-
-      streamedTransformed.dispose();
     });
 
     //
     // MemoryValue test
     //
-    test('MemoryValue', () {
+    test('MemoryValue', () async {
       final memoryValue = MemoryValue<int>();
 
-      memoryValue.value = 10;
-      memoryValue.value = 11;
-
-      memoryValue.outStream.listen((value) {
-        expect(value, 11);
-        expect(memoryValue.oldValue, 10);
+      Timer.run(() {
+        memoryValue.value = 111;
+        memoryValue.value = 121;
       });
 
-      memoryValue.dispose();
+      expect(memoryValue.outStream, emitsInOrder([111, 121]));
+
+      memoryValue.outStream.listen((memory) {
+        print(memory);
+        if (memory == 121) {
+          expect(memoryValue.oldValue, 111);
+        }
+      });
     });
 
     //
@@ -70,21 +75,22 @@ void main() {
     //
     test('HistoryObject', () {
       final historyObject = HistoryObject<String>();
-
-      historyObject.value = 'Frideos';
-      historyObject.saveValue();
-      historyObject.value = 'Dart';
-      historyObject.saveValue();
-      historyObject.value = 'Flutter';
-      historyObject.saveValue();
-
-      historyObject.historyStream.listen((history) {
-        expect(history.length, 3);
-        expect(history.first, 'Frideos');
-        expect(history.last, 'Flutter');
+      Timer.run(() {
+        historyObject.value = 'Frideos';
+        historyObject.saveValue();
+        historyObject.value = 'Dart';
+        historyObject.saveValue();
+        historyObject.value = 'Flutter';
+        historyObject.saveValue();
+        expect(historyObject.history.length, 3);
       });
 
-      historyObject.dispose();
+      expect(
+        historyObject.outStream,
+        emitsInOrder(['Frideos', 'Dart', 'Flutter']),
+      );
+
+    
     });
 
     //
