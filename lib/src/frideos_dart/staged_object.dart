@@ -286,7 +286,7 @@ class StagedObject implements StreamedObject {
     }
   }
 
-  Stage getStage(int index) { 
+  Stage getStage(int index) {
     assert(_stagesMap[index] != null);
     return _stagesMap[index];
   }

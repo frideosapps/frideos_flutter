@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../frideos_dart/interfaces/app_state.dart';
 
-/// Simple state provider that extends a StatefulWidget and use an InheritedWidget 
+/// Simple state provider that extends a StatefulWidget and use an InheritedWidget
 /// to share the state with the widgets on the tree.
-/// 
-/// Used along with streams, it is possibile for the widgets the access this data to 
+///
+/// Used along with streams, it is possibile for the widgets the access this data to
 /// modify it and propagates the changes to the entire widgets tree.
-/// 
+///
 class AppStateProvider<T extends AppStateModel> extends StatefulWidget {
   AppStateProvider({this.appState, this.child});
 
@@ -30,7 +30,7 @@ class _AppStateProviderState extends State<AppStateProvider> {
   @override
   void initState() {
     super.initState();
-    widget.appState.init();    
+    widget.appState.init();
   }
 
   @override

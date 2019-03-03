@@ -92,7 +92,7 @@ class StreamedMap<K, V> extends StreamedObject<Map<K, V>> {
   /// Clear the map, add all the key/value pairs of the map passed
   /// and update the stream
   set value(Map<K, V> map) {
-    stream.value = map;    
+    stream.value = map;
     timesUpdated++;
   }
 
@@ -110,7 +110,7 @@ class StreamedMap<K, V> extends StreamedObject<Map<K, V>> {
   }
 
   /// Used to add key/value pair to the map and update the stream automatically
-  addKey(K key, V val) {   
+  addKey(K key, V val) {
     value[key] = val;
     refresh();
   }

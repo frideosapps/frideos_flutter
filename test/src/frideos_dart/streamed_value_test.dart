@@ -89,8 +89,6 @@ void main() {
         historyObject.outStream,
         emitsInOrder(['Frideos', 'Dart', 'Flutter']),
       );
-
-    
     });
 
     //

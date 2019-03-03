@@ -56,8 +56,8 @@ class StreamedList<T> extends StreamedObject<List<T>> {
   StreamedList({List<T> initialData}) {
     stream = StreamedValue<List<T>>();
 
-    if (initialData != null) {      
-      stream.value = initialData;      
+    if (initialData != null) {
+      stream.value = initialData;
     }
 
     stream.onChange((data) {
@@ -91,8 +91,8 @@ class StreamedList<T> extends StreamedObject<List<T>> {
   void Function(List<T> data) _onChange = (list) {};
 
   /// Set the new value and update the stream
-  set value(List<T> list) {    
-    stream.value = list;    
+  set value(List<T> list) {
+    stream.value = list;
     timesUpdated++;
   }
 

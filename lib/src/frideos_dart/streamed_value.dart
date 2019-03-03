@@ -120,10 +120,10 @@ class StreamedValue<T> implements StreamedObject<T> {
   T get value => _lastValue;
 
   /// Value setter
-  set value(T value) {        
-      _lastValue = value;
-      stream.add(value);      
-      timesUpdated++;    
+  set value(T value) {
+    _lastValue = value;
+    stream.add(value);
+    timesUpdated++;
   }
 
   /// To set a function that will be called every time the stream updates.
@@ -171,7 +171,7 @@ class MemoryValue<T> extends StreamedValue<T> {
   T get oldValue => _oldValue;
 
   set value(T value) {
-    if (_lastValue != value) {      
+    if (_lastValue != value) {
       _oldValue = _lastValue;
       _lastValue = value;
       stream.add(value);
@@ -216,7 +216,7 @@ class HistoryObject<T> extends MemoryValue<T> {
   ///
   /// Function to store the current value to a collection and sending it to stream
   ///
-  saveValue() {    
+  saveValue() {
     _historyStream.addElement(value);
   }
 
@@ -342,7 +342,7 @@ class TimerObject extends StreamedValue<int> {
   /// Method to get the lap time
   getLapTime() {
     if (isStopwatchActive) {
-      var milliseconds = _stopwatch.elapsedMilliseconds;      
+      var milliseconds = _stopwatch.elapsedMilliseconds;
       _stopwatchStreamed.value = milliseconds;
       _stopwatch.reset();
       _stopwatch.start();

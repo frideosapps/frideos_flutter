@@ -91,5 +91,4 @@ void main() {
     print(renderOpacity.opacity);
     expect(renderOpacity.opacity, 1.0);
   });
-
 }

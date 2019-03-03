@@ -93,7 +93,7 @@ class ListSender<T> {
   }
 
   send(List<T> data) {
-    _receiver.value = data;    
+    _receiver.value = data;
     //_receiver.refresh();
   }
 }
