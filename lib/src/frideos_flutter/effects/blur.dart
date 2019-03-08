@@ -17,7 +17,10 @@ class BlurWidget extends StatelessWidget {
       @required this.child,
       @required this.sigmaX,
       @required this.sigmaY})
-      : super(key: key);
+      : assert(child != null, "The child argument is null."),
+        assert(sigmaX != null, "The sigmaX argument is null."),
+        assert(sigmaY != null, "The sigmaY argument is null."),
+        super(key: key);
 
   ///
   /// Child to blur
@@ -71,7 +74,8 @@ class AnimatedBlurWidget extends StatefulWidget {
       this.reverseAnimation = true,
       this.loop = true,
       this.refreshTime = blurRefreshTime})
-      : super(key: key);
+      : assert(child != null, "The child argument is null."),
+        super(key: key);
 
   ///
   /// Child to blur
@@ -242,7 +246,8 @@ class BlurInWidget extends StatefulWidget {
       this.initialSigmaY = 6.0,
       this.duration = 5000,
       this.refreshTime = blurRefreshTime})
-      : super(key: key);
+      : assert(child != null, "The child argument is null."),
+        super(key: key);
 
   ///
   /// Child to blur
@@ -350,7 +355,8 @@ class BlurOutWidget extends StatefulWidget {
       this.finalSigmaY = 6.0,
       this.duration = 5000,
       this.refreshTime = blurRefreshTime})
-      : super(key: key);
+      : assert(child != null, "The child argument is null."),
+        super(key: key);
 
   ///
   /// Child to blur

@@ -13,7 +13,14 @@ import 'extended_asyncwidgets.dart';
 ///
 class ScrollingText extends StatefulWidget {
   ScrollingText(
-      {@required this.text, @required this.scrollingDuration, this.style});
+      {Key key,
+      @required this.text,
+      @required this.scrollingDuration,
+      this.style})
+      : assert(text != null, "The text argument is null."),
+        assert(
+            scrollingDuration != null, "The scrollDuration argument is null."),
+        super(key: key);
 
   final String text;
   final int scrollingDuration;

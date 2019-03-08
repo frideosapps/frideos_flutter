@@ -12,13 +12,14 @@ class PageThreeBloc extends BlocBase {
   send(int numItems) {
     print('SENDING SELECTED ITEMS');
 
-    tunnelSenderMessage.send('Page three received $numItems item${numItems > 1 ? 's' : ''}');
+    tunnelSenderMessage
+        .send('Page three received $numItems item${numItems > 1 ? 's' : ''}');
   }
 
   PageThreeBloc() {
     print('-------PAGE THREE BLOC--------');
 
-    tunnelReceiverSelectedItems.outStream.listen((selectedItems) {      
+    tunnelReceiverSelectedItems.outStream.listen((selectedItems) {
       print('length: ${selectedItems.length}');
       items.value.addAll(selectedItems);
       send(selectedItems.length);

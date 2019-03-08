@@ -13,30 +13,64 @@ typedef ErrorCallback = Widget Function(Object);
 typedef WaitingCallback = Widget Function();
 
 ///
-/// StreamedWidget is a wrapper for the [StreamBuilder] widget
+/// ValueBuilder extends the [StreamBuilder] widget providing
+/// some callbacks to handle the state of the stream and returning a
+/// [Container] if `noDataChild` is not provided, in order to avoid
+/// checking `snapshot.hasData`.
 ///
-/// If no [noDataChild] widget or [onNoData] callback is provided then a [Container] is shown
+/// N.B. To use when there is no need to receive a *null value*.
 ///
-/// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
+/// It takes as a `stream` parameter an object implementing the
+/// [StreamedObject] interface and triggers the rebuild of the widget
+/// whenever the stream emits a new event.
 ///
 ///
-class StreamedWidget<T> extends StreamBuilder<T> {
-  const StreamedWidget(
+/// #### Usage:
+///
+/// ```dart
+/// ValueBuilder<String>(
+///   stream: streamedValue,
+///   builder: (BuildContext context,
+///       AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+///   noDataChild: // Widget to show when the stream has no data
+///   onNoData: () => // or Callback
+///   errorChild: // Widget to show on error
+///   onError: (error) => // or Callback
+/// )
+/// ```
+///
+/// If no [noDataChild] widget or [onNoData] callback is provided then
+/// a [Container] is returned.
+///
+/// If no [errorChild] widget or no [onError] callback is provided then
+/// a [Container] is returned.
+///
+///
+/// N.B. The callbacks are executed only if their respective child is
+/// not provided.
+///
+///
+class ValueBuilder<T> extends StreamBuilder<T> {
+  ValueBuilder(
       {Key key,
-      this.initialData,
-      Stream<T> stream,
+      @required StreamedObject<T> stream,
       @required this.builder,
       this.noDataChild,
       this.onNoData,
       this.errorChild,
       this.onError})
-      : super(key: key, stream: stream, builder: builder);
+      : assert(stream != null, "The stream argument is null."),
+        assert(builder != null, "The builder argument is null."),
+        super(
+            key: key,
+            initialData: stream.value,
+            stream: stream.outStream,
+            builder: builder);
 
   final AsyncWidgetBuilder<T> builder;
-  final T initialData;
 
   ///
-  /// If the snapshot has no data then this widget is shown
+  /// If the snapshot has no data then this widget is returned
   final Widget noDataChild;
 
   ///
@@ -44,7 +78,7 @@ class StreamedWidget<T> extends StreamBuilder<T> {
   final WaitingCallback onNoData;
 
   ///
-  /// This widget is shown if there is an error
+  /// This widget is returned if there is an error
   final Widget errorChild;
 
   ///
@@ -74,29 +108,156 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 }
 
 ///
-/// FuturedWidget is a wrapper for the [FutureBuilder] widget
+/// StreamedWidget extends the [StreamBuilder] widget providing
+/// some callbacks to handle the state of the stream and returning a
+/// [Container] if `noDataChild` is not provided, in order to avoid
+/// checking `snapshot.hasData`.
 ///
-/// If no [onWaitingChild] widget or [onWaiting] callback is provided then a [Container] is shown
+/// N.B. To use when there is no need to receive a *null value*.
 ///
-/// If no [errorChild] widget or no [onError] callback is provided then a [Container] is shown
+/// It takes as a `stream` parameter a [Stream] and triggers the rebuild
+/// of the widget whenever the stream emits a new event.
+///
+///
+///#### Usage
+///
+/// ```dart
+/// StreamedWidget<String>(stream: stream, builder: (BuildContext context,
+///       AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+///   noDataChild: // Widget to show when the stream has no data
+///   onNoData: () => // or Callback
+///   errorChild: // Widget to show on error
+///   onError: (error) => // or Callback
+/// )
+/// ```
+///
+/// In case of an object implementing the StreamedObject interface (eg. StreamedValue, StreameList etc.):
+///
+/// ```dart
+/// StreamedWidget<String>(stream: streamedObject.outStream, // outStream getter
+///      builder: (BuildContext context, AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+///   noDataChild: // Widget to show when the stream has no data
+///   onNoData: () => // or Callback
+///   errorChild: // Widget to show on error
+///   onError: (error) => // or Callback
+/// )
+/// ```
+///
+/// If no [noDataChild] widget or [onNoData] callback is provided then
+/// a [Container] is returned.
+///
+/// If no [errorChild] widget or no [onError] callback is provided then
+/// a [Container] is returned.
+///
+/// N.B. The callbacks are executed only if their respective child is
+/// not provided.
+///
+///
+class StreamedWidget<T> extends StreamBuilder<T> {
+  const StreamedWidget(
+      {Key key,
+      this.initialData,
+      @required Stream<T> stream,
+      @required this.builder,
+      this.noDataChild,
+      this.onNoData,
+      this.errorChild,
+      this.onError})
+      : assert(stream != null, "The stream argument is null."),
+        assert(builder != null, "The builder argument is null."),
+        super(key: key, stream: stream, builder: builder);
+
+  final AsyncWidgetBuilder<T> builder;
+  final T initialData;
+
+  ///
+  /// If the snapshot has no data then this widget is returned
+  final Widget noDataChild;
+
+  ///
+  /// If no [noDataChild] is provided then the [onNoData] callback is called
+  final WaitingCallback onNoData;
+
+  ///
+  /// This widget is returned if there is an error
+  final Widget errorChild;
+
+  ///
+  /// If no [errorChild] is provided then the [onError] callback is called
+  final ErrorCallback onError;
+
+  @override
+  Widget build(BuildContext context, AsyncSnapshot<T> currentSummary) {
+    if (currentSummary.hasData) {
+      return builder(context, currentSummary);
+    }
+
+    if (currentSummary.hasError) {
+      if (errorChild != null) {
+        return errorChild;
+      } else {
+        return onError != null ? onError(currentSummary.error) : Container();
+      }
+    }
+
+    if (noDataChild != null) {
+      return noDataChild;
+    } else {
+      return onNoData != null ? onNoData() : Container();
+    }
+  }
+}
+
+///
+/// FuturedWidget is a wrapper for the [FutureBuilder] widget. It provides
+/// some callbacks to handle the state of the future and returning a
+/// [Container] if `onWaitingChild` is not provided, in order to avoid
+/// checking `snapshot.hasData`.
+///
+///
+/// #### Usage
+///
+/// ```dart
+/// FuturedWidget<String>(future: future,
+///   builder: (BuildContext context,
+///        AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+///   waitingChild: // Widget to show on waiting
+///   onWaiting: () => // or Callback
+///   errorChild: // Widget to show on error
+///   onError: (error) => // or Callback
+/// )
+/// ```
+///
+/// If no [onWaitingChild] widget or [onWaiting] callback is provided then
+/// a [Container] is returned.
+///
+/// If no [errorChild] widget or no [onError] callback is provided then
+/// a [Container] is returned.
+///
+/// N.B. The callbacks are executed only if their respective child is
+/// not provided.
 ///
 ///
 class FuturedWidget<T> extends StatelessWidget {
   FuturedWidget(
-      {this.initialData,
+      {Key key,
+      this.initialData,
       @required this.future,
       @required this.builder,
       this.onWaitingChild,
       this.onWaiting,
       this.errorChild,
-      this.onError});
+      this.onError})
+      : assert(future != null, "The future argument is null."),
+        assert(builder != null, "The builder argument is null."),
+        super(key: key);
 
   final T initialData;
   final Future<T> future;
   final AsyncWidgetBuilder<T> builder;
 
   ///
-  /// If the snapshot has no data then this widget is shown
+  /// If the snapshot has no data then this widget is returned
   final Widget onWaitingChild;
 
   ///
@@ -104,7 +265,7 @@ class FuturedWidget<T> extends StatelessWidget {
   final WaitingCallback onWaiting;
 
   ///
-  /// This widget is shown if there is an error
+  /// This widget is returned if there is an error
   final Widget errorChild;
 
   ///
@@ -135,60 +296,5 @@ class FuturedWidget<T> extends StatelessWidget {
             return onWaiting != null ? onWaiting() : Container();
           }
         });
-  }
-}
-
-class ValueBuilder<T> extends StreamBuilder<T> {
-  ValueBuilder(
-      {Key key,
-      StreamedObject<T> stream,
-      @required this.builder,
-      this.noDataChild,
-      this.onNoData,
-      this.errorChild,
-      this.onError})
-      : super(
-            key: key,
-            initialData: stream.value,
-            stream: stream.outStream,
-            builder: builder);
-
-  final AsyncWidgetBuilder<T> builder;
-
-  ///
-  /// If the snapshot has no data then this widget is shown
-  final Widget noDataChild;
-
-  ///
-  /// If no [noDataChild] is provided then the [onNoData] callback is called
-  final WaitingCallback onNoData;
-
-  ///
-  /// This widget is shown if there is an error
-  final Widget errorChild;
-
-  ///
-  /// If no [errorChild] is provided then the [onError] callback is called
-  final ErrorCallback onError;
-
-  @override
-  Widget build(BuildContext context, AsyncSnapshot<T> currentSummary) {
-    if (currentSummary.hasData) {
-      return builder(context, currentSummary);
-    }
-
-    if (currentSummary.hasError) {
-      if (errorChild != null) {
-        return errorChild;
-      } else {
-        return onError != null ? onError(currentSummary.error) : Container();
-      }
-    }
-
-    if (noDataChild != null) {
-      return noDataChild;
-    } else {
-      return onNoData != null ? onNoData() : Container();
-    }
   }
 }

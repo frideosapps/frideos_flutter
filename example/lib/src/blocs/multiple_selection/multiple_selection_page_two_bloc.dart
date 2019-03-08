@@ -12,7 +12,8 @@ class PageTwoBloc extends BlocBase {
   send(int numItems) {
     print('SENDING SELECTED ITEMS');
 
-    tunnelSenderMessage.send('Page two received $numItems item${numItems > 1 ? 's' : ''}');
+    tunnelSenderMessage
+        .send('Page two received $numItems item${numItems > 1 ? 's' : ''}');
   }
 
   PageTwoBloc() {

@@ -2,7 +2,6 @@ import 'package:frideos/frideos_dart.dart';
 
 import '../../blocs/bloc.dart';
 
-
 class StagedPageOneBloc extends BlocBase {
   StagedPageOneBloc() {
     print('-------StagedPageOne BLOC--------');
@@ -17,7 +16,7 @@ class StagedPageOneBloc extends BlocBase {
   final widgetsStagesMap = Map<int, Stage>();
 
   addStage(Stage stage) {
-    widgetsStagesMap[indexStage] = stage;    
+    widgetsStagesMap[indexStage] = stage;
     indexStage++;
     tunnelSender.send(widgetsStagesMap);
     print('Map: $widgetsStagesMap');

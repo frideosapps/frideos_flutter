@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:frideos/frideos.dart';
 
 class BlurPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

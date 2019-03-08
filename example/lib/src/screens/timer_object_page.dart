@@ -37,7 +37,7 @@ class TimerObjectPage extends StatelessWidget {
                           children: <Widget>[
                             Text('TimerObject', style: styleHeader),
                             Container(height: 20.0),
-                            ValueBuilder<int>(                              
+                            ValueBuilder<int>(
                               stream: bloc.timerObject,
                               builder: (BuildContext context,
                                       AsyncSnapshot<int> snapshot) =>
@@ -46,7 +46,7 @@ class TimerObjectPage extends StatelessWidget {
                                       style: styleValue),
                               noDataChild: Text('NO DATA'),
                             ),
-                            ValueBuilder<int>(                              
+                            ValueBuilder<int>(
                               stream: bloc.timerObject.stopwatch,
                               builder: (BuildContext context,
                                       AsyncSnapshot<int> snapshot) =>
@@ -55,7 +55,7 @@ class TimerObjectPage extends StatelessWidget {
                                       style: styleValue),
                               noDataChild: Text('NO DATA'),
                             ),
-                            ValueBuilder<int>(                              
+                            ValueBuilder<int>(
                               stream: bloc.timerObject,
                               builder: (BuildContext context,
                                   AsyncSnapshot<int> snapshot) {

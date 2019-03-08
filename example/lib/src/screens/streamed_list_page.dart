@@ -5,7 +5,6 @@ import 'package:frideos/frideos_flutter.dart';
 import '../blocs/bloc.dart';
 import '../blocs/streamed_list_bloc.dart';
 
-
 const styleHeader =
     TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
 const styleValue = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
@@ -76,7 +75,7 @@ class StreamedListWidget extends StatelessWidget {
             }),
         Container(height: 20.0),
         Expanded(
-          child: ValueBuilder<List<String>>(            
+          child: ValueBuilder<List<String>>(
             stream: bloc.streamedList,
             builder:
                 (BuildContext context, AsyncSnapshot<List<String>> snapshot) {

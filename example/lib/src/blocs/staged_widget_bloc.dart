@@ -21,9 +21,9 @@ class StagedWidgetBloc extends BlocBase {
   updateRotate(Timer t) {
     rotateAnimation.animation.value += 0.04;
 
-    if (rotateAnimation.animation.value > math.pi*2 ) {
+    if (rotateAnimation.animation.value > math.pi * 2) {
       //rotateAnimation.reset();
-       rotateAnimation.animation.value = math.pi*2;
+      rotateAnimation.animation.value = math.pi * 2;
       stopRotate();
     }
   }
@@ -35,7 +35,6 @@ class StagedWidgetBloc extends BlocBase {
   resetRotate() {
     rotateAnimation.reset();
   }
-
 
   // Initial value 0.5, updating interval 20 milliseconds
   final scaleAnimation =
@@ -49,7 +48,7 @@ class StagedWidgetBloc extends BlocBase {
     scaleAnimation.animation.value -= 0.002;
 
     if (scaleAnimation.animation.value < 0.1) {
-      scaleAnimation.animation.value = 0.1;      
+      scaleAnimation.animation.value = 0.1;
     }
   }
 

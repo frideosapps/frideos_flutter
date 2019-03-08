@@ -33,7 +33,6 @@ class StagedObjectBloc extends BlocBase {
     blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
   }
 
-
   // The map can be set through the constructor of the StagedObject
   // or by the setStagesMap method like in this case.
   setMap(Map<int, Stage> stagesMap) {
@@ -52,7 +51,7 @@ class StagedObjectBloc extends BlocBase {
 
     var nextStage = staged.getNextStage();
     if (nextStage != null) {
-      text.value = "Next stage:";      
+      text.value = "Next stage:";
       widget.value = nextStage.widget;
       stage.value = StageBridge(
           staged.getStageIndex(), staged.getCurrentStage(), nextStage);

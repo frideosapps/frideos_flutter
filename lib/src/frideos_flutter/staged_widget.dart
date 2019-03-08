@@ -25,10 +25,13 @@ import '../frideos_dart/staged_object.dart';
 ///
 class StagedWidget extends StatefulWidget {
   StagedWidget(
-      {@required this.stagesMap,
+      {Key key,
+      @required this.stagesMap,
       this.absoluteTiming = false,
       this.onStart,
-      this.onEnd});
+      this.onEnd})
+      : assert(stagesMap != null, "The stagesMap argument is null."),
+        super(key: key);
 
   final Map<int, Stage> stagesMap;
   final bool absoluteTiming;

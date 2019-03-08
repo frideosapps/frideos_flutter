@@ -54,7 +54,7 @@ class MultipleSelectionPageOne extends StatelessWidget {
                 height: 20.0,
               ),
               Expanded(
-                child: ValueBuilder(                  
+                child: ValueBuilder(
                   stream: bloc.selectedCollection,
                   builder: (c, s) {
                     return GridView.builder(
@@ -67,8 +67,7 @@ class MultipleSelectionPageOne extends StatelessWidget {
                             alignment: Alignment.center,
                             children: <Widget>[
                               ValueBuilder<double>(
-                                stream:
-                                    bloc.borderAnimation.animation,
+                                stream: bloc.borderAnimation.animation,
                                 builder: (BuildContext context,
                                     AsyncSnapshot<double> snapshot) {
                                   return Opacity(
@@ -121,7 +120,7 @@ class MultipleSelectionPageOne extends StatelessWidget {
                         });
                   },
                 ),
-              ),         
+              ),
             ],
           ),
         ),

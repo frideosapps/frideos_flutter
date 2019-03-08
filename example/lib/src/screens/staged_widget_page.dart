@@ -49,13 +49,10 @@ class StagedWidgetPage extends StatelessWidget {
     ];
 
     var shadows = <Shadow>[
+      Shadow(offset: Offset(6.0, 6.0), blurRadius: 5.0, color: Colors.black),
       Shadow(
           offset: Offset(6.0, 6.0),
-          blurRadius: 5.0,          
-          color: Colors.black),
-      Shadow(
-          offset: Offset(6.0, 6.0),
-          blurRadius: 10.0,          
+          blurRadius: 10.0,
           color: Colors.blueGrey[900]),
     ];
 
@@ -125,7 +122,6 @@ class StagedWidgetPage extends StatelessWidget {
                         duration: 3000,
                         child: Text('Flutter',
                             style: TextStyle(
-                                //color: Colors.white,
                                 fontSize: 94.0,
                                 fontWeight: FontWeight.w500,
                                 foreground: Paint()..shader = linearGradient,
@@ -143,7 +139,7 @@ class StagedWidgetPage extends StatelessWidget {
                                 child: FadeOutWidget(
                                   duration: 6000,
                                   child: Text('Flutter',
-                                      style: TextStyle(                                          
+                                      style: TextStyle(
                                           fontSize: 94.0,
                                           fontWeight: FontWeight.w500,
                                           foreground: Paint()

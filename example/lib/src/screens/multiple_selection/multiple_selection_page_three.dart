@@ -19,7 +19,7 @@ class MultipleSelectionPageThree extends StatelessWidget {
       body: Container(
         child: Center(
           child: Column(
-            children: <Widget>[  
+            children: <Widget>[
               Expanded(
                 child: ValueBuilder<List<Item>>(
                   stream: bloc.items,
@@ -50,8 +50,7 @@ class MultipleSelectionPageThree extends StatelessWidget {
                           );
                         });
                   },
-                  noDataChild:
-                      Text('items list empty.'),
+                  noDataChild: Text('items list empty.'),
                 ),
               ),
             ],

@@ -18,7 +18,11 @@ class VerticalSlider extends StatefulWidget {
       this.backgroundBar = const Color(0xffbbdefb),
       this.foregroundBar = const Color(0xff2090e9),
       this.triangleColor = Colors.deepOrange})
-      : super(key: key);
+      : assert(rangeMin != null, "The rangeMin argument is null."),
+        assert(rangeMax != null, "The rangeMax argument is null."),
+        assert(initialValue != null, "The initialValue argument is null."),
+        assert(onSliding != null, "The onSliding argument is null."),
+        super(key: key);
 
   final double rangeMin;
   final double rangeMax;

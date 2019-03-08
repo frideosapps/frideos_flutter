@@ -9,7 +9,9 @@ import '../frideos_dart/interfaces/app_state.dart';
 /// modify it and propagates the changes to the entire widgets tree.
 ///
 class AppStateProvider<T extends AppStateModel> extends StatefulWidget {
-  AppStateProvider({this.appState, this.child});
+  AppStateProvider({@required this.appState, @required this.child})
+      : assert(appState != null, "The appState argument is null."),
+        assert(child != null, "The child argument is null.");
 
   final T appState;
   final Widget child;

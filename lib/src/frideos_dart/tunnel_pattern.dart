@@ -36,17 +36,18 @@ class StreamedSender<T> {
   StreamedSender();
 
   StreamedSender.setReceiver(StreamedValue<T> receiver) {
+    assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 
   setReceiver(StreamedValue<T> receiver) {
+    assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 
   send(T data) {
     _receiver.value = data;
     if (T is List || T is Map) _receiver.refresh();
-    //print(data);
   }
 }
 
@@ -85,16 +86,17 @@ class ListSender<T> {
   ListSender();
 
   ListSender.setReceiver(StreamedList<T> receiver) {
+    assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 
   setReceiver(StreamedList<T> receiver) {
+    assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 
   send(List<T> data) {
     _receiver.value = data;
-    //_receiver.refresh();
   }
 }
 
@@ -133,12 +135,14 @@ class MapSender<K, V> {
   MapSender();
 
   MapSender.setReceiver(StreamedMap<K, V> receiver) {
+    assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 
   /// Method to set the [StreamedMap] on the other bloc where
   /// to send the data
   setReceiver(StreamedMap<K, V> receiver) {
+    assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 

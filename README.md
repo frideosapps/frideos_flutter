@@ -253,7 +253,7 @@ class SettingsPage extends StatelessWidget {
 
 ## Streams and BLoC pattern
 
-Utility classes to make a little bit easier working with streams/RxDart and Flutter. 
+Utility classes to make a little bit easier working with streams. 
 
 This example (you can find it in the example folder of this repo) shows how to use some classes of this library, and a comparison code without it. It is just a page with two textfields to add a key/value pair to a map. The map is then used to drive a ListView.builder showing all the pairs.
 
@@ -381,11 +381,13 @@ As you can see the code is more clean, easier to read and to mantain.
 
 ### StreamedValue
 
-Used in tandem with the StreamedWidget/StreamBuilder/ValueBuilder, it automatically triggers the refresh of the widget when a new value is set.
+It's the simplest class that implements the [StreamedObject] interface. 
+ 
+Every time a new value is set, this is compared to the oldest one and if  it is different, it is sent to stream. 
 
-This essentially does a simple thing: every time a new value is set, this is compared to the oldest one and if it is different assigned to the variable and sent to stream. Why this? So that when a new value is set, it automatically triggers the StreamerBuilder of the widget and it refreshes without the need to manually add the value to the sink of the stream.
+Used in tandem with [ValueBuilder] it automatically triggers the rebuild of the widgets returned by its builder.
 
-So for example, instead of doing something like this:
+So for example, instead of:
 
 ```dart
 counter += 1;
@@ -398,11 +400,11 @@ It becomes just:
 counter.value += 1;
 ```
 
-Then the StreamedValue is used to drive a ValueBuilder/StreamedWidget/StreamBuilder using the outStream getter.
+It can be used even with [StreamedWidget] and [StreamBuilder] by using its stream getter `outStream`. In this case, it is necessary to pass to the `initialData` parameter the current value of the [StreamedValue] (e.g. using the getter `value`).
+
 
 N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the `refresh` method to update the stream.
 
-N.B. Using both StreamedWidget and StreamBuilder it is necessary to pass to the `iniitialData` parameter, the value of the stream (e.g. using the getter `value` of the StreamedObjects).
 
 #### Usage
 
@@ -418,20 +420,9 @@ incrementCounter() {
 ValueBuilder<int>(                
   stream: bloc.count, // no need of the outStream getter with ValueBuilder
   builder: (BuildContext context, AsyncSnapshot<int> snapshot) =>
-    Text('Value: ${snapshot.data}', style: styleValue),
+    Text('Value: ${snapshot.data}'),
   noDataChild: Text('NO DATA'),
 ),
-
-// Alternative:
-//
-// StreamedWidget<int>(
-//    initialData: bloc.count
-//    stream: bloc.count.outStream,
-//    builder: (BuildContext context,
-//        AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
-//    noDataChild: Text('NO DATA'),
-//),
-
 RaisedButton(
     color: buttonColor,
     child: Text('+'),
@@ -439,11 +430,27 @@ RaisedButton(
       bloc.incrementCounter();
     },
 ),
+
+// As an alternative:
+//
+// StreamedWidget<int>(
+//    initialData: bloc.count.value
+//    stream: bloc.count.outStream,
+//    builder: (BuildContext context,
+//        AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
+//    noDataChild: Text('NO DATA'),
+//),
 ```
+
+On update the [timesUpdated] increases showing how many times the value has been updated.
+
+N.B. For collections use [StreamedList] and [StreamedMap] instead.
+
 
 ### StreamedTransformed
 
-A special StreamedValue that is used when there is the need to use a StreamTransformer (e.g. validation of input fields).
+A particular class the implement the StreamedObject interface, to use when there is the need of a StreamTransformer (e.g. stream transformation, validation of input
+fields, etc.).
 
 #### Usage
 
@@ -639,19 +646,19 @@ Used to make a one-way tunnel beetween two blocs (from blocA to a StremedValue o
 
 #### Usage
 
-1. #### Define a [StreamedValueBase] derived object in the blocB
+1. #### Define an object that implements the [StreamedObject] interface in the blocB (e.g. a StreamedValue):
 
 ```dart
 final receiverStr = StreamedValue<String>();
 ```
 
-2. #### Define a [StreamedSender] in the blocA
+2. #### Define a [StreamedSender] in the blocA:
 
 ```dart
 final tunnelSenderStr = StreamedSender<String>();
 ```
 
-3. #### Set the receiver in the sender on the class the holds the instances of the blocs
+3. #### Set the receiver in the sender on the class the holds the instances of the blocs:
 
 ```dart
 blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
@@ -669,7 +676,7 @@ Like the StreamedSender, but used with collections.
 
 #### Usage
 
-1. #### Define a [StreamedList] or [StreamedMap]object in the blocB
+1. #### Define a [StreamedList] or [StreamedMap] object in the blocB
 
 ```dart
 final receiverList = StreamedList<int>();
@@ -735,14 +742,19 @@ void init() async {
 ## Widgets
 
 ### ValueBuilder
-It is a widget that extends the StreamBuilder class but takes as a stream parameter an object that implements the StreamedObject interface.
+ValueBuilder extends the [StreamBuilder] widget providing some callbacks to handle the state of the stream and returning a [Container] if `noDataChild` is not provided, in order to avoid checking `snapshot.hasData`. 
+ 
+N.B. To use when there is no need to receive a *null value*.
+ 
+It takes as a `stream` parameter an object implementing the [StreamedObject] interface and triggers the rebuild of the widget whenever the stream emits a new event.
 
 #### Usage
 
 ```dart
 ValueBuilder<String>(
-  stream: streamedValue,        
-  builder: (BuildContext context, AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+  stream: streamedValue,      
+  builder: (BuildContext context, 
+     AsyncSnapshot<String> snasphot) => Text(snasphot.data),
   noDataChild: // Widget to show when the stream has no data
   onNoData: () => // or Callback
   errorChild: // Widget to show on error
@@ -750,8 +762,26 @@ ValueBuilder<String>(
 )
 ```
 
+If no [noDataChild] widget or [onNoData] callback is provided then a [Container] is returned.
+
+If no [errorChild] widget or no [onError] callback is provided then a [Container] is returned.
+ 
+N.B. The callbacks are executed only if their respective child is not provided.
+
+
 ### StreamedWidget
-It extends that StreamBuilder class, provides some callbacks to handle the state of the stream and return a `Container()` if `noDataChild` is not provided, to avoid to check if the `snapshot.hasData` is true. To use when there is no need to receive a null value.
+StreamedWidget extends the [StreamBuilder] widget providing 
+some callbacks to handle the state of the stream and returning a 
+[Container] if `noDataChild` is not provided, in order to avoid 
+checking `snapshot.hasData`. 
+ 
+N.B. To use when there is no need to receive a *null value*.
+
+It takes as a `stream` parameter a [Stream] and triggers the rebuild of the widget whenever the stream emits a new event.
+
+If no [noDataChild] widget or [onNoData] callback is provided then a [Container] is returned.
+
+If no [errorChild] widget or no [onError] callback is provided then  a [Container] is returned.
 
 #### Usage
 
@@ -765,7 +795,20 @@ StreamedWidget<String>(stream: stream, builder: (BuildContext context, AsyncSnap
 )
 ```
 
-N.B. The callback is executed only if the respective child is not provided.
+In case of an object implementing the StreamedObject interface (eg. StreamedValue, StreameList etc.):
+
+```dart
+StreamedWidget<String>(stream: streamedObject.outStream, // outStream getter
+builder: (BuildContext context, AsyncSnapshot<String> snasphot)
+  => Text(snasphot.data),
+  noDataChild: // Widget to show when the stream has no data
+  onNoData: () => // or Callback
+  errorChild: // Widget to show on error
+  onError: (error) => // or Callback
+)
+```
+
+N.B. The callbacks are executed only if their respective child is not provided.
 
 ### ReceiverWidget
 
@@ -778,8 +821,7 @@ ReceiverWidget(stream: streamedValue.outStream),
 ```
 
 ### FuturedWidget
-
-It's a wrapper for the FutureBuilder that gives the possibility to choose directly in the widget the widget to show on waiting the future is resolving or in case of errore or, in alternative, to use the relative callbacks.
+FuturedWidget is a wrapper for the [FutureBuilder] widget. It provides some callbacks to handle the state of the future and returning a [Container] if `onWaitingChild` is not provided, in order to avoid checking `snapshot.hasData`. 
 
 #### Usage
 
@@ -793,7 +835,11 @@ FuturedWidget<String>(future: future, builder: (BuildContext context, AsyncSnaps
 )
 ```
 
-N.B. The callback is executed only if the respective child is not provided.
+If no [onWaitingChild] widget or [onWaiting] callback is provided then a [Container] is returned.
+
+If no [errorChild] widget or no [onError] callback is provided then a [Container] is returned.
+
+N.B. The callbacks are executed only if their respective child is not provided.
 
 
 
@@ -1349,16 +1395,18 @@ An example app to show how to use this library.
 - Blur (fixed, in, out, animated)
 - WavesWidget
 - Sliders
+
+### 2. [Theme changer](https://github.com/frideosapps/theme_changer)
+A simple starter app with a drawer, app state management, dynamic theme changer and persistent theme using the sharedpreferences.
   
-### 2. [Counter](https://github.com/frideosapps/counter)
+### 3. [Counter](https://github.com/frideosapps/counter)
 A simple app using the BLoC pattern showing a counter implemented with this library.
 
-### 3. [Blood pressure](https://github.com/frideosapps/bloodpressure)
+### 4. [Blood pressure](https://github.com/frideosapps/bloodpressure)
 An example of a medical app built with Flutter for the classification of the arterial blood pressure.
 
-### 4. [Pair game](https://github.com/frideosapps/pair_game)
+### 5. [Pair game](https://github.com/frideosapps/pair_game)
 A simple pair game (multiple selections, animations, tunnel pattern).
 
-### 5. [Theme changer](https://github.com/frideosapps/theme_changer)
-A starter app with a drawer and a dynamic theme changer, BLoC pattern, settings page.
+
 

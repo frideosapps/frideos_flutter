@@ -21,7 +21,7 @@ class StagedPageTwo extends StatelessWidget {
           padding: EdgeInsets.all(12.0),
           child: Column(
             children: <Widget>[
-              ValueBuilder<StageStatus>(                
+              ValueBuilder<StageStatus>(
                 stream: bloc.staged.getStatus,
                 builder: (context, AsyncSnapshot<StageStatus> snapshot) {
                   return Row(
@@ -40,7 +40,7 @@ class StagedPageTwo extends StatelessWidget {
                               color: Colors.lightBlueAccent,
                               child: Text('Start'),
                               onPressed: () {
-                                bloc.staged.startStages();                                
+                                bloc.staged.startStages();
                               })
                           : Container(),
                       snapshot.data == StageStatus.active
@@ -54,10 +54,10 @@ class StagedPageTwo extends StatelessWidget {
                     ],
                   );
                 },
-              ),              
+              ),
               Expanded(
                 child: Center(
-                  child: ValueBuilder(                    
+                  child: ValueBuilder(
                     stream: bloc.staged,
                     builder: (context, snapshot) => snapshot.data,
                   ),

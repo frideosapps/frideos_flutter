@@ -58,8 +58,7 @@ class MultipleSelectionHome extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              MultipleSelectionPageThree(
+                          builder: (context) => MultipleSelectionPageThree(
                                 bloc: bloc.blocC,
                               ),
                         ),
@@ -68,7 +67,7 @@ class MultipleSelectionHome extends StatelessWidget {
                   ),
                 ],
               ),
-             Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(

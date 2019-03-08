@@ -22,7 +22,7 @@ class AnimatedObjectPage extends StatelessWidget {
               Container(
                 height: 20.0,
               ),
-              ValueBuilder<AnimatedStatus>(                
+              ValueBuilder<AnimatedStatus>(
                 stream: bloc.scaleAnimation.status,
                 builder: (context, AsyncSnapshot<AnimatedStatus> snapshot) {
                   return Row(

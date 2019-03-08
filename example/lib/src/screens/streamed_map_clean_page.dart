@@ -5,7 +5,6 @@ import 'package:frideos/frideos_flutter.dart';
 import '../blocs/bloc.dart';
 import '../blocs/streamed_map_clean_bloc.dart';
 
-
 const styleHeader =
     TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
 const styleValue = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
@@ -40,7 +39,7 @@ class StreamedMapCleanWidget extends StatelessWidget {
           height: 16.0,
         ),
         Text('StreamedMap', style: styleHeader),
-        StreamBuilder<String>(            
+        StreamBuilder<String>(
             stream: bloc.outTextTransformed,
             builder: (context, AsyncSnapshot<String> snapshot) {
               return Column(
@@ -95,7 +94,7 @@ class StreamedMapCleanWidget extends StatelessWidget {
                 ],
               );
             }),
-        StreamBuilder<bool>(            
+        StreamBuilder<bool>(
             stream: bloc.isFilled,
             builder: (context, AsyncSnapshot<bool> snapshot) {
               return RaisedButton(
@@ -106,7 +105,7 @@ class StreamedMapCleanWidget extends StatelessWidget {
             }),
         Container(height: 20.0),
         Expanded(
-          child: StreamedWidget<Map<int, String>>(            
+          child: StreamedWidget<Map<int, String>>(
             stream: bloc.outMap,
             builder: (BuildContext context,
                 AsyncSnapshot<Map<int, String>> snapshot) {

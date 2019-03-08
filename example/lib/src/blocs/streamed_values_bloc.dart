@@ -15,15 +15,15 @@ class StreamedValuesBloc extends BlocBase {
     print('-------StreamedValues BLOC--------');
 
     // Activate the debug console messages on disposing
-     count.debugMode();
+    count.debugMode();
     countMemory.debugMode();
-    countHistory.debugMode();    
-    counterObj.debugMode(); 
+    countHistory.debugMode();
+    counterObj.debugMode();
   }
 
   final count = StreamedValue<int>(initialData: 0);
   final countMemory = MemoryValue<int>(initialData: 2);
-  final countHistory = HistoryObject<int>(initialData: 4);  
+  final countHistory = HistoryObject<int>(initialData: 4);
   final counterObj =
       StreamedValue<Counter>(initialData: Counter(1, 'First hit!'));
 
@@ -40,12 +40,10 @@ class StreamedValuesBloc extends BlocBase {
 
   saveToHistory() => countHistory.saveValue();
 
-  
-
   dispose() {
     print('-------StreamedValues BLOC DISPOSE--------');
     count.dispose();
     countMemory.dispose();
-    countHistory.dispose();    
+    countHistory.dispose();
   }
 }

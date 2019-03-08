@@ -17,7 +17,9 @@ class FadeOutWidget extends StatefulWidget {
       @required this.child,
       @required this.duration,
       this.curve = Curves.linear})
-      : super(key: key);
+      : assert(child != null, "The child argument is null."),
+        assert(duration != null, "The duration argument is null."),
+        super(key: key);
 
   final Widget child;
   final int duration;
@@ -80,7 +82,9 @@ class FadeInWidget extends StatefulWidget {
       @required this.child,
       @required this.duration,
       this.curve = Curves.linear})
-      : super(key: key);
+      : assert(child != null, "The child argument is null."),
+        assert(duration != null, "The duration argument is null."),
+        super(key: key);
 
   final Widget child;
   final int duration;
@@ -153,7 +157,11 @@ class LinearTransition extends StatefulWidget {
       @required this.firstWidget,
       @required this.secondWidget,
       @required this.transitionDuration})
-      : super(key: key);
+      : assert(firstWidget != null, "The firstWidget argument is null."),
+        assert(secondWidget != null, "The secondWidget argument is null."),
+        assert(transitionDuration != null,
+            "The transitionDuration argument is null."),
+        super(key: key);
 
   final Widget firstWidget;
   final Widget secondWidget;
@@ -237,7 +245,11 @@ class CurvedTransition extends StatefulWidget {
       @required this.secondWidget,
       @required this.transitionDuration,
       this.curve})
-      : super(key: key);
+      : assert(firstWidget != null, "The firstWidget argument is null."),
+        assert(secondWidget != null, "The secondWidget argument is null."),
+        assert(transitionDuration != null,
+            "The transitionDuration argument is null."),
+        super(key: key);
 
   final Widget firstWidget;
   final Widget secondWidget;

@@ -1,3 +1,7 @@
+## Version 0.4.0+3 (08-03-19)
+- Docs improved
+- Code refactoring
+
 ## Version 0.4.0 (03-03-19)
 
 ### BREAKING CHANGES

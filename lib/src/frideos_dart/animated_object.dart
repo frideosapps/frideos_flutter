@@ -102,7 +102,9 @@ enum AnimatedStatus { active, stop, pause }
 ///
 ///
 class AnimatedObject<T> {
-  AnimatedObject({this.initialValue, this.interval}) {
+  AnimatedObject({this.initialValue, this.interval})
+      : assert(initialValue != null, "The initialValue argument is null."),
+        assert(interval != null, "The interval argument is null.") {
     status.value = AnimatedStatus.stop;
   }
 

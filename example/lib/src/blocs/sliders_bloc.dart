@@ -2,7 +2,6 @@ import 'package:frideos/frideos_dart.dart';
 
 import '../blocs/bloc.dart';
 
-
 class SlidersBloc extends BlocBase {
   SlidersBloc() {
     angle.value = initialAngle;
@@ -15,14 +14,12 @@ class SlidersBloc extends BlocBase {
   double initialAngle = 2.2;
   double initialScale = 1.8;
 
-
-
   horizontalSlider(value) {
     angle.value = value;
   }
 
   verticalSlider(value) {
-    scale.value = value;    
+    scale.value = value;
   }
 
   void dispose() {

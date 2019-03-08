@@ -12,12 +12,14 @@ const baseHeight = 15.0;
 ///
 class WavesWidget extends StatefulWidget {
   WavesWidget({
+    Key key,
     this.width,
     this.height,
     this.color,
     this.refreshTime = 20,
     @required this.child,
-  });
+  })  : assert(child != null, "The child argument is null."),
+        super(key: key);
 
   final double width;
   final double height;

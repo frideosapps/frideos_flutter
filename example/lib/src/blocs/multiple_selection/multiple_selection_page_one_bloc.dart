@@ -26,14 +26,15 @@ class BorderItem {
 
 class PageOneBloc extends BlocBase {
   PageOneBloc() {
-    print('-------PAGE ONE BLOC--------');    
+    print('-------PAGE ONE BLOC--------');
   }
 
   final selectedCollection = StreamedList<int>(initialData: []);
   final mockItems = globalMockItems;
   int lastSelectedItem = -1;
-  
-  final borderAnimation = AnimatedObject<double>(initialValue: 0.0, interval: 20);
+
+  final borderAnimation =
+      AnimatedObject<double>(initialValue: 0.0, interval: 20);
 
   final borderOpacityList = List<BorderItem>();
 
@@ -91,7 +92,7 @@ class PageOneBloc extends BlocBase {
       }
 
       if (borderOpacityList[i].opacity < 0 ||
-          borderOpacityList[i].opacity > 1) {        
+          borderOpacityList[i].opacity > 1) {
         toDelete.add(i);
       }
     }

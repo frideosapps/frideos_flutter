@@ -6,14 +6,13 @@ import '../blocs/bloc.dart';
 
 class AnimatedObjectBloc extends BlocBase {
   AnimatedObjectBloc() {
-    print('-------AnimatedObject BLOC--------');    
+    print('-------AnimatedObject BLOC--------');
   }
 
   // Initial value 0.5, updating interval 20 milliseconds
   final scaleAnimation =
       AnimatedObject<double>(initialValue: 0.5, interval: 20);
 
-      
   final rotationAnimation =
       AnimatedObject<double>(initialValue: 0.5, interval: 20);
 
@@ -33,7 +32,6 @@ class AnimatedObjectBloc extends BlocBase {
   updateRotation(Timer t) {
     rotationAnimation.value += 0.1;
   }
-
 
   stop() {
     scaleAnimation.stop();

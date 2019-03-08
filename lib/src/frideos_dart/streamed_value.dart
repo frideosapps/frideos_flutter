@@ -6,36 +6,36 @@ import 'streamed_list.dart';
 
 import '../frideos_dart/interfaces/streamed_object.dart';
 
-/// It's the simplest object that implements the [StreamedObject] interface.
+/// It's the simplest class that implements the [StreamedObject] interface.
 ///
-/// When a value is set through the setter, if it's different from the one
-/// alredy stored then the new value is stored and sent to stream by
-/// it's setter. Used in tandem with the ValueBuilder/StreamBuilder,
-/// it automatically triggers the refresh of the widget when a new
-/// value is set.
+/// Every time a new value is set, this is compared to the oldest one and if
+/// it is different, it is sent to stream.
 ///
-/// This essentially does a simple thing: every time a new value is set,
-/// this is compared to the oldest one and if it is different, it is assigned
-/// to the variable and sent to stream. Why this? So that when a new value
-/// is set, it automatically triggers the StreamerBuilder of the widget
-/// and it refreshes without the need to manually add the value to the
-/// sink of the stream.
+/// Used in tandem with [ValueBuilder] it automatically triggers the rebuild
+/// of the widgets returned by its builder.
 ///
-/// So for example, instead of doing something like this:
+///
+/// So for example, instead of:
+///
 ///
 /// ```dart
 /// counter += 1;
 /// stream.sink.add(counter);
 /// ```
 ///
+///
 /// It becomes just:
+///
 ///
 /// ```dart
 /// counter.value += 1;
 /// ```
 ///
-/// Then the StreamedValue is used to drive a [ValueBuilder]/StreamBuilder
-/// using the outStream getter.
+///
+/// It can be used even with [StreamedWidget] and [StreamBuilder] by using its
+/// stream getter `outStream`. In this case, it is necessary to pass to the
+/// `initialData` parameter the current value of the [StreamedValue]
+/// (e.g. using the getter `value`).
 ///
 ///
 /// N.B. when the type is not a basic type (e.g int, double, String etc.) and
@@ -56,25 +56,37 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 ///
 /// // View
 /// ValueBuilder<int>(
-///     stream: bloc.count.outStream,
+///     stream: bloc.count, // no need of the outStream getter with ValueBuilder
 ///     builder: (BuildContext context,
-///         AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
+///         AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}'),
 ///     noDataChild: Text('NO DATA'),
 /// ),
 /// RaisedButton(
 ///     color: buttonColor,
 ///     child: Text('+'),
 ///     onPressed: () {
-///         bloc.incrementCounter();
-///         },
+///       bloc.incrementCounter();
+///     },
 /// ),
+///
+/// // As an alternative:
+/// //
+/// // StreamedWidget<int>(
+/// //   initialData: bloc.count.value
+/// //   stream: bloc.count.outStream,
+/// //   builder: (BuildContext context,
+/// //       AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
+/// //   noDataChild: Text('NO DATA'),
+/// //,
+///
 /// ```
+///
 ///
 /// On update the [timesUpdated] increases showing how many times the
 /// value has been updated.
 ///
 ///
-/// N.B. For collections use the [StreamedList] and [StreamedMap] instead.
+/// N.B. For collections use [StreamedList] and [StreamedMap] instead.
 ///
 ///
 class StreamedValue<T> implements StreamedObject<T> {
@@ -273,7 +285,6 @@ const updateTimerMilliseconds = 17;
 ///```
 ///
 class TimerObject extends StreamedValue<int> {
-  /// TIMER
   Timer _timer;
 
   Duration _interval = Duration(milliseconds: updateTimerMilliseconds);
@@ -386,9 +397,9 @@ class TimerObject extends StreamedValue<int> {
 
 ///
 ///
-/// A special StreamedValue that is used when there is the need to use
-/// a StreamTransformer (e.g. stream transformation, validation of input
-/// fields, etc.).
+/// A particular class the implement the [StreamedObject] interface, to use when
+/// there is the need of a StreamTransformer (e.g. stream transformation,
+/// validation of input fields, etc.).
 ///
 ///
 /// #### Usage

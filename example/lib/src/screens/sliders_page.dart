@@ -37,7 +37,7 @@ class SlidersPage extends StatelessWidget {
                                   height:
                                       MediaQuery.of(context).size.height * 0.4,
                                   child: Column(
-                                    children: <Widget>[                                      
+                                    children: <Widget>[
                                       Expanded(
                                         child: Transform.scale(
                                           scale: snapshotScale.data,
