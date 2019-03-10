@@ -209,10 +209,9 @@ class _LinearTransitionState extends State<LinearTransition> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: StreamedWidget<double>(
-        initialData: 0,
-        stream: opacity.outStream,
-        builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+      child: ValueBuilder<double>(
+        stream: opacity,
+        builder: (context, snapshot) {
           return Stack(
             children: <Widget>[
               Opacity(

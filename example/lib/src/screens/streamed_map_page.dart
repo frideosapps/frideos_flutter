@@ -59,7 +59,7 @@ class StreamedMapWidget extends StatelessWidget {
         Text('StreamedMap', style: styleHeader),
         StreamBuilder<String>(
             stream: bloc.streamedText.outTransformed,
-            builder: (context, AsyncSnapshot<String> snapshot) {
+            builder: (context, snapshot) {
               return Column(
                 children: <Widget>[
                   Padding(
@@ -83,9 +83,9 @@ class StreamedMapWidget extends StatelessWidget {
                 ],
               );
             }),
-        StreamBuilder(
+        StreamBuilder<int>(
             stream: bloc.streamedKey.outTransformed,
-            builder: (context, AsyncSnapshot<int> snapshot) {
+            builder: (context, snapshot) {
               return Column(
                 children: <Widget>[
                   Padding(
@@ -114,7 +114,7 @@ class StreamedMapWidget extends StatelessWidget {
             }),
         StreamBuilder<bool>(
             stream: bloc.isFilled,
-            builder: (context, AsyncSnapshot<bool> snapshot) {
+            builder: (context, snapshot) {
               return RaisedButton(
                 color: buttonColor,
                 child: Text('Add text'),
@@ -125,8 +125,7 @@ class StreamedMapWidget extends StatelessWidget {
         Expanded(
           child: ValueBuilder<Map<int, String>>(
             stream: bloc.streamedMap,
-            builder: (BuildContext context,
-                AsyncSnapshot<Map<int, String>> snapshot) {
+            builder: (context, snapshot) {
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {

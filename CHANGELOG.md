@@ -1,3 +1,19 @@
+## Version 0.4.1 (10-03-19)
+
+### - StreamedList
+  - Added `AddAll` method.  
+  
+### - AnimatedObject 
+  - added `AnimatedType` enum, to handle the behavior of the animated object.
+  - added `startAnimation` method: it is now possible specify a type of behavior (increment or decrement the value), the velocity, a minValue (in case of decrement) and a maxValue (increment).
+  - added `outStream` getter (deprecated: `animationStream`).
+
+  - Code refactoring.
+  
+### - Blur widgets and Wave widget refactored to use the ValueBuilder widget.
+
+### - Code refactoring.
+
 ## Version 0.4.0+3 (08-03-19)
 - Docs improved
 - Code refactoring

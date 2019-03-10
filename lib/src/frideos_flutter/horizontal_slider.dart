@@ -95,7 +95,6 @@ class _HorizontalSliderState extends State<HorizontalSlider> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //color: Colors.blueGrey[200],
       child: StreamBuilder(
           stream: slider.outStream,
           builder: (context, AsyncSnapshot snapshot) {

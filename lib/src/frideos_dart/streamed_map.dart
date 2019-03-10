@@ -10,8 +10,8 @@ import '../../frideos_dart.dart';
 /// use these methods:
 ///
 /// - [addKey]
-/// - [removeKey]
 /// - [clear]
+/// - [removeKey]
 ///
 /// For other direct actions on the map, to update the stream call
 /// the [refresh] method instead.
@@ -52,7 +52,7 @@ import '../../frideos_dart.dart';
 /// ```
 ///
 ///
-class StreamedMap<K, V> extends StreamedObject<Map<K, V>> {
+class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
   StreamedMap({Map<K, V> initialData}) {
     stream = StreamedValue<Map<K, V>>();
 
@@ -105,38 +105,38 @@ class StreamedMap<K, V> extends StreamedObject<Map<K, V>> {
   }
 
   /// To set a function that will be called every time the stream updates.
-  onChange(Function(Map<K, V>) onDataChanged) {
+  void onChange(Function(Map<K, V>) onDataChanged) {
     _onChange = onDataChanged;
   }
 
-  /// Used to add key/value pair to the map and update the stream automatically
-  addKey(K key, V val) {
+  /// Used to add key/value pair to the map and update the stream.
+  void addKey(K key, V val) {
     value[key] = val;
     refresh();
   }
 
-  /// Used to remove a key from the map and update the stream automatically
+  /// Used to remove a key from the map and update the stream.
   V removeKey(K key) {
     V removed = value.remove(key);
     refresh();
     return removed;
   }
 
-  /// Used to clear the map and update the stream automatically
-  clear() {
+  /// Used to clear the map and update the stream.
+  void clear() {
     value.clear();
     refresh();
   }
 
   /// To refresh the stream when the map is modified without using the
   /// methods of this class.
-  refresh() {
+  void refresh() {
     inStream(value);
     timesUpdated++;
   }
 
   /// Dispose the stream.
-  dispose() {
+  void dispose() {
     if (_debugMode) {
       print('---------- Closing Stream ------ type: Map<$K, $V>');
       print('Value: $value');

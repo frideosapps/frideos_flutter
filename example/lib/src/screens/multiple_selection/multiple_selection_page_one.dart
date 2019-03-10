@@ -35,8 +35,7 @@ class MultipleSelectionPageOne extends StatelessWidget {
                   }),
               ValueBuilder<String>(
                 stream: bloc.tunnelReceiverMessage,
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                builder: (context, snapshot) {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -61,15 +60,14 @@ class MultipleSelectionPageOne extends StatelessWidget {
                         itemCount: bloc.mockItems.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2),
-                        itemBuilder: (BuildContext context, int index) {
+                        itemBuilder: (context, index) {
                           var item = bloc.mockItems[index];
                           return Stack(
                             alignment: Alignment.center,
                             children: <Widget>[
                               ValueBuilder<double>(
                                 stream: bloc.borderAnimation.animation,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<double> snapshot) {
+                                builder: (context, snapshot) {
                                   return Opacity(
                                     //opacity: snapshot.data,
                                     opacity: bloc.getItemOpacity(index),

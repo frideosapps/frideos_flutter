@@ -53,8 +53,14 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
 - VerticalSlider
 
 #### - [Examples built with this library](#examples)
+- Example app
+- Theme changer and persistent theme with SharedPreferences
+- Counter app
+- Blood pressure example app
+- Pair game
 
-### Dependencies
+
+###  Dependencies
 
 - [RxDart](https://pub.dartlang.org/packages/rxdart)
 - [SharedPreferences](https://pub.dartlang.org/packages/shared_preferences) 
@@ -419,7 +425,7 @@ incrementCounter() {
 // View
 ValueBuilder<int>(                
   stream: bloc.count, // no need of the outStream getter with ValueBuilder
-  builder: (BuildContext context, AsyncSnapshot<int> snapshot) =>
+  builder: (context, snapshot) =>
     Text('Value: ${snapshot.data}'),
   noDataChild: Text('NO DATA'),
 ),
@@ -436,8 +442,7 @@ RaisedButton(
 // StreamedWidget<int>(
 //    initialData: bloc.count.value
 //    stream: bloc.count.outStream,
-//    builder: (BuildContext context,
-//        AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
+//    builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
 //    noDataChild: Text('NO DATA'),
 //),
 ```
@@ -480,9 +485,9 @@ final validateKey =
 
 
 // In the view:
-StreamBuilder(
+StreamBuilder<int>(
             stream: bloc.streamedKey.outTransformed,
-            builder: (context, AsyncSnapshot<int> snapshot) {
+            builder: (context, snapshot) {
               return Column(
                 children: <Widget>[
                   Padding(
@@ -518,12 +523,13 @@ This class has been created to work with lists. It works like [StreamedValue].
 To modify the list (e.g. adding items) and update the stream automatically
 use these methods:
 
+- [AddAll]
 - [addElement]
 - [clear]
 - [removeAt]
 - [removeElement]
-- [replaceAt]
 - [replace]
+- [replaceAt]
 
 For other direct actions on the list, to update the stream call
 the [refresh] method instead.
@@ -753,8 +759,7 @@ It takes as a `stream` parameter an object implementing the [StreamedObject] int
 ```dart
 ValueBuilder<String>(
   stream: streamedValue,      
-  builder: (BuildContext context, 
-     AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+  builder: (context, snasphot) => Text(snasphot.data),
   noDataChild: // Widget to show when the stream has no data
   onNoData: () => // or Callback
   errorChild: // Widget to show on error
@@ -786,8 +791,9 @@ If no [errorChild] widget or no [onError] callback is provided then  a [Containe
 #### Usage
 
 ```dart
-StreamedWidget<String>(stream: stream, builder: (BuildContext context, AsyncSnapshot<String> snasphot)
-  => Text(snasphot.data),
+StreamedWidget<String>(
+  stream: stream, 
+  builder: (context, snasphot) => Text(snasphot.data),
   noDataChild: // Widget to show when the stream has no data
   onNoData: () => // or Callback
   errorChild: // Widget to show on error
@@ -798,9 +804,9 @@ StreamedWidget<String>(stream: stream, builder: (BuildContext context, AsyncSnap
 In case of an object implementing the StreamedObject interface (eg. StreamedValue, StreameList etc.):
 
 ```dart
-StreamedWidget<String>(stream: streamedObject.outStream, // outStream getter
-builder: (BuildContext context, AsyncSnapshot<String> snasphot)
-  => Text(snasphot.data),
+StreamedWidget<String>(
+  stream: streamedObject.outStream, // outStream getter
+  builder: (context, snasphot) => Text(snasphot.data),
   noDataChild: // Widget to show when the stream has no data
   onNoData: () => // or Callback
   errorChild: // Widget to show on error
@@ -826,8 +832,9 @@ FuturedWidget is a wrapper for the [FutureBuilder] widget. It provides some call
 #### Usage
 
 ```dart
-FuturedWidget<String>(future: future, builder: (BuildContext context, AsyncSnapshot<String> snasphot)
-  => Text(snasphot.data),
+FuturedWidget<String>(
+  future: future, 
+  builder: (context, snasphot) => Text(snasphot.data),
   waitingChild: // Widget to show on waiting
   onWaiting: () => // or Callback
   errorChild: // Widget to show on error
@@ -936,10 +943,9 @@ From the AnimatedObject example:
           child: Column(
             children: <Widget>[
               Container(height: 20.0,),
-              StreamedWidget<AnimatedStatus>(
-                initialData: AnimatedStatus.stop,
-                stream: bloc.scaleAnimation.statusStream,
-                builder: (context, AsyncSnapshot<AnimatedStatus> snapshot) {
+               ValueBuilder<AnimatedStatus>(
+                stream: bloc.scaleAnimation.status,                
+                builder: (context, snapshot) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -972,8 +978,8 @@ From the AnimatedObject example:
                 },
               ),
               Expanded(
-                child: StreamedWidget(
-                    stream: bloc.scaleAnimation.animationStream,
+                child: ValueBuilder<double>(
+                    stream: bloc.scaleAnimation,
                     builder: (context, snapshot) {
                       return Transform.scale(
                           scale: snapshot.data,

@@ -41,6 +41,20 @@ void main() {
       );
     });
 
+    test('addAll', () {
+      final streamedList = StreamedList<int>();
+      streamedList.value = List<int>();
+
+      Timer.run(() {
+        streamedList.addAll([1, 2, 3, 4, 5]);
+      });
+
+      expect(
+        streamedList.outStream,
+        emits([1, 2, 3, 4, 5]),
+      );
+    });
+
     test('Clear, removeAt, length', () {
       final streamedList = StreamedList<int>();
       streamedList.value = List<int>();

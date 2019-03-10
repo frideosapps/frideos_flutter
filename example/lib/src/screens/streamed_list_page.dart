@@ -41,7 +41,7 @@ class StreamedListWidget extends StatelessWidget {
         StreamBuilder<String>(
             initialData: ' ',
             stream: bloc.streamedText.outTransformed,
-            builder: (context, AsyncSnapshot<String> snapshot) {
+            builder: (context, snapshot) {
               return Column(
                 children: <Widget>[
                   Padding(
@@ -77,8 +77,7 @@ class StreamedListWidget extends StatelessWidget {
         Expanded(
           child: ValueBuilder<List<String>>(
             stream: bloc.streamedList,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            builder: (context, snapshot) {
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) => Center(

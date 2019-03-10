@@ -210,10 +210,9 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
-          StreamedWidget(
-              initialData: blur.initialValue,
-              stream: blur.animationStream,
-              builder: (context, AsyncSnapshot<double> snapshot) {
+          ValueBuilder<double>(
+              stream: blur.animation,
+              builder: (context, snapshot) {
                 return Stack(
                   children: <Widget>[
                     Container(
@@ -319,10 +318,9 @@ class _BlurInWidgetState extends State<BlurInWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
-          StreamedWidget(
-              initialData: blur.initialValue,
-              stream: blur.animationStream,
-              builder: (context, AsyncSnapshot snapshot) {
+          ValueBuilder<double>(
+              stream: blur.animation,
+              builder: (context, snapshot) {
                 return Stack(
                   children: <Widget>[
                     Container(
@@ -427,10 +425,9 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) =>
-          StreamedWidget(
-              initialData: blur.initialValue,
-              stream: blur.animationStream,
-              builder: (context, AsyncSnapshot<double> snapshot) {
+          ValueBuilder<double>(
+              stream: blur.animation,
+              builder: (context, snapshot) {
                 return Stack(
                   children: <Widget>[
                     Container(

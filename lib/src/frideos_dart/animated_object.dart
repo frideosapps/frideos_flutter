@@ -1,11 +1,18 @@
 import 'dart:async';
 
+import 'interfaces/streamed_object.dart';
 import 'streamed_value.dart';
 
 ///
 /// Enum to handle the status of the animation.
 ///
 enum AnimatedStatus { active, stop, pause }
+
+///
+/// Enum to specify the behavior of the animation for
+/// the [startAnimation] method.
+///
+enum AnimatedType { increment, decrement }
 
 ///
 ///
@@ -53,9 +60,8 @@ enum AnimatedStatus { active, stop, pause }
 ///            children: <Widget>[
 ///              Container(height: 20.0,),
 ///              ValueBuilder<AnimatedStatus>(
-///                initialData: AnimatedStatus.stop,
-///                stream: bloc.scaleAnimation.statusStream,
-///                builder: (context, AsyncSnapshot<AnimatedStatus> snapshot) {
+///                stream: bloc.scaleAnimation.status,
+///                builder: (context, snapshot) {
 ///                 return Row(
 ///                    mainAxisAlignment: MainAxisAlignment.center,
 ///                    children: <Widget>[
@@ -88,8 +94,8 @@ enum AnimatedStatus { active, stop, pause }
 ///                },
 ///              ),
 ///              Expanded(
-///                child: ValueBuilder(
-///                    stream: bloc.scaleAnimation.animationStream,
+///                child: ValueBuilder<double>(
+///                    stream: bloc.scaleAnimation,
 ///                    builder: (context, snapshot) {
 ///                      return Transform.scale(
 ///                          scale: snapshot.data, child: FlutterLogo());
@@ -101,7 +107,7 @@ enum AnimatedStatus { active, stop, pause }
 ///```
 ///
 ///
-class AnimatedObject<T> {
+class AnimatedObject<T> implements StreamedObject<T> {
   AnimatedObject({this.initialValue, this.interval})
       : assert(initialValue != null, "The initialValue argument is null."),
         assert(interval != null, "The interval argument is null.") {
@@ -113,6 +119,13 @@ class AnimatedObject<T> {
 
   /// Getter for stream of the [StreamedValue] that holds the animation
   /// value.
+  Stream<T> get outStream => animation.outStream;
+
+  /// Deprecated. use [outStream] instead, this is used by [ValueBuilder].
+  ///
+  /// Getter for stream of the [StreamedValue] that holds the animation
+  /// value.
+  @Deprecated('Used the outStream getter instead.')
   Stream<T> get animationStream => animation.outStream;
 
   /// Getter for the AnimatedObject value
@@ -150,35 +163,142 @@ class AnimatedObject<T> {
     }
   }
 
-  // In the callback increase the animation.value!
-  start(Function(Timer t) callback) {
+  /// In the callback increase the animation.value!
+  void start(Function(Timer t) callback) {
     if (!timer.isTimerActive) {
       animation.value = initialValue;
       timer.startPeriodic(
           Duration(milliseconds: interval), (Timer t) => callback(t));
-      //
       status.value = AnimatedStatus.active;
     }
   }
 
+  ///
+  /// Method to start animating the value.
+  ///
+  /// - `type`: with this parameter specify if the the value
+  /// has to be incremented or decremented
+  ///
+  ///
+  /// - `velocity`: entity of the increment/decrement
+  ///
+  ///
+  /// - `minValue` and `maxValue`: if an [AnimatedType] of value `increment`
+  /// is set, then a `maxValue` parameter must be given. If `decrement`, a
+  /// `minValue` must be set. Once reached a min or a max value, the
+  /// animation stops.
+  ///
+  void startAnimation(
+      {AnimatedType type,
+      dynamic velocity,
+      dynamic minValue,
+      dynamic maxValue}) {
+    assert(type != null && velocity != null,
+        'type and velocity parameters must be not null.');
+
+    dynamic valueTmp = initialValue;
+
+    switch (type) {
+      case AnimatedType.increment:
+        assert(maxValue != null, 'The parameter maxValue must be not null.');
+
+        start((Timer t) {
+          if (valueTmp < maxValue) {
+            valueTmp += velocity;
+            value = valueTmp;
+          }
+
+          if (valueTmp >= maxValue) {
+            value = maxValue;
+            stop();
+          }
+        });
+        break;
+      case AnimatedType.decrement:
+        assert(minValue != null, 'The parameter maxValue must be not null.');
+
+        start((Timer t) {
+          if (valueTmp > minValue) {
+            valueTmp -= velocity;
+            value = valueTmp;
+          }
+
+          if (valueTmp <= minValue) {
+            value = minValue;
+            stop();
+          }
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
+  /*
+dynamic val = initialValue;
+        assert(val != null, "val is null");
+
+        switch (type) {
+          case AnimatedType.increment:
+            assert(
+                max != null, // && T.runtimeType == max.runtimeType,
+                'The parameter max must be not null and of type: ${T.runtimeType}');
+
+            start((Timer t) {
+              if (val < max) {
+                val += velocity;
+                value = val;
+              }
+
+              if (val > max) {
+                value = max;
+                timer.stopTimer();
+              }
+            });
+            break;
+          case AnimatedType.decrement:
+            assert(
+                min != null, //&& T.runtimeType == min.runtimeType,
+                'The parameter max must be not null and of type: ${T.runtimeType}');
+
+            start((Timer t) {
+              if (val > min) {
+                val -= velocity;
+                value = val;
+              }
+
+              if (val < min) {
+                value = min;
+                timer.stopTimer();
+              }
+              print('decrement: $val, ${status.value}, ${isAnimating()}');
+            });
+            break;
+          default:
+            break;
+        }
+  */
+
+  ///////////
+
   /// Method to stop the animation-
-  stop() {
+  void stop() {
     timer.stopTimer();
     status.value = AnimatedStatus.stop;
   }
 
   /// Method to reset the animation. It doesn't stop the animation, it just
   /// sets the animation.value to the [initialValue].
-  reset() {
+  void reset() {
     animation.value = initialValue;
   }
 
   /// Method to pause the animation
-  pause() {
+  void pause() {
     status.value = AnimatedStatus.pause;
   }
 
-  dispose() {
+  void dispose() {
     animation.dispose();
     timer.dispose();
   }

@@ -70,9 +70,7 @@ class _StagedWidgetState extends State<StagedWidget> {
   Widget build(BuildContext context) {
     final stage = staged.getStage(0);
     assert(stage != null);
-    return StreamedWidget(
-        initialData: stage.widget,
-        stream: staged.outStream,
-        builder: (context, snapshot) => snapshot.data);
+    return ValueBuilder(
+        stream: staged, builder: (context, snapshot) => snapshot.data);
   }
 }

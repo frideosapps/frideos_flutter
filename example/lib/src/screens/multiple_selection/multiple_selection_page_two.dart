@@ -28,7 +28,7 @@ class MultipleSelectionPageTwo extends StatelessWidget {
                         itemCount: s.data.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2),
-                        itemBuilder: (BuildContext context, int index) {
+                        itemBuilder: (context, index) {
                           var item = s.data[index];
                           return Container(
                             padding: EdgeInsets.all(10.0),

@@ -59,11 +59,10 @@ class _ScrollingTextState extends State<ScrollingText> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     if (timer != null) {
       timer.cancel();
     }
+    super.dispose();
   }
 
   @override
@@ -73,7 +72,7 @@ class _ScrollingTextState extends State<ScrollingText> {
       child: StreamedWidget<String>(
         initialData: '',
         stream: textStream.outStream,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        builder: (context, snapshot) {
           return Text(snapshot.data, style: widget.style);
         },
         noDataChild: Text('NO DATA'),

@@ -141,14 +141,14 @@ class MapSender<K, V> {
 
   /// Method to set the [StreamedMap] on the other bloc where
   /// to send the data
-  setReceiver(StreamedMap<K, V> receiver) {
+  void setReceiver(StreamedMap<K, V> receiver) {
     assert(receiver != null, "The receiver argument is null.");
     _receiver = receiver;
   }
 
   /// Method to send the data to the StreamedMap set by the [setReceiver]
   /// method.
-  send(Map<K, V> data) {
+  void send(Map<K, V> data) {
     _receiver.value = {};
     _receiver.value.clear();
     _receiver.value.addAll(data);

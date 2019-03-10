@@ -18,19 +18,18 @@ class HistoryPage extends StatelessWidget {
       body: Container(
         child: ValueBuilder<List<int>>(
           stream: bloc.countHistory.historyStream,
-          builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) =>
-              ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: Text('Item ${index + 1}:'),
-                      title: Text(
-                        '${snapshot.data[index]}',
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      dense: true,
-                    );
-                  }),
+          builder: (context, snapshot) => ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Text('Item ${index + 1}:'),
+                  title: Text(
+                    '${snapshot.data[index]}',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  dense: true,
+                );
+              }),
           noDataChild: Text('NO DATA'),
         ),
       ),

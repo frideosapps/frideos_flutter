@@ -24,7 +24,7 @@ class AnimatedObjectPage extends StatelessWidget {
               ),
               ValueBuilder<AnimatedStatus>(
                 stream: bloc.scaleAnimation.status,
-                builder: (context, AsyncSnapshot<AnimatedStatus> snapshot) {
+                builder: (context, snapshot) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -57,8 +57,8 @@ class AnimatedObjectPage extends StatelessWidget {
                 },
               ),
               Expanded(
-                child: ValueBuilder(
-                    stream: bloc.scaleAnimation.animation,
+                child: ValueBuilder<double>(
+                    stream: bloc.scaleAnimation,
                     builder: (context, snapshot) {
                       return Transform.scale(
                           scale: snapshot.data,

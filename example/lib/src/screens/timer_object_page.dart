@@ -39,26 +39,21 @@ class TimerObjectPage extends StatelessWidget {
                             Container(height: 20.0),
                             ValueBuilder<int>(
                               stream: bloc.timerObject,
-                              builder: (BuildContext context,
-                                      AsyncSnapshot<int> snapshot) =>
-                                  Text(
-                                      'Value: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
-                                      style: styleValue),
+                              builder: (context, snapshot) => Text(
+                                  'Value: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
+                                  style: styleValue),
                               noDataChild: Text('NO DATA'),
                             ),
                             ValueBuilder<int>(
                               stream: bloc.timerObject.stopwatch,
-                              builder: (BuildContext context,
-                                      AsyncSnapshot<int> snapshot) =>
-                                  Text(
-                                      'Time passed: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
-                                      style: styleValue),
+                              builder: (context, snapshot) => Text(
+                                  'Time passed: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
+                                  style: styleValue),
                               noDataChild: Text('NO DATA'),
                             ),
                             ValueBuilder<int>(
                               stream: bloc.timerObject,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<int> snapshot) {
+                              builder: (context, snapshot) {
                                 return Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,

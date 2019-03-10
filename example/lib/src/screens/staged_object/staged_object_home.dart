@@ -207,7 +207,7 @@ class StagedHomePage extends StatelessWidget {
             ),
             ValueBuilder<StageStatus>(
                 stream: bloc.staged.getStatus,
-                builder: (context, AsyncSnapshot<StageStatus> snapshot) {
+                builder: (context, snapshot) {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -266,7 +266,7 @@ class StagedHomePage extends StatelessWidget {
             ),
             ValueBuilder<StageStatus>(
               stream: bloc.staged.getStatus,
-              builder: (context, AsyncSnapshot<StageStatus> snapshot) {
+              builder: (context, snapshot) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'streamed_value.dart';
-import 'models/stage.dart';
 import 'interfaces/streamed_object.dart';
+import 'models/stage.dart';
 
 ///
 /// Enum to handle the Status of the StagedObject
@@ -212,9 +212,8 @@ class StagedObject implements StreamedObject {
 
   /// WidgetStream getter
   ///
-  // Stream<Widget> get widgetStream => _widgetStream.outStream;
-
-  /// Implementation of the getter outStream for the [Value[Builder]
+  /// Implementation of the getter outStream for the [StreamedObject]
+  /// interface. Used as default by the [ValueBuilder].
   Stream<Widget> get outStream => _widgetStream.outStream;
 
   /// Getter
@@ -241,12 +240,12 @@ class StagedObject implements StreamedObject {
   /// By this function is set the type of timing: absolute or relative
   Function(Timer t) periodic;
 
-  clearMap() {
+  void clearMap() {
     _stagesMap.clear();
   }
 
   /// To se the map of the stages
-  setStagesMap(Map<int, Stage> stagesMap) {
+  void setStagesMap(Map<int, Stage> stagesMap) {
     _stagesMap = stagesMap;
 
     // Extract the times
@@ -254,18 +253,18 @@ class StagedObject implements StreamedObject {
     stagesMap.forEach((k, v) => _stages.add(v.time));
   }
 
-  getMapLength() {
+  int getMapLength() {
     return _stagesMap.length;
   }
 
   /// To set the callback non widget specific (this is called
   /// on every stage change and at the beginning if the flag [callbackOnStart]
   /// it is not set to false, default is true).
-  setCallback(Function callback) {
+  void setCallback(Function callback) {
     _callback = callback;
   }
 
-  setOnEndCallback(Function callback) {
+  void setOnEndCallback(Function callback) {
     _onEnd = callback;
   }
 
@@ -325,7 +324,7 @@ class StagedObject implements StreamedObject {
     }
   }
 
-  resetStages() {
+  void resetStages() {
     // print('Reset stages');
     // Refresh the buffer with the original list
     _stagesBuffer.clear();
@@ -338,7 +337,7 @@ class StagedObject implements StreamedObject {
     isLastStage = false;
   }
 
-  stopStages() {
+  void stopStages() {
     // print('Stop stages');
     _timerObject.stopTimer();
     lastStageTime = 0;
@@ -352,7 +351,7 @@ class StagedObject implements StreamedObject {
   }
 
   // check for absolute time position
-  checkAbsolute(Timer t) {
+  void checkAbsolute(Timer t) {
     if (_stagesBuffer.length > 0) {
       // Updating the timer
       _timerObject.updateTime(t);
@@ -384,7 +383,7 @@ class StagedObject implements StreamedObject {
     }
   }
 
-  checkRelative(Timer t) {
+  void checkRelative(Timer t) {
     // Check if there are items in the stages list
     // and go on until
     if (_stagesBuffer.length > 1) {
@@ -427,7 +426,7 @@ class StagedObject implements StreamedObject {
     }
   }
 
-  _callCallbacks() {
+  void _callCallbacks() {
     // Call the onShow function
     if (_stagesMap[stageIndex].onShow != null) {
       _stagesMap[stageIndex].onShow();
@@ -438,7 +437,7 @@ class StagedObject implements StreamedObject {
     _callback();
   }
 
-  dispose() {
+  void dispose() {
     _timerObject.dispose();
     _widgetStream.dispose();
     _status.dispose();

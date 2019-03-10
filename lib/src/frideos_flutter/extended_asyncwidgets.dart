@@ -30,8 +30,7 @@ typedef WaitingCallback = Widget Function();
 /// ```dart
 /// ValueBuilder<String>(
 ///   stream: streamedValue,
-///   builder: (BuildContext context,
-///       AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+///   builder: (BuildContext context, snasphot) => Text(snasphot.data),
 ///   noDataChild: // Widget to show when the stream has no data
 ///   onNoData: () => // or Callback
 ///   errorChild: // Widget to show on error
@@ -122,8 +121,9 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 ///#### Usage
 ///
 /// ```dart
-/// StreamedWidget<String>(stream: stream, builder: (BuildContext context,
-///       AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+/// StreamedWidget<String>(
+///   stream: stream,
+///   builder: (context, snasphot) => Text(snasphot.data),
 ///   noDataChild: // Widget to show when the stream has no data
 ///   onNoData: () => // or Callback
 ///   errorChild: // Widget to show on error
@@ -131,11 +131,13 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 /// )
 /// ```
 ///
-/// In case of an object implementing the StreamedObject interface (eg. StreamedValue, StreameList etc.):
+/// In case of an object implementing the StreamedObject interface
+/// (eg. StreamedValue, StreamedList etc.):
 ///
 /// ```dart
-/// StreamedWidget<String>(stream: streamedObject.outStream, // outStream getter
-///      builder: (BuildContext context, AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+/// StreamedWidget<String>(
+///   stream: streamedObject.outStream, // outStream getter
+///   builder: (context, snasphot) => Text(snasphot.data),
 ///   noDataChild: // Widget to show when the stream has no data
 ///   onNoData: () => // or Callback
 ///   errorChild: // Widget to show on error
@@ -218,9 +220,9 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 /// #### Usage
 ///
 /// ```dart
-/// FuturedWidget<String>(future: future,
-///   builder: (BuildContext context,
-///        AsyncSnapshot<String> snasphot) => Text(snasphot.data),
+/// FuturedWidget<String>(
+///   future: future,
+///   builder: (BuildContext context, snasphot) => Text(snasphot.data),
 ///   waitingChild: // Widget to show on waiting
 ///   onWaiting: () => // or Callback
 ///   errorChild: // Widget to show on error

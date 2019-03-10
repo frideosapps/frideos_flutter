@@ -57,8 +57,7 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 /// // View
 /// ValueBuilder<int>(
 ///     stream: bloc.count, // no need of the outStream getter with ValueBuilder
-///     builder: (BuildContext context,
-///         AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}'),
+///     builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
 ///     noDataChild: Text('NO DATA'),
 /// ),
 /// RaisedButton(
@@ -74,8 +73,7 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 /// // StreamedWidget<int>(
 /// //   initialData: bloc.count.value
 /// //   stream: bloc.count.outStream,
-/// //   builder: (BuildContext context,
-/// //       AsyncSnapshot<int> snapshot) => Text('Value: ${snapshot.data}',
+/// //   builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
 /// //   noDataChild: Text('NO DATA'),
 /// //,
 ///
@@ -145,7 +143,7 @@ class StreamedValue<T> implements StreamedObject<T> {
 
   /// Method to refresh the stream (e.g to use when the type it is not
   /// a basic type, and a property of an object has changed).
-  refresh() {
+  void refresh() {
     inStream(value);
     timesUpdated++;
   }
@@ -155,7 +153,7 @@ class StreamedValue<T> implements StreamedObject<T> {
     _debugMode = true;
   }
 
-  dispose() {
+  void dispose() {
     if (_debugMode) {
       print('---------- Closing Stream ------ type: $T');
       print('Value: $value');
@@ -228,7 +226,7 @@ class HistoryObject<T> extends MemoryValue<T> {
   ///
   /// Function to store the current value to a collection and sending it to stream
   ///
-  saveValue() {
+  void saveValue() {
     _historyStream.addElement(value);
   }
 
@@ -240,7 +238,7 @@ class HistoryObject<T> extends MemoryValue<T> {
   }
 
   @override
-  dispose() {
+  void dispose() {
     super.dispose();
     _historyStream.dispose();
   }
@@ -321,7 +319,7 @@ class TimerObject extends StreamedValue<int> {
 
   /// Start timer and stopwatch only if they aren't active
   ///
-  startTimer() {
+  void startTimer() {
     if (!isTimerActive) {
       _timer = Timer.periodic(_interval, (Timer t) => updateTime(t));
       isTimerActive = true;
@@ -335,14 +333,14 @@ class TimerObject extends StreamedValue<int> {
 
   /// Update the time and send it to stream
   ///
-  updateTime(Timer t) {
+  void updateTime(Timer t) {
     _time += _interval.inMilliseconds;
     inStream(_time);
   }
 
   /// Method to start a periodic function and set the isTimerActive to true
   ///
-  startPeriodic(Duration interval, Function(Timer) callback) {
+  void startPeriodic(Duration interval, Function(Timer) callback) {
     if (!isTimerActive) {
       _timer = Timer.periodic(interval, callback);
       _interval = interval;
@@ -351,7 +349,7 @@ class TimerObject extends StreamedValue<int> {
   }
 
   /// Method to get the lap time
-  getLapTime() {
+  void getLapTime() {
     if (isStopwatchActive) {
       var milliseconds = _stopwatch.elapsedMilliseconds;
       _stopwatchStreamed.value = milliseconds;
@@ -361,7 +359,7 @@ class TimerObject extends StreamedValue<int> {
   }
 
   /// Stop timer and stopwatch, and set to false the booleans
-  stopTimer() {
+  void stopTimer() {
     if (isTimerActive) {
       _timer.cancel();
       _time = 0;
@@ -376,18 +374,18 @@ class TimerObject extends StreamedValue<int> {
   }
 
   /// Method to reset the timer
-  resetTimer() {
+  void resetTimer() {
     _time = 0;
     inStream(_time);
   }
 
   /// Method to cancel the current timer
-  pauseTimer() {
+  void pauseTimer() {
     _timer.cancel();
   }
 
   @override
-  dispose() {
+  void dispose() {
     super.dispose();
     if (_timer != null) _timer.cancel();
     _stopwatchStreamed.dispose();
@@ -428,9 +426,9 @@ class TimerObject extends StreamedValue<int> {
 ///
 ///
 /// // In the view:
-/// StreamBuilder(
+/// StreamBuilder<int>(
 ///             stream: bloc.streamedKey.outTransformed,
-///             builder: (context, AsyncSnapshot<int> snapshot) {
+///             builder: (context, snapshot) {
 ///               return Column(
 ///                 children: <Widget>[
 ///                   Padding(
@@ -524,13 +522,13 @@ class StreamedTransformed<T, S> implements StreamedObject {
 
   /// Method to refresh the stream (e.g to use when the type it is not
   /// a basic type, and a property of an object has changed).
-  refresh() {
+  void refresh() {
     inStream(value);
     timesUpdated++;
   }
 
   /// Dispose the stream.
-  dispose() {
+  void dispose() {
     if (_debugMode) {
       print('---------- Closing Stream ------ type: $T');
       print('Value: $value');
