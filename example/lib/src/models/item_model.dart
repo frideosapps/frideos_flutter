@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Item {
+  Item(this.name, this.description, this.imageUrl, this.color);
+
   String name;
   String description;
   String imageUrl;
   Color color;
-  Item(this.name, this.description, this.imageUrl, this.color);
 }
 
-get globalMockItems => [
+List<Item> get globalMockItems => [
       Item('Car', 'The fastest car in the world', 'url', Colors.blue),
       Item('Airplane', 'The biggest airplane in the world', 'url',
           Colors.orange),

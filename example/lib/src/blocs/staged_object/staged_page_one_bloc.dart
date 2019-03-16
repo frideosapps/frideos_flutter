@@ -15,7 +15,7 @@ class StagedPageOneBloc extends BlocBase {
   int indexStage = 0;
   final widgetsStagesMap = Map<int, Stage>();
 
-  addStage(Stage stage) {
+  void addStage(Stage stage) {
     widgetsStagesMap[indexStage] = stage;
     indexStage++;
     tunnelSender.send(widgetsStagesMap);
@@ -23,13 +23,14 @@ class StagedPageOneBloc extends BlocBase {
     totalWidgets.value = widgetsStagesMap.length;
   }
 
-  resetMap() {
+  void resetMap() {
     widgetsStagesMap.clear();
     indexStage = 0;
     totalWidgets.value = 0;
   }
 
-  dispose() {
+  @override
+  void dispose() {
     print('-------StagedPageOne BLOC DISPOSE--------');
     totalWidgets.dispose();
   }

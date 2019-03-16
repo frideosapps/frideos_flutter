@@ -6,7 +6,7 @@ import 'package:frideos/frideos_dart.dart';
 import '../../blocs/staged_object/staged_page_two_bloc.dart';
 
 class StagedPageTwo extends StatelessWidget {
-  StagedPageTwo({this.bloc});
+  const StagedPageTwo({this.bloc});
 
   final StagedPageTwoBloc bloc;
 
@@ -15,10 +15,10 @@ class StagedPageTwo extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Page two'),
+          title: const Text('Page two'),
         ),
         body: Container(
-          padding: EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12),
           child: Column(
             children: <Widget>[
               ValueBuilder<StageStatus>(
@@ -30,26 +30,23 @@ class StagedPageTwo extends StatelessWidget {
                       snapshot.data == StageStatus.active
                           ? RaisedButton(
                               color: Colors.lightBlueAccent,
-                              child: Text('Reset'),
-                              onPressed: () {
-                                bloc.staged.resetStages();
-                              })
+                              child: const Text('Reset'),
+                              onPressed: bloc.staged.resetStages,
+                            )
                           : Container(),
                       snapshot.data == StageStatus.stop
                           ? RaisedButton(
                               color: Colors.lightBlueAccent,
-                              child: Text('Start'),
-                              onPressed: () {
-                                bloc.staged.startStages();
-                              })
+                              child: const Text('Start'),
+                              onPressed: bloc.staged.startStages,
+                            )
                           : Container(),
                       snapshot.data == StageStatus.active
                           ? RaisedButton(
                               color: Colors.lightBlueAccent,
-                              child: Text('Stop'),
-                              onPressed: () {
-                                bloc.staged.stopStages();
-                              })
+                              child: const Text('Stop'),
+                              onPressed: bloc.staged.stopStages,
+                            )
                           : Container(),
                     ],
                   );

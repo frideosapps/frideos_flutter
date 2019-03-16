@@ -21,7 +21,8 @@ class StagedPageTwoBloc extends BlocBase {
 
   final timerObject = TimerObject();
 
-  dispose() {
+  @override
+  void dispose() {
     print('-------StagedPageTwo BLOC DISPOSE--------');
     timerObject.dispose();
     staged.dispose();

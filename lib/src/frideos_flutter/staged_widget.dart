@@ -12,40 +12,41 @@ import '../frideos_dart/staged_object.dart';
 /// It takes as a parameter a Map<int, Stage> and plays every [Stage].
 ///
 /// By default to change the stage is used the relative time, so the time
-/// parameter of the [Stage] indicates how much time the stage will lasts. Instead,
-/// to specify the absolute time, set to true the [absoluteTiming] flag, in this case
-/// the time parameter indicates the absolute time when to show the widget.
+/// parameter of the [Stage] indicates how much time the stage will lasts.
+/// Instead, to specify the absolute time, set to true the [absoluteTiming]
+/// flag, in this case the time parameter indicates the absolute time when
+/// to show the widget.
 ///
 /// The [onStart] is used to call a function when the StagesObject begins
 /// to play the stages.
 ///
-/// The [onEnd] callback is called at the end of the last stage when the timeing is relative
-/// (the [absoluteTiming] flag is set to false).
+/// The [onEnd] callback is called at the end of the last stage when the timeing
+/// is relative (the [absoluteTiming] flag is set to false).
 ///
 ///
 class StagedWidget extends StatefulWidget {
-  StagedWidget(
-      {Key key,
-      @required this.stagesMap,
+  const StagedWidget(
+      {@required this.stagesMap,
+      Key key,
       this.absoluteTiming = false,
       this.onStart,
       this.onEnd})
-      : assert(stagesMap != null, "The stagesMap argument is null."),
+      : assert(stagesMap != null, 'The stagesMap argument is null.'),
         super(key: key);
 
   final Map<int, Stage> stagesMap;
   final bool absoluteTiming;
-  final Function() onStart;
-  final Function() onEnd;
+  final Function onStart;
+  final Function onEnd;
 
   @override
   _StagedWidgetState createState() {
-    return new _StagedWidgetState();
+    return _StagedWidgetState();
   }
 }
 
 class _StagedWidgetState extends State<StagedWidget> {
-  final staged = StagedObject();
+  final StagedObject staged = StagedObject();
 
   @override
   void initState() {
@@ -56,8 +57,9 @@ class _StagedWidgetState extends State<StagedWidget> {
     if (widget.onEnd != null) {
       staged.setOnEndCallback(widget.onEnd);
     }
-    staged.setStagesMap(widget.stagesMap);
-    staged.startStages();
+    staged
+      ..setStagesMap(widget.stagesMap)
+      ..startStages();
   }
 
   @override

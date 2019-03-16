@@ -5,13 +5,14 @@ import 'package:frideos/frideos_flutter.dart';
 import '../blocs/bloc.dart';
 import '../blocs/timer_object_bloc.dart';
 
-const styleHeader =
-    TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
-const styleValue = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
-const styleOldValue =
-    TextStyle(color: Colors.grey, fontSize: 12.0, fontWeight: FontWeight.w500);
-const padding = 22.0;
-const buttonColor = Color(0xff99cef9);
+const TextStyle styleHeader =
+    TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500);
+const TextStyle styleValue =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+const TextStyle styleOldValue =
+    TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500);
+const double padding = 22;
+const Color buttonColor = Color(0xff99cef9);
 
 class TimerObjectPage extends StatelessWidget {
   @override
@@ -21,7 +22,7 @@ class TimerObjectPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Streamed objects'),
+          title: const Text('Streamed objects'),
         ),
         body: Container(
           color: Colors.blueGrey[100],
@@ -31,25 +32,25 @@ class TimerObjectPage extends StatelessWidget {
                 children: <Widget>[
                   Card(
                     child: Container(
-                        padding: EdgeInsets.all(padding),
+                        padding: const EdgeInsets.all(padding),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('TimerObject', style: styleHeader),
-                            Container(height: 20.0),
+                            const Text('TimerObject', style: styleHeader),
+                            Container(height: 20),
                             ValueBuilder<int>(
                               stream: bloc.timerObject,
                               builder: (context, snapshot) => Text(
                                   'Value: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
                                   style: styleValue),
-                              noDataChild: Text('NO DATA'),
+                              noDataChild: const Text('NO DATA'),
                             ),
                             ValueBuilder<int>(
                               stream: bloc.timerObject.stopwatch,
                               builder: (context, snapshot) => Text(
                                   'Time passed: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
                                   style: styleValue),
-                              noDataChild: Text('NO DATA'),
+                              noDataChild: const Text('NO DATA'),
                             ),
                             ValueBuilder<int>(
                               stream: bloc.timerObject,
@@ -60,27 +61,21 @@ class TimerObjectPage extends StatelessWidget {
                                   children: <Widget>[
                                     RaisedButton(
                                       color: buttonColor,
-                                      child: Text('Lap time'),
-                                      onPressed: () {
-                                        bloc.getLapTime();
-                                      },
+                                      child: const Text('Lap time'),
+                                      onPressed: bloc.getLapTime,
                                     ),
                                     RaisedButton(
                                       color: buttonColor,
-                                      child: Text('Stop'),
-                                      onPressed: () {
-                                        bloc.stopTimer();
-                                      },
+                                      child: const Text('Stop'),
+                                      onPressed: bloc.stopTimer,
                                     ),
                                   ],
                                 );
                               },
                               noDataChild: RaisedButton(
                                 color: buttonColor,
-                                child: Text('Start'),
-                                onPressed: () {
-                                  bloc.startTimer();
-                                },
+                                child: const Text('Start'),
+                                onPressed: bloc.startTimer,
                               ),
                               onError: (error) => Text(error),
                             ),

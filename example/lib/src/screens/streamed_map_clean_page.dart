@@ -5,13 +5,14 @@ import 'package:frideos/frideos_flutter.dart';
 import '../blocs/bloc.dart';
 import '../blocs/streamed_map_clean_bloc.dart';
 
-const styleHeader =
-    TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
-const styleValue = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
-const styleOldValue =
-    TextStyle(color: Colors.grey, fontSize: 12.0, fontWeight: FontWeight.w500);
-const padding = 22.0;
-const buttonColor = Color(0xff99cef9);
+const TextStyle styleHeader =
+    TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500);
+const TextStyle styleValue =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+const TextStyle styleOldValue =
+    TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500);
+const double padding = 22;
+const Color buttonColor = Color(0xff99cef9);
 
 class StreamedMapCleanPage extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class StreamedMapCleanPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('StreamedMap'),
+          title: const Text('StreamedMap'),
         ),
         body: StreamedMapCleanWidget(),
       ),
@@ -36,9 +37,9 @@ class StreamedMapCleanWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          height: 16.0,
+          height: 16,
         ),
-        Text('StreamedMap', style: styleHeader),
+        const Text('StreamedMap', style: styleHeader),
         StreamBuilder<String>(
             stream: bloc.outTextTransformed,
             builder: (context, snapshot) {
@@ -46,12 +47,12 @@ class StreamedMapCleanWidget extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 20.0,
+                      vertical: 12,
+                      horizontal: 20,
                     ),
                     child: TextField(
-                      style: TextStyle(
-                        fontSize: 18.0,
+                      style: const TextStyle(
+                        fontSize: 18,
                         color: Colors.black,
                       ),
                       decoration: InputDecoration(
@@ -72,12 +73,12 @@ class StreamedMapCleanWidget extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 20.0,
+                      vertical: 12,
+                      horizontal: 20,
                     ),
                     child: TextField(
-                      style: TextStyle(
-                        fontSize: 18.0,
+                      style: const TextStyle(
+                        fontSize: 18,
                         color: Colors.black,
                       ),
                       decoration: InputDecoration(
@@ -85,9 +86,10 @@ class StreamedMapCleanWidget extends StatelessWidget {
                         hintText: 'Insert an integer...',
                         errorText: snapshot.error,
                       ),
-                      // To avoid the user could insert text use the TextInputType.number
-                      // Here is commented to show the error msg.
-                      //keyboardType: TextInputType.number,
+                      // To avoid the user could insert text use the
+                      // TextInputType.number. Here is commented to
+                      // show the error msg.
+                      // keyboardType: TextInputType.number,
                       onChanged: bloc.inKey,
                     ),
                   ),
@@ -99,11 +101,11 @@ class StreamedMapCleanWidget extends StatelessWidget {
             builder: (context, snapshot) {
               return RaisedButton(
                 color: buttonColor,
-                child: Text('Add text'),
+                child: const Text('Add text'),
                 onPressed: snapshot.hasData ? bloc.addText : null,
               );
             }),
-        Container(height: 20.0),
+        Container(height: 20),
         Expanded(
           child: StreamedWidget<Map<int, String>>(
             stream: bloc.outMap,
@@ -111,14 +113,14 @@ class StreamedMapCleanWidget extends StatelessWidget {
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
-                    var key = snapshot.data.keys.elementAt(index);
+                    final key = snapshot.data.keys.elementAt(index);
                     return Center(
                       child: Text('Key $key: ${snapshot.data[key]}',
                           style: styleValue),
                     );
                   });
             },
-            noDataChild: Text('NO DATA'),
+            noDataChild: const Text('NO DATA'),
           ),
         ),
       ],

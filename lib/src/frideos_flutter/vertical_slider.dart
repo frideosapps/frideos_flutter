@@ -8,20 +8,20 @@ import '../frideos_dart/utils.dart';
 /// A simple vertical slider
 ///
 class VerticalSlider extends StatefulWidget {
-  VerticalSlider(
+  const VerticalSlider(
       {@required GlobalKey key,
       @required this.rangeMin,
       @required this.rangeMax,
-      this.step = 1.0,
       @required this.initialValue,
       @required this.onSliding,
+      this.step = 1.0,
       this.backgroundBar = const Color(0xffbbdefb),
       this.foregroundBar = const Color(0xff2090e9),
       this.triangleColor = Colors.deepOrange})
-      : assert(rangeMin != null, "The rangeMin argument is null."),
-        assert(rangeMax != null, "The rangeMax argument is null."),
-        assert(initialValue != null, "The initialValue argument is null."),
-        assert(onSliding != null, "The onSliding argument is null."),
+      : assert(rangeMin != null, 'The rangeMin argument is null.'),
+        assert(rangeMax != null, 'The rangeMax argument is null.'),
+        assert(initialValue != null, 'The initialValue argument is null.'),
+        assert(onSliding != null, 'The onSliding argument is null.'),
         super(key: key);
 
   final double rangeMin;
@@ -36,19 +36,19 @@ class VerticalSlider extends StatefulWidget {
 
   @override
   _VerticalSliderState createState() {
-    return new _VerticalSliderState();
+    return _VerticalSliderState();
   }
 }
 
 class _VerticalSliderState extends State<VerticalSlider> {
-  final slider = StreamedValue<double>();
+  final StreamedValue<double> slider = StreamedValue<double>();
 
   double width;
   double height;
   double sliderHeight;
   double sliderMargin;
   double angle;
-  double baseTriangleSize = 20.0;
+  double baseTriangleSize = 20;
 
   double min;
   double max;
@@ -79,8 +79,8 @@ class _VerticalSliderState extends State<VerticalSlider> {
 
       sliderEnd = sliderHeight + sliderMargin - baseTriangleSize;
 
-      var sliderInitialPosition =
-          Utils.convertRange(min, max, 0.0, sliderEnd, initialValue);
+      final sliderInitialPosition =
+          Utils.convertRange(min, max, 0, sliderEnd, initialValue);
 
       slider.value = sliderInitialPosition;
 
@@ -99,7 +99,7 @@ class _VerticalSliderState extends State<VerticalSlider> {
     return Container(
       child: StreamBuilder(
           stream: slider.outStream,
-          builder: (context, AsyncSnapshot snapshot) {
+          builder: (context, snapshot) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -112,9 +112,10 @@ class _VerticalSliderState extends State<VerticalSlider> {
                         color: widget.backgroundBar,
                         margin: EdgeInsets.symmetric(
                             vertical: baseTriangleSize * 0.5)),
-                    //The bar needs to be started at the vertex of the triangle (baseTriangleSize*0.5)
+                    // The bar needs to be started at the vertex of the triangle
+                    // (baseTriangleSize*0.5)
                     Container(
-                        width: 14.0,
+                        width: 14,
                         height: sliderPosition,
                         color: widget.foregroundBar,
                         margin: EdgeInsets.symmetric(
@@ -134,9 +135,9 @@ class _VerticalSliderState extends State<VerticalSlider> {
                               height: baseTriangleSize,
                             )),
                         onVerticalDragUpdate: (v) {
-                          var stepDir = v.delta.direction > 0 ? step : -step;
+                          final stepDir = v.delta.direction > 0 ? step : -step;
 
-                          var newPosition = sliderPosition + stepDir;
+                          final newPosition = sliderPosition + stepDir;
 
                           sliderPosition = newPosition;
 
@@ -149,7 +150,7 @@ class _VerticalSliderState extends State<VerticalSlider> {
                           }
 
                           slider.value = Utils.convertRange(
-                              0.0, sliderEnd, min, max, sliderPosition);
+                              0, sliderEnd, min, max, sliderPosition);
 
                           widget.onSliding(slider.value);
                         },
@@ -165,25 +166,25 @@ class _VerticalSliderState extends State<VerticalSlider> {
 }
 
 class _VerticalSliderPainter extends CustomPainter {
-  final height;
-  final width;
-  Color color;
-
   _VerticalSliderPainter({this.height, this.width, this.color});
+
+  final double height;
+  final double width;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
-    Path path = new Path();
-    var points = [
-      Offset(width, 0.0),
-      Offset(0.0, height * 0.5),
+    final path = Path();
+    final points = [
+      Offset(width, 0),
+      Offset(0, height * 0.5),
       Offset(width, height),
     ];
     path.addPolygon(points, true);
 
-    Paint paint = Paint();
-    paint.style = PaintingStyle.fill;
-    paint.color = color;
+    final paint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = color;
     canvas.drawPath(path, paint);
   }
 

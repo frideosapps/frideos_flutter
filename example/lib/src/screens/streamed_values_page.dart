@@ -7,13 +7,14 @@ import '../blocs/streamed_values_bloc.dart';
 
 import 'history_page.dart';
 
-const styleHeader =
-    TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w500);
-const styleValue = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
-const styleOldValue =
-    TextStyle(color: Colors.grey, fontSize: 12.0, fontWeight: FontWeight.w500);
-const padding = 22.0;
-const buttonColor = Color(0xff99cef9);
+const TextStyle styleHeader =
+    TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500);
+const TextStyle styleValue =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+const TextStyle styleOldValue =
+    TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500);
+const double padding = 22;
+const Color buttonColor = Color(0xff99cef9);
 
 class StreamedValuesPage extends StatelessWidget {
   @override
@@ -21,7 +22,7 @@ class StreamedValuesPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Streamed objects'),
+          title: const Text('Streamed objects'),
         ),
         body: Container(
           color: Colors.blueGrey[100],
@@ -49,17 +50,17 @@ class StreamedValueWidget extends StatelessWidget {
 
     return Card(
       child: Container(
-          padding: EdgeInsets.all(padding),
+          padding: const EdgeInsets.all(padding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('StreamedValue', style: styleHeader),
-              Container(height: 20.0),
+              const Text('StreamedValue', style: styleHeader),
+              Container(height: 20),
               ValueBuilder<int>(
                 stream: bloc.count,
                 builder: (context, snapshot) =>
                     Text('Value: ${snapshot.data}', style: styleValue),
-                noDataChild: Text('NO DATA'),
+                noDataChild: const Text('NO DATA'),
               ),
               ValueBuilder<Counter>(
                 stream: bloc.counterObj,
@@ -70,14 +71,12 @@ class StreamedValueWidget extends StatelessWidget {
                     ],
                   );
                 },
-                noDataChild: Text('NO DATA'),
+                noDataChild: const Text('NO DATA'),
               ),
               RaisedButton(
                 color: buttonColor,
-                child: Text('+'),
-                onPressed: () {
-                  bloc.incrementCounter();
-                },
+                child: const Text('+'),
+                onPressed: bloc.incrementCounter,
               ),
             ],
           )),
@@ -92,12 +91,12 @@ class MemoryWidget extends StatelessWidget {
 
     return Card(
       child: Container(
-        padding: EdgeInsets.all(padding),
+        padding: const EdgeInsets.all(padding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('MemoryObject', style: styleHeader),
-            Container(height: 20.0),
+            const Text('MemoryObject', style: styleHeader),
+            Container(height: 20),
             ValueBuilder<int>(
               stream: bloc.countMemory,
               builder: (context, snapshot) => Column(
@@ -107,14 +106,12 @@ class MemoryWidget extends StatelessWidget {
                           style: styleOldValue),
                     ],
                   ),
-              noDataChild: Text('NO DATA'),
+              noDataChild: const Text('NO DATA'),
             ),
             RaisedButton(
               color: buttonColor,
-              child: Text('+'),
-              onPressed: () {
-                bloc.incrementCounterMemory();
-              },
+              child: const Text('+'),
+              onPressed: bloc.incrementCounterMemory,
             ),
           ],
         ),
@@ -130,11 +127,11 @@ class HistoryWidget extends StatelessWidget {
 
     return Card(
       child: Container(
-        padding: EdgeInsets.all(padding),
+        padding: const EdgeInsets.all(padding),
         child: Column(
           children: <Widget>[
-            Text('HistoryObject', style: styleHeader),
-            Container(height: 20.0),
+            const Text('HistoryObject', style: styleHeader),
+            Container(height: 20),
             ValueBuilder<int>(
               stream: bloc.countHistory,
               builder: (context, snapshot) => Column(
@@ -145,24 +142,22 @@ class HistoryWidget extends StatelessWidget {
                           style: styleOldValue),
                     ],
                   ),
-              noDataChild: Text('NO DATA'),
+              noDataChild: const Text('NO DATA'),
             ),
             ValueBuilder<List<int>>(
               stream: bloc.countHistory.historyStream,
               builder: (context, snapshot) => Text(
                   'History length: ${snapshot.data.length}',
                   style: styleValue),
-              noDataChild: Text('NO DATA'),
+              noDataChild: const Text('NO DATA'),
             ),
             RaisedButton(
               color: buttonColor,
-              child: Text('+'),
-              onPressed: () {
-                bloc.incrementCounterHistory();
-              },
+              child: const Text('+'),
+              onPressed: bloc.incrementCounterHistory,
             ),
             Container(
-              height: 10.0,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -173,12 +168,12 @@ class HistoryWidget extends StatelessWidget {
                       stream: bloc.countHistory,
                       builder: (context, snapshot) => RaisedButton(
                             color: buttonColor,
-                            child: Text('Save to history'),
+                            child: const Text('Save to history'),
                             onPressed: bloc.saveToHistory,
                           ),
                       noDataChild: RaisedButton(
                         color: Theme.of(context).disabledColor,
-                        child: Text('First click on +'),
+                        child: const Text('First click on +'),
                         onPressed: null,
                       ),
                     ),
@@ -186,7 +181,7 @@ class HistoryWidget extends StatelessWidget {
                 ),
                 RaisedButton(
                   color: buttonColor,
-                  child: Text('History page'),
+                  child: const Text('History page'),
                   onPressed: () {
                     Navigator.push(
                       context,

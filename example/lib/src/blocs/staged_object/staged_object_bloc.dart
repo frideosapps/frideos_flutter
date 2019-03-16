@@ -9,6 +9,16 @@ import 'staged_page_one_bloc.dart';
 import 'staged_page_two_bloc.dart';
 
 class StagedObjectBloc extends BlocBase {
+  StagedObjectBloc() {
+    print('-------STAGEDOBJECT BLOC--------');
+
+    // Used to send the map with the stages
+    blocA.tunnelSender.setReceiver(blocB.receiverWidget);
+
+    //to send the message to the blocB
+    blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
+  }
+
   final blocA = StagedPageOneBloc();
   final blocB = StagedPageTwoBloc();
 
@@ -23,45 +33,37 @@ class StagedObjectBloc extends BlocBase {
 
   final stage = StreamedValue<StageBridge>();
 
-  StagedObjectBloc() {
-    print('-------STAGEDOBJECT BLOC--------');
-
-    // Used to send the map with the stages
-    blocA.tunnelSender.setReceiver(blocB.receiverWidget);
-
-    //to send the message to the blocB
-    blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
-  }
-
   // The map can be set through the constructor of the StagedObject
   // or by the setStagesMap method like in this case.
-  setMap(Map<int, Stage> stagesMap) {
+  void setMap(Map<int, Stage> stagesMap) {
     staged.setStagesMap(stagesMap);
   }
 
-  start() {
+  void start() {
     if (staged.getMapLength() > 0) {
-      staged.setCallback(sendNextStageText);
-      staged.startStages();
+      staged
+        ..setCallback(sendNextStageText)
+        ..startStages();
     }
   }
 
-  sendNextStageText() {
+  void sendNextStageText() {
     print('change stage');
 
-    var nextStage = staged.getNextStage();
+    final nextStage = staged.getNextStage();
     if (nextStage != null) {
-      text.value = "Next stage:";
+      text.value = 'Next stage:';
       widget.value = nextStage.widget;
       stage.value = StageBridge(
           staged.getStageIndex(), staged.getCurrentStage(), nextStage);
     } else {
-      text.value = "This is the last stage";
+      text.value = 'This is the last stage';
       widget.value = Container();
     }
   }
 
-  dispose() {
+  @override
+  void dispose() {
     print('-------STAGEDOBJECT BLOC DISPOSE--------');
 
     blocA.dispose();

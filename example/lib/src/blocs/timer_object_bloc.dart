@@ -9,19 +9,19 @@ class TimerObjectBloc extends BlocBase {
 
   final timerObject = TimerObject();
 
-  startTimer() {
+  void startTimer() {
     timerObject.startTimer();
   }
 
-  stopTimer() {
+  void stopTimer() {
     timerObject.stopTimer();
   }
 
-  getLapTime() {
+  void getLapTime() {
     timerObject.getLapTime();
   }
 
-  dispose() {
+  void dispose() {
     print('-------TimerObject BLOC DISPOSE--------');
 
     timerObject.dispose();

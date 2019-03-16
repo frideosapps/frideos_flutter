@@ -8,14 +8,14 @@ import '../blocs/sliders_bloc.dart';
 class SlidersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SlidersBloc bloc = BlocProvider.of(context);
+    final SlidersBloc bloc = BlocProvider.of(context);
     GlobalKey _horizontalSliderKey = GlobalKey();
     GlobalKey _verticalSliderKey = GlobalKey();
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Sliders'),
+          title: const Text('Sliders'),
         ),
         body: Container(
           alignment: Alignment.center,
@@ -43,18 +43,18 @@ class SlidersPage extends StatelessWidget {
                                           scale: snapshotScale.data,
                                           child: Transform.rotate(
                                               angle: snapshot.data,
-                                              child: FlutterLogo()),
+                                              child: const FlutterLogo()),
                                         ),
                                       )
                                     ],
                                   ),
                                 );
                               },
-                              noDataChild:
-                                  Text('Click on start to show the widgets.'));
+                              noDataChild: const Text(
+                                  'Click on start to show the widgets.'));
                         },
                         noDataChild:
-                            Text('Click on start to show the widgets.')),
+                            const Text('Click on start to show the widgets.')),
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -80,7 +80,7 @@ class SlidersPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: HorizontalSlider(
                   key: _horizontalSliderKey,
-                  rangeMin: 0.0,
+                  rangeMin: 0,
                   rangeMax: 3.14,
                   //step: 5.0,
                   initialValue: bloc.initialAngle,

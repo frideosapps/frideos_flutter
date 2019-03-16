@@ -2,7 +2,8 @@ import 'streamed_value.dart';
 import 'streamed_list.dart';
 import 'streamed_map.dart';
 
-/// Used to make a one-way tunnel beetween two blocs (from blocA to a StremedValue on blocB).
+/// Used to make a one-way tunnel beetween two blocs (from blocA to
+/// a StremedValue on blocB).
 ///
 /// #### Usage:
 ///
@@ -19,7 +20,8 @@ import 'streamed_map.dart';
 /// ```
 ///
 ///
-/// 3 - Set the receiver in the sender on the class the holds the instances of the blocs
+/// 3 - Set the receiver in the sender on the class the holds the instances
+/// of the blocs
 ///
 /// ```dart///
 /// blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
@@ -31,23 +33,25 @@ import 'streamed_map.dart';
 /// tunnelSenderStr.send("Text from blocA to blocB");
 /// ```
 class StreamedSender<T> {
-  StreamedValue<T> _receiver;
-
   StreamedSender();
 
-  StreamedSender.setReceiver(StreamedValue<T> receiver) {
-    assert(receiver != null, "The receiver argument is null.");
+  StreamedSender.setReceiver(StreamedValue<T> receiver)
+      : assert(receiver != null, 'The receiver argument is null.') {
     _receiver = receiver;
   }
 
-  setReceiver(StreamedValue<T> receiver) {
-    assert(receiver != null, "The receiver argument is null.");
+  StreamedValue<T> _receiver;
+
+  void setReceiver(StreamedValue<T> receiver) {
+    assert(receiver != null, 'The receiver argument is null.');
     _receiver = receiver;
   }
 
-  send(T data) {
+  void send(T data) {
     _receiver.value = data;
-    if (T is List || T is Map) _receiver.refresh();
+    if (T is List || T is Map) {
+      _receiver.refresh();
+    }
   }
 }
 
@@ -81,21 +85,21 @@ class StreamedSender<T> {
 /// ```
 ///
 class ListSender<T> {
-  StreamedList<T> _receiver;
-
   ListSender();
 
-  ListSender.setReceiver(StreamedList<T> receiver) {
-    assert(receiver != null, "The receiver argument is null.");
+  ListSender.setReceiver(StreamedList<T> receiver)
+      : assert(receiver != null, 'The receiver argument is null.') {
     _receiver = receiver;
   }
 
-  setReceiver(StreamedList<T> receiver) {
-    assert(receiver != null, "The receiver argument is null.");
+  StreamedList<T> _receiver;
+
+  void setReceiver(StreamedList<T> receiver) {
+    assert(receiver != null, 'The receiver argument is null.');
     _receiver = receiver;
   }
 
-  send(List<T> data) {
+  void send(List<T> data) {
     _receiver.value = data;
   }
 }
@@ -130,28 +134,25 @@ class ListSender<T> {
 /// ```
 ///
 class MapSender<K, V> {
-  StreamedMap<K, V> _receiver;
-
   MapSender();
 
-  MapSender.setReceiver(StreamedMap<K, V> receiver) {
-    assert(receiver != null, "The receiver argument is null.");
+  MapSender.setReceiver(StreamedMap<K, V> receiver)
+      : assert(receiver != null, 'The receiver argument is null.') {
     _receiver = receiver;
   }
+
+  StreamedMap<K, V> _receiver;
 
   /// Method to set the [StreamedMap] on the other bloc where
   /// to send the data
   void setReceiver(StreamedMap<K, V> receiver) {
-    assert(receiver != null, "The receiver argument is null.");
+    assert(receiver != null, 'The receiver argument is null.');
     _receiver = receiver;
   }
 
   /// Method to send the data to the StreamedMap set by the [setReceiver]
   /// method.
   void send(Map<K, V> data) {
-    _receiver.value = {};
-    _receiver.value.clear();
-    _receiver.value.addAll(data);
-    _receiver.refresh();
+    _receiver.value = data;
   }
 }

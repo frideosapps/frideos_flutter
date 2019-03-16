@@ -5,9 +5,10 @@ import 'package:frideos/frideos_dart.dart';
 import '../blocs/bloc.dart';
 
 class Counter {
+  Counter(this.counter, this.text);
+
   int counter;
   String text;
-  Counter(this.counter, this.text);
 }
 
 class StreamedValuesBloc extends BlocBase {
@@ -27,20 +28,20 @@ class StreamedValuesBloc extends BlocBase {
   final counterObj =
       StreamedValue<Counter>(initialData: Counter(1, 'First hit!'));
 
-  incrementCounter() {
+  void incrementCounter() {
     count.value++;
     counterObj.value.counter++;
     counterObj.value.text = 'Counter: ${counterObj.value.counter}';
     counterObj.refresh();
   }
 
-  incrementCounterMemory() => countMemory.value++;
+  void incrementCounterMemory() => countMemory.value++;
 
-  incrementCounterHistory() => countHistory.value++;
+  void incrementCounterHistory() => countHistory.value++;
 
-  saveToHistory() => countHistory.saveValue();
+  void saveToHistory() => countHistory.saveValue();
 
-  dispose() {
+  void dispose() {
     print('-------StreamedValues BLOC DISPOSE--------');
     count.dispose();
     countMemory.dispose();

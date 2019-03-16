@@ -2,7 +2,7 @@ name: frideos
 author: Francesco Mineo <frideosapps@gmail.com>
 homepage: https://github.com/frideosapps/frideos_flutter
 description: Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets etc.).
-version: 0.4.1
+version: 0.4.2
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -10,15 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   rxdart: ^0.18.0
-
   shared_preferences: ^0.5.1+1
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-
+    sdk: flutter  
   test: ^1.5.1
 
 # For information on the generic Dart part of this file, see the

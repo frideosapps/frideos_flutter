@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'interfaces/streamed_object.dart';
 import 'streamed_value.dart';
 
@@ -10,7 +12,7 @@ enum AnimatedStatus { active, stop, pause }
 
 ///
 /// Enum to specify the behavior of the animation for
-/// the [startAnimation] method.
+/// the `startAnimation` method.
 ///
 enum AnimatedType { increment, decrement }
 
@@ -108,14 +110,14 @@ enum AnimatedType { increment, decrement }
 ///
 ///
 class AnimatedObject<T> implements StreamedObject<T> {
-  AnimatedObject({this.initialValue, this.interval})
-      : assert(initialValue != null, "The initialValue argument is null."),
-        assert(interval != null, "The interval argument is null.") {
+  AnimatedObject({@required this.initialValue, @required this.interval})
+      : assert(initialValue != null, 'The initialValue argument is null.'),
+        assert(interval != null, 'The interval argument is null.') {
     status.value = AnimatedStatus.stop;
   }
 
-  /// [StreamedValue] object that holds the animation value
-  final animation = StreamedValue<T>();
+  /// It is the [StreamedValue] object that holds the animation value
+  final StreamedValue<T> animation = StreamedValue<T>();
 
   /// Getter for stream of the [StreamedValue] that holds the animation
   /// value.
@@ -129,6 +131,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
   Stream<T> get animationStream => animation.outStream;
 
   /// Getter for the AnimatedObject value
+  @override
   T get value => animation.value;
 
   /// Setter for the AnimatedObject value
@@ -138,7 +141,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
   T initialValue;
 
   /// Timer to handle the timing
-  final timer = TimerObject();
+  final TimerObject timer = TimerObject();
 
   /// Interval in milliseconds
   int interval;
@@ -146,7 +149,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
   ///
   /// AnimatedObject status
   ///
-  final status = StreamedValue<AnimatedStatus>();
+  final StreamedValue<AnimatedStatus> status = StreamedValue<AnimatedStatus>();
 
   /// Getter for the stream of the status of the animation
   Stream<AnimatedStatus> get statusStream => status.outStream;
@@ -189,8 +192,8 @@ class AnimatedObject<T> implements StreamedObject<T> {
   /// animation stops.
   ///
   void startAnimation(
-      {AnimatedType type,
-      dynamic velocity,
+      {@required AnimatedType type,
+      @required dynamic velocity,
       dynamic minValue,
       dynamic maxValue}) {
     assert(type != null && velocity != null,
@@ -202,7 +205,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
       case AnimatedType.increment:
         assert(maxValue != null, 'The parameter maxValue must be not null.');
 
-        start((Timer t) {
+        start((t) {
           if (valueTmp < maxValue) {
             valueTmp += velocity;
             value = valueTmp;
@@ -217,7 +220,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
       case AnimatedType.decrement:
         assert(minValue != null, 'The parameter maxValue must be not null.');
 
-        start((Timer t) {
+        start((t) {
           if (valueTmp > minValue) {
             valueTmp -= velocity;
             value = valueTmp;
@@ -233,53 +236,6 @@ class AnimatedObject<T> implements StreamedObject<T> {
         break;
     }
   }
-
-  /*
-dynamic val = initialValue;
-        assert(val != null, "val is null");
-
-        switch (type) {
-          case AnimatedType.increment:
-            assert(
-                max != null, // && T.runtimeType == max.runtimeType,
-                'The parameter max must be not null and of type: ${T.runtimeType}');
-
-            start((Timer t) {
-              if (val < max) {
-                val += velocity;
-                value = val;
-              }
-
-              if (val > max) {
-                value = max;
-                timer.stopTimer();
-              }
-            });
-            break;
-          case AnimatedType.decrement:
-            assert(
-                min != null, //&& T.runtimeType == min.runtimeType,
-                'The parameter max must be not null and of type: ${T.runtimeType}');
-
-            start((Timer t) {
-              if (val > min) {
-                val -= velocity;
-                value = val;
-              }
-
-              if (val < min) {
-                value = min;
-                timer.stopTimer();
-              }
-              print('decrement: $val, ${status.value}, ${isAnimating()}');
-            });
-            break;
-          default:
-            break;
-        }
-  */
-
-  ///////////
 
   /// Method to stop the animation-
   void stop() {

@@ -14,11 +14,11 @@ class StagedWidgetBloc extends BlocBase {
   final rotateAnimation =
       AnimatedObject<double>(initialValue: 0.0, interval: 20);
 
-  startRotate() {
+  void startRotate() {
     rotateAnimation.start(updateRotate);
   }
 
-  updateRotate(Timer t) {
+  void updateRotate(Timer t) {
     rotateAnimation.animation.value += 0.04;
 
     if (rotateAnimation.animation.value > math.pi * 2) {
@@ -28,11 +28,11 @@ class StagedWidgetBloc extends BlocBase {
     }
   }
 
-  stopRotate() {
+  void stopRotate() {
     rotateAnimation.stop();
   }
 
-  resetRotate() {
+  void resetRotate() {
     rotateAnimation.reset();
   }
 
@@ -40,11 +40,11 @@ class StagedWidgetBloc extends BlocBase {
   final scaleAnimation =
       AnimatedObject<double>(initialValue: 1.0, interval: 20);
 
-  startScale() {
+  void startScale() {
     scaleAnimation.start(updateScale);
   }
 
-  updateScale(Timer t) {
+  void updateScale(Timer t) {
     scaleAnimation.animation.value -= 0.002;
 
     if (scaleAnimation.animation.value < 0.1) {
@@ -52,19 +52,20 @@ class StagedWidgetBloc extends BlocBase {
     }
   }
 
-  stopScale() {
+  void stopScale() {
     scaleAnimation.stop();
   }
 
-  resetScale() {
+  void resetScale() {
     scaleAnimation.reset();
   }
 
-  stagedOnStart() {
+  void stagedOnStart() {
     print('Change stage');
   }
 
-  dispose() {
+  @override
+  void dispose() {
     print('-------StagedWidget BLOC DISPOSE--------');
     rotateAnimation.dispose();
     scaleAnimation.dispose();

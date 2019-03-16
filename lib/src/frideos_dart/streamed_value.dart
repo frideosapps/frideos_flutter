@@ -11,7 +11,7 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 /// Every time a new value is set, this is compared to the oldest one and if
 /// it is different, it is sent to stream.
 ///
-/// Used in tandem with [ValueBuilder] it automatically triggers the rebuild
+/// Used in tandem with `ValueBuilder` it automatically triggers the rebuild
 /// of the widgets returned by its builder.
 ///
 ///
@@ -32,7 +32,7 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 /// ```
 ///
 ///
-/// It can be used even with [StreamedWidget] and [StreamBuilder] by using its
+/// It can be used even with `StreamedWidget` and `StreamBuilder` by using its
 /// stream getter `outStream`. In this case, it is necessary to pass to the
 /// `initialData` parameter the current value of the [StreamedValue]
 /// (e.g. using the getter `value`).
@@ -106,6 +106,7 @@ class StreamedValue<T> implements StreamedObject<T> {
   StreamController<T> stream;
 
   /// Stream getter
+  @override
   Stream<T> get outStream => stream.stream;
 
   /// Sink for the stream
@@ -127,6 +128,7 @@ class StreamedValue<T> implements StreamedObject<T> {
   Function _onChange = (T data) {};
 
   /// Value getter
+  @override
   T get value => _lastValue;
 
   /// Value setter
@@ -168,8 +170,9 @@ class StreamedValue<T> implements StreamedObject<T> {
 ///
 /// The MemoryObject has a property to preserve the previous value.
 ///
-/// The setter checks for the new value, if it is different from the one already stored,
-/// this one is given [oldValue] before storing and streaming the new one.
+/// The setter checks for the new value, if it is different from the one
+/// already stored, this one is given [oldValue] before storing and streaming
+/// the new one.
 ///
 ///
 ///
@@ -180,6 +183,7 @@ class MemoryValue<T> extends StreamedValue<T> {
 
   T get oldValue => _oldValue;
 
+  @override
   set value(T value) {
     if (_lastValue != value) {
       _oldValue = _lastValue;
@@ -197,14 +201,15 @@ class MemoryValue<T> extends StreamedValue<T> {
 ///
 /// HistoryObject extends the [MemoryValue] class, adding a [StreamedList].
 ///
-/// When the current value needs to be stored, the [saveValue] function is called
-/// to send it to the [_historyStream].
+/// When the current value needs to be stored, the [saveValue] function
+/// is called to send it to the [_historyStream].
 ///
 class HistoryObject<T> extends MemoryValue<T> {
   HistoryObject({T initialData}) : super(initialData: initialData);
 
   final _historyStream = StreamedList<T>(initialData: []);
 
+  @override
   set value(T value) {
     if (_lastValue != value) {
       _oldValue = _lastValue;
@@ -224,7 +229,8 @@ class HistoryObject<T> extends MemoryValue<T> {
   StreamedValue<List<T>> get historyStream => _historyStream.stream;
 
   ///
-  /// Function to store the current value to a collection and sending it to stream
+  /// Function to store the current value to a collection and
+  /// sending it to stream
   ///
   void saveValue() {
     _historyStream.addElement(value);
@@ -247,7 +253,7 @@ class HistoryObject<T> extends MemoryValue<T> {
 ///
 ///
 /// Timer refresh time
-const updateTimerMilliseconds = 17;
+const int updateTimerMilliseconds = 17;
 
 ///
 ///
@@ -298,8 +304,7 @@ class TimerObject extends StreamedValue<int> {
 
   bool isStopwatchActive = false;
 
-  /// SETTER
-  ///
+  @override
   set value(int value) {
     if (_lastValue != value) {
       inStream(value);
@@ -321,7 +326,7 @@ class TimerObject extends StreamedValue<int> {
   ///
   void startTimer() {
     if (!isTimerActive) {
-      _timer = Timer.periodic(_interval, (Timer t) => updateTime(t));
+      _timer = Timer.periodic(_interval, (t) => updateTime(t));
       isTimerActive = true;
     }
 
@@ -351,10 +356,11 @@ class TimerObject extends StreamedValue<int> {
   /// Method to get the lap time
   void getLapTime() {
     if (isStopwatchActive) {
-      var milliseconds = _stopwatch.elapsedMilliseconds;
+      final milliseconds = _stopwatch.elapsedMilliseconds;
       _stopwatchStreamed.value = milliseconds;
-      _stopwatch.reset();
-      _stopwatch.start();
+      _stopwatch
+        ..reset()
+        ..start();
     }
   }
 
@@ -367,8 +373,9 @@ class TimerObject extends StreamedValue<int> {
       isTimerActive = false;
     }
     if (isStopwatchActive) {
-      _stopwatch.reset();
-      _stopwatch.stop();
+      _stopwatch
+        ..reset()
+        ..stop();
       isStopwatchActive = false;
     }
   }
@@ -387,7 +394,9 @@ class TimerObject extends StreamedValue<int> {
   @override
   void dispose() {
     super.dispose();
-    if (_timer != null) _timer.cancel();
+    if (_timer != null) {
+      _timer.cancel();
+    }
     _stopwatchStreamed.dispose();
     _stopwatch.stop();
   }
@@ -461,12 +470,11 @@ class TimerObject extends StreamedValue<int> {
 ///
 class StreamedTransformed<T, S> implements StreamedObject {
   StreamedTransformed({T initialData}) {
-    stream = BehaviorSubject<T>(seedValue: initialData);
-
-    stream.listen((e) {
-      _lastValue = e;
-      _onChange(e);
-    });
+    stream = BehaviorSubject<T>(seedValue: initialData)
+      ..listen((e) {
+        _lastValue = e;
+        _onChange(e);
+      });
   }
 
   T _lastValue;
@@ -487,6 +495,7 @@ class StreamedTransformed<T, S> implements StreamedObject {
   Function get inStream => stream.sink.add;
 
   /// Stream getter
+  @override
   Stream<T> get outStream => stream.stream;
 
   /// Streamtransformer
@@ -496,6 +505,7 @@ class StreamedTransformed<T, S> implements StreamedObject {
   Stream<S> get outTransformed => stream.stream.transform(_transformer);
 
   /// Value getter
+  @override
   T get value => _lastValue;
 
   /// Value setter

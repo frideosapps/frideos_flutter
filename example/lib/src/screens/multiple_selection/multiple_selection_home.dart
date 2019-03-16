@@ -10,12 +10,12 @@ import 'multiple_selection_page_three.dart';
 class MultipleSelectionHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    MultipleSelectionBloc bloc = BlocProvider.of(context);
+    final MultipleSelectionBloc bloc = BlocProvider.of(context);
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Multiple selection'),
+          title: const Text('Multiple selection'),
         ),
         body: Container(
           child: Column(
@@ -25,7 +25,7 @@ class MultipleSelectionHome extends StatelessWidget {
                 children: <Widget>[
                   RaisedButton(
                     color: Colors.lightBlueAccent,
-                    child: Text('Page one'),
+                    child: const Text('Page one'),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -39,7 +39,7 @@ class MultipleSelectionHome extends StatelessWidget {
                   ),
                   RaisedButton(
                     color: Colors.lightBlueAccent,
-                    child: Text('Page two'),
+                    child: const Text('Page two'),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -53,7 +53,7 @@ class MultipleSelectionHome extends StatelessWidget {
                   ),
                   RaisedButton(
                     color: Colors.lightBlueAccent,
-                    child: Text('Page three'),
+                    child: const Text('Page three'),
                     onPressed: () {
                       Navigator.push(
                         context,

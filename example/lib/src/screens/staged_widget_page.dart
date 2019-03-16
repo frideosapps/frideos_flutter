@@ -8,13 +8,13 @@ import 'package:frideos/frideos_dart.dart';
 import '../blocs/staged_widget_bloc.dart';
 
 class StagedWidgetPage extends StatelessWidget {
-  StagedWidgetPage({this.bloc});
+  const StagedWidgetPage({this.bloc});
 
   final StagedWidgetBloc bloc;
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
 
     final Shader linearGradient = LinearGradient(
       colors: <Color>[Colors.red[900], Colors.blue[900]],
@@ -24,7 +24,7 @@ class StagedWidgetPage extends StatelessWidget {
       colors: <Color>[Colors.blue[900], Colors.lime[300]],
     ).createShader(Rect.fromLTWH(width / 2 - 50.0, 0.0, width / 2 + 50.0, 5.0));
 
-    _background(MaterialColor color) {
+    Widget _background(MaterialColor color) {
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -41,25 +41,25 @@ class StagedWidgetPage extends StatelessWidget {
       );
     }
 
-    var backgrounds = [
+    final backgrounds = [
       _background(Colors.blue),
       _background(Colors.pink),
       _background(Colors.blueGrey),
       _background(Colors.orange),
     ];
 
-    var shadows = <Shadow>[
-      Shadow(offset: Offset(6.0, 6.0), blurRadius: 5.0, color: Colors.black),
+    final shadows = <Shadow>[
+      const Shadow(offset: Offset(6, 6), blurRadius: 5, color: Colors.black),
       Shadow(
-          offset: Offset(6.0, 6.0),
-          blurRadius: 10.0,
+          offset: const Offset(6, 6),
+          blurRadius: 10,
           color: Colors.blueGrey[900]),
     ];
 
-    var stagesMap = <int, Stage>{
+    final stagesMap = <int, Stage>{
       0: Stage(
           widget: Container(
-              key: Key('0'),
+              key: const Key('0'),
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
@@ -84,7 +84,7 @@ class StagedWidgetPage extends StatelessWidget {
                                     scrollingDuration: 4000,
                                     style: TextStyle(
                                         //color: Colors.blue[800],
-                                        fontSize: 94.0,
+                                        fontSize: 94,
                                         fontWeight: FontWeight.w500,
                                         foreground: Paint()
                                           ..shader = linearGradient,
@@ -104,7 +104,7 @@ class StagedWidgetPage extends StatelessWidget {
           }),
       1: Stage(
           widget: Container(
-              key: Key('1'),
+              key: const Key('1'),
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
@@ -122,7 +122,7 @@ class StagedWidgetPage extends StatelessWidget {
                         duration: 3000,
                         child: Text('Flutter',
                             style: TextStyle(
-                                fontSize: 94.0,
+                                fontSize: 94,
                                 fontWeight: FontWeight.w500,
                                 foreground: Paint()..shader = linearGradient,
                                 shadows: shadows)),
@@ -140,7 +140,7 @@ class StagedWidgetPage extends StatelessWidget {
                                   duration: 6000,
                                   child: Text('Flutter',
                                       style: TextStyle(
-                                          fontSize: 94.0,
+                                          fontSize: 94,
                                           fontWeight: FontWeight.w500,
                                           foreground: Paint()
                                             ..shader = linearGradient2,
@@ -160,7 +160,7 @@ class StagedWidgetPage extends StatelessWidget {
           }),
       2: Stage(
           widget: Container(
-              key: Key('2'),
+              key: const Key('2'),
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
@@ -179,7 +179,7 @@ class StagedWidgetPage extends StatelessWidget {
                           text: '...is',
                           scrollingDuration: 2000,
                           style: TextStyle(
-                              fontSize: 94.0,
+                              fontSize: 94,
                               fontWeight: FontWeight.w500,
                               foreground: Paint()..shader = linearGradient,
                               shadows: shadows),
@@ -196,7 +196,7 @@ class StagedWidgetPage extends StatelessWidget {
           }),
       3: Stage(
           widget: Container(
-              key: Key('3'),
+              key: const Key('3'),
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
@@ -217,7 +217,7 @@ class StagedWidgetPage extends StatelessWidget {
                             text: 'Limitless!',
                             scrollingDuration: 2000,
                             style: TextStyle(
-                                fontSize: 74.0,
+                                fontSize: 74,
                                 fontWeight: FontWeight.w500,
                                 foreground: Paint()..shader = linearGradient,
                                 shadows: shadows),
@@ -234,7 +234,7 @@ class StagedWidgetPage extends StatelessWidget {
           }),
       4: Stage(
           widget: Container(
-              key: Key('4'),
+              key: const Key('4'),
               child: Stack(
                 children: <Widget>[
                   LinearTransition(
@@ -249,7 +249,7 @@ class StagedWidgetPage extends StatelessWidget {
                         text: 'Period.',
                         scrollingDuration: 2000,
                         style: TextStyle(
-                            fontSize: 94.0,
+                            fontSize: 94,
                             fontWeight: FontWeight.w500,
                             foreground: Paint()..shader = linearGradient2,
                             shadows: shadows),
@@ -267,7 +267,7 @@ class StagedWidgetPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('StagedWidget'),
+          title: const Text('StagedWidget'),
           backgroundColor: Colors.blue[400],
         ),
         body: StagedWidget(
@@ -275,8 +275,9 @@ class StagedWidgetPage extends StatelessWidget {
             onStart: bloc.stagedOnStart,
             onEnd: () {
               // Navigator.pop(context);
-              bloc.stopRotate();
-              bloc.stopScale();
+              bloc
+                ..stopRotate()
+                ..stopScale();
             }),
       ),
     );

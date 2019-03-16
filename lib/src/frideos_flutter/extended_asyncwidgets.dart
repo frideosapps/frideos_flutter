@@ -51,15 +51,15 @@ typedef WaitingCallback = Widget Function();
 ///
 class ValueBuilder<T> extends StreamBuilder<T> {
   ValueBuilder(
-      {Key key,
-      @required StreamedObject<T> stream,
+      {@required StreamedObject<T> stream,
       @required this.builder,
+      Key key,
       this.noDataChild,
       this.onNoData,
       this.errorChild,
       this.onError})
-      : assert(stream != null, "The stream argument is null."),
-        assert(builder != null, "The builder argument is null."),
+      : assert(stream != null, 'The stream argument is null.'),
+        assert(builder != null, 'The builder argument is null.'),
         super(
             key: key,
             initialData: stream.value,
@@ -157,16 +157,16 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 ///
 class StreamedWidget<T> extends StreamBuilder<T> {
   const StreamedWidget(
-      {Key key,
-      this.initialData,
-      @required Stream<T> stream,
+      {@required Stream<T> stream,
       @required this.builder,
+      Key key,
+      this.initialData,
       this.noDataChild,
       this.onNoData,
       this.errorChild,
       this.onError})
-      : assert(stream != null, "The stream argument is null."),
-        assert(builder != null, "The builder argument is null."),
+      : assert(stream != null, 'The stream argument is null.'),
+        assert(builder != null, 'The builder argument is null.'),
         super(key: key, stream: stream, builder: builder);
 
   final AsyncWidgetBuilder<T> builder;
@@ -241,17 +241,17 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 ///
 ///
 class FuturedWidget<T> extends StatelessWidget {
-  FuturedWidget(
-      {Key key,
-      this.initialData,
-      @required this.future,
+  const FuturedWidget(
+      {@required this.future,
       @required this.builder,
+      Key key,
+      this.initialData,
       this.onWaitingChild,
       this.onWaiting,
       this.errorChild,
       this.onError})
-      : assert(future != null, "The future argument is null."),
-        assert(builder != null, "The builder argument is null."),
+      : assert(future != null, 'The future argument is null.'),
+        assert(builder != null, 'The builder argument is null.'),
         super(key: key);
 
   final T initialData;
@@ -279,7 +279,7 @@ class FuturedWidget<T> extends StatelessWidget {
     return FutureBuilder<T>(
         initialData: initialData,
         future: future,
-        builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             return builder(context, snapshot);
           }

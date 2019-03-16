@@ -1,3 +1,7 @@
+## Version 0.4.2 (16-03-19)
+- Code refactoring
+- Update Readme.md
+
 ## Version 0.4.1 (10-03-19)
 
 ### - StreamedList

@@ -28,10 +28,10 @@ class StreamedMapCleanBloc extends BlocBase with Validators {
       outTextTransformed, outKeyTransformed, (a, b) => true);
 
   // Add to the streamed map the key/value pair put by the user
-  addText() {
-    var key = int.parse(_key.value);
-    var value = _text.value;
-    var streamMap = _map.value;
+  void addText() {
+    final key = int.parse(_key.value);
+    final value = _text.value;
+    final streamMap = _map.value;
 
     if (streamMap != null) {
       map.addAll(streamMap);
@@ -41,7 +41,8 @@ class StreamedMapCleanBloc extends BlocBase with Validators {
     inMap(map);
   }
 
-  dispose() {
+  @override
+  void dispose() {
     print('-------StreamedMapClean BLOC DISPOSE--------');
 
     _map.close();

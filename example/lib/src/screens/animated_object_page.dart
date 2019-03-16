@@ -13,14 +13,14 @@ class AnimatedObjectPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('AnimatedObject page'),
+          title: const Text('AnimatedObject page'),
         ),
         body: Container(
           color: Colors.blueGrey[100],
           child: Column(
             children: <Widget>[
               Container(
-                height: 20.0,
+                height: 20,
               ),
               ValueBuilder<AnimatedStatus>(
                 stream: bloc.scaleAnimation.status,
@@ -31,26 +31,23 @@ class AnimatedObjectPage extends StatelessWidget {
                       snapshot.data == AnimatedStatus.active
                           ? RaisedButton(
                               color: Colors.lightBlueAccent,
-                              child: Text('Reset'),
-                              onPressed: () {
-                                bloc.reset();
-                              })
+                              child: const Text('Reset'),
+                              onPressed: bloc.reset,
+                            )
                           : Container(),
                       snapshot.data == AnimatedStatus.stop
                           ? RaisedButton(
                               color: Colors.lightBlueAccent,
-                              child: Text('Start'),
-                              onPressed: () {
-                                bloc.start();
-                              })
+                              child: const Text('Start'),
+                              onPressed: bloc.start,
+                            )
                           : Container(),
                       snapshot.data == AnimatedStatus.active
                           ? RaisedButton(
                               color: Colors.lightBlueAccent,
-                              child: Text('Stop'),
-                              onPressed: () {
-                                bloc.stop();
-                              })
+                              child: const Text('Stop'),
+                              onPressed: bloc.stop,
+                            )
                           : Container(),
                     ],
                   );
@@ -61,17 +58,20 @@ class AnimatedObjectPage extends StatelessWidget {
                     stream: bloc.scaleAnimation,
                     builder: (context, snapshot) {
                       return Transform.scale(
-                          scale: snapshot.data,
-                          // No need for StreamBuilder here, the widget
-                          // is already updating
-                          child: Transform.rotate(
-                              angle: bloc.rotationAnimation.value,
-                              // Same here
-                              //
-                              child: Transform(
-                                  transform: Matrix4.rotationY(
-                                      bloc.rotationAnimation.value),
-                                  child: FlutterLogo())));
+                        scale: snapshot.data,
+                        // No need for StreamBuilder here, the widget
+                        // is already updating
+                        child: Transform.rotate(
+                          angle: bloc.rotationAnimation.value,
+                          // Same here
+                          //
+                          child: Transform(
+                            transform:
+                                Matrix4.rotationY(bloc.rotationAnimation.value),
+                            child: const FlutterLogo(),
+                          ),
+                        ),
+                      );
                     }),
               )
             ],

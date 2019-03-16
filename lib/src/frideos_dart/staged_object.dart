@@ -14,7 +14,7 @@ enum StageStatus { active, stop }
 ///
 /// Interval in millisecond to check for the next stage
 ///
-const updateTimeStaged = 100;
+const int updateTimeStaged = 100;
 
 /// A complex class to hadle the rendering of widgets over the time.
 /// It takes a collection of "Stages" and triggers the visualization of
@@ -33,14 +33,16 @@ const updateTimeStaged = 100;
 /// }
 /// ```
 ///
-/// ##### N.B. The onShow callback is used to trigger an action when the stage shows
+/// ##### N.B. The onShow callback is used to trigger an action when the
+/// stage shows
 ///
 /// #### Usage
 ///
 /// From the StagedObject example:
 ///
 /// 1. #### Declare a map <int, Stage>
-///    Here the map is in the view and is set in the BLoC class by the setStagesMap.
+///    Here the map is in the view and is set in the BLoC class by the
+///    setStagesMap.
 ///
 /// ```dart
 /// Map<int, Stage> get stagesMap => <int, Stage>{
@@ -178,11 +180,11 @@ class StagedObject implements StreamedObject {
   ///
   /// Stages, every value is a relative or an absolute time
   ///
-  final _stages = List<int>();
+  final List<int> _stages = [];
 
   /// The list is buffered to let the original one inalterated
   ///
-  final _stagesBuffer = List<int>();
+  final List<int> _stagesBuffer = [];
 
   /// The stage to show
   ///
@@ -213,7 +215,8 @@ class StagedObject implements StreamedObject {
   /// WidgetStream getter
   ///
   /// Implementation of the getter outStream for the [StreamedObject]
-  /// interface. Used as default by the [ValueBuilder].
+  /// interface. Used as default by the `ValueBuilder`.
+  @override
   Stream<Widget> get outStream => _widgetStream.outStream;
 
   /// Getter
@@ -223,7 +226,7 @@ class StagedObject implements StreamedObject {
   /// everytime the stage changes. Setting the [callbackOnStart]
   /// to false, the callback it is not called at the stage 0.
   ///
-  Function() _callback = () {};
+  Function _callback = () {};
 
   /// By default the callback it is called at the beginning
   /// and on every stage change, set to false to disable the
@@ -231,7 +234,7 @@ class StagedObject implements StreamedObject {
   bool callbackOnStart = true;
 
   /// This callback is called at the end.
-  Function() _onEnd = () {};
+  Function _onEnd = () {};
 
   /// Type of timing, absolute or relative
   ///
@@ -249,7 +252,9 @@ class StagedObject implements StreamedObject {
     _stagesMap = stagesMap;
 
     // Extract the times
-    if (_stages.length > 0) _stages.clear();
+    if (_stages.isNotEmpty) {
+      _stages.clear();
+    }
     stagesMap.forEach((k, v) => _stages.add(v.time));
   }
 
@@ -277,7 +282,7 @@ class StagedObject implements StreamedObject {
   }
 
   Stage getNextStage() {
-    var nextStage = stageIndex + 1;
+    final nextStage = stageIndex + 1;
     if (_stagesMap.containsKey(nextStage)) {
       return _stagesMap[nextStage];
     } else {
@@ -290,11 +295,13 @@ class StagedObject implements StreamedObject {
     return _stagesMap[index];
   }
 
-  startStages() {
+  void startStages() {
     if (_stagesMap != null) {
-      if (!_timerObject.isTimerActive && _stagesMap.length > 0) {
+      if (!_timerObject.isTimerActive && _stagesMap.isNotEmpty) {
         // Buffer the list
-        if (_stagesBuffer.length > 0) _stagesBuffer.clear();
+        if (_stagesBuffer.isNotEmpty) {
+          _stagesBuffer.clear();
+        }
         _stagesBuffer.addAll(_stages);
 
         // Show the first element of the list of widgets
@@ -303,7 +310,7 @@ class StagedObject implements StreamedObject {
         // Set the stage index to the first element
         stageIndex = 0;
 
-        var interval = Duration(milliseconds: updateTimeStaged);
+        final interval = Duration(milliseconds: updateTimeStaged);
 
         // The implementation of the periodic function is set by setting
         // the absoluteTiming flag to true (absolute) or false (relative).
@@ -327,8 +334,9 @@ class StagedObject implements StreamedObject {
   void resetStages() {
     // print('Reset stages');
     // Refresh the buffer with the original list
-    _stagesBuffer.clear();
-    _stagesBuffer.addAll(_stages);
+    _stagesBuffer
+      ..clear()
+      ..addAll(_stages);
 
     // Set the stage to the first element
     stageIndex = 0;
@@ -345,21 +353,21 @@ class StagedObject implements StreamedObject {
 
     // Calling the onEnd callback if the timing is relative
     if (!absoluteTiming) {
-      var time = _stagesMap[stageIndex].time;
+      final time = _stagesMap[stageIndex].time;
       Timer(Duration(milliseconds: time), _onEnd);
     }
   }
 
   // check for absolute time position
   void checkAbsolute(Timer t) {
-    if (_stagesBuffer.length > 0) {
+    if (_stagesBuffer.isNotEmpty) {
       // Updating the timer
       _timerObject.updateTime(t);
 
-      var currentTime = _timerObject.time;
+      final currentTime = _timerObject.time;
 
       // Time in milliseconds of the current stage
-      var stage = _stagesBuffer.first;
+      final stage = _stagesBuffer.first;
 
       // If the current time is between +/- 100ms of an item of the stages
       if (currentTime >= stage - stageTimeMargin &&
@@ -367,7 +375,8 @@ class StagedObject implements StreamedObject {
         // Send to stream the new widget
         _widgetStream.value = _stagesMap[stageIndex].widget;
 
-        // To call the general callback and the onShow callback of the single windget
+        // To call the general callback and the onShow callback
+        // of the single windget
         _callCallbacks();
 
         // Remove the current item
@@ -390,15 +399,15 @@ class StagedObject implements StreamedObject {
       // Updating the timer
       _timerObject.updateTime(t);
 
-      var currentTime = _timerObject.time;
+      final currentTime = _timerObject.time;
 
       // Time in milliseconds of the current stage
-      var stage = _stagesBuffer.first;
+      final stage = _stagesBuffer.first;
 
       // Being relative time the cutoff is the time passed
       // from the time of the last stage and the current one
       //
-      int timePassed = currentTime - lastStageTime;
+      final timePassed = currentTime - lastStageTime;
 
       // If the current time is between +/- 100ms of an item of the stages
       if (timePassed >= stage - stageTimeMargin &&
@@ -410,7 +419,8 @@ class StagedObject implements StreamedObject {
         // Send to stream the new widget
         _widgetStream.value = _stagesMap[stageIndex].widget;
 
-        // To call the general callback and the onShow callback of the single windget
+        // To call the general callback and the onShow callback
+        // of the single windget
         _callCallbacks();
 
         // Remove the current item

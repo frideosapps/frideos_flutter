@@ -27,20 +27,20 @@ import 'screens/staged_object/staged_object_home.dart';
 import 'screens/multiple_selection/multiple_selection_home.dart';
 
 class HomePage extends StatelessWidget {
-  _expansionTile(String title, List<Widget> widgets) {
+  Widget _expansionTile(String title, List<Widget> widgets) {
     return ExpansionTile(
         backgroundColor: Colors.white,
         title: Text(title,
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         children: widgets);
   }
 
-  _tile(String title, Function onTap) {
+  Widget _tile(String title, Function onTap) {
     return ListTile(
       dense: true,
       title: Text(title,
-          style: TextStyle(
-              fontSize: 14.0,
+          style: const TextStyle(
+              fontSize: 14,
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.italic)),
       onTap: onTap,
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Frideos examples'),
+        title: const Text('Frideos examples'),
       ),
       drawer: Drawer(
         child: Container(
@@ -61,9 +61,9 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               DrawerHeader(
                 child: Center(
-                  child: Text(
+                  child: const Text(
                     'Examples',
-                    style: TextStyle(color: Colors.white, fontSize: 22.0),
+                    style: TextStyle(color: Colors.white, fontSize: 22),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -242,7 +242,7 @@ class HomePage extends StatelessWidget {
                   );
                 }),
               ]),
-              AboutListTile(),
+              const AboutListTile(),
             ],
           ),
         ),
@@ -253,18 +253,18 @@ class HomePage extends StatelessWidget {
           transitionDuration: 1000,
           firstWidget: Container(),
           secondWidget: Container(
-            child: WavesWidget(
-              color: Colors.blue,
-              child: Container(
-                  color: Colors.blue[800],
-                  alignment: Alignment.center,
-                  child: BlurInWidget(
-                      initialSigmaX: 6.0,
-                      initialSigmaY: 12.0,
-                      duration: 2000,
-                      child: FlutterLogo(
-                        size: 240.0,
-                      ))),
+            child: BlurWidget(
+              sigmaX: 2,
+              sigmaY: 2,
+              child: WavesWidget(
+                color: Colors.blue,
+                child: Container(
+                    color: Colors.blue[800],
+                    alignment: Alignment.center,
+                    child: FlutterLogo(
+                      size: MediaQuery.of(context).size.width,
+                    )),
+              ),
             ),
           ),
         ),

@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos.dart';
 
-const strokeWidth = 25.0;
-const baseHeight = 15.0;
+const double strokeWidth = 25;
+const double baseHeight = 15;
 
 ///
 /// Waves animation
 ///
 class WavesWidget extends StatefulWidget {
-  WavesWidget({
+  const WavesWidget({
+    @required this.child,
     Key key,
     this.width,
     this.height,
     this.color,
     this.refreshTime = 20,
-    @required this.child,
-  })  : assert(child != null, "The child argument is null."),
+  })  : assert(child != null, 'The child argument is null.'),
         super(key: key);
 
   final double width;
@@ -33,7 +33,7 @@ class WavesWidget extends StatefulWidget {
 
   @override
   _WavesWidgetState createState() {
-    return new _WavesWidgetState();
+    return _WavesWidgetState();
   }
 }
 
@@ -60,27 +60,26 @@ class _WavesWidgetState extends State<WavesWidget> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) =>
-          ValueBuilder<int>(
-              stream: frame.animation,
-              builder: (context, snapshot) {
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.center,
-                      height: widget.height,
-                      child: widget.child,
-                    ),
-                    CustomPaint(
-                      painter: _WavesPainter(
-                          frame: snapshot.data, color: widget.color),
-                      child: Container(
-                        height: widget.height,
-                      ),
-                    ),
-                  ],
-                );
-              }),
+      builder: (context, constraints) => ValueBuilder<int>(
+          stream: frame.animation,
+          builder: (context, snapshot) {
+            return Stack(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  height: widget.height,
+                  child: widget.child,
+                ),
+                CustomPaint(
+                  painter:
+                      _WavesPainter(frame: snapshot.data, color: widget.color),
+                  child: Container(
+                    height: widget.height,
+                  ),
+                ),
+              ],
+            );
+          }),
     );
   }
 }
@@ -100,17 +99,17 @@ class _WavesPainter extends CustomPainter {
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    var height = size.height - paint.strokeWidth / 2;
-    var width = size.width;
+    final height = size.height - paint.strokeWidth / 2;
+    final width = size.width;
 
-    var path = Path();
-    path.moveTo(0.0, height + baseHeight);
-    path.lineTo(width, height + baseHeight);
-    path.moveTo(0.0, height + baseHeight);
+    final path = Path()
+      ..moveTo(0, height + baseHeight)
+      ..lineTo(width, height + baseHeight)
+      ..moveTo(0, height + baseHeight);
 
     for (int i = 0; i < size.width.toInt(); i += 6) {
-      var x = i * 1.0;
-      var sin = math.sin((frame + i) * math.pi / 180.0);
+      final x = i * 1.0;
+      final sin = math.sin((frame + i) * math.pi / 180.0);
       path.lineTo(x, height - sin * 5.0);
     }
 
@@ -123,14 +122,15 @@ class _WavesPainter extends CustomPainter {
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    path.reset();
-    path.moveTo(0.0, height + baseHeight);
-    path.lineTo(width, height + baseHeight);
-    path.moveTo(0.0, height + baseHeight);
+    path
+      ..reset()
+      ..moveTo(0, height + baseHeight)
+      ..lineTo(width, height + baseHeight)
+      ..moveTo(0, height + baseHeight);
 
     for (int i = 0; i < size.width.toInt(); i += 3) {
-      var x = i * 1.0;
-      var sin = math.sin((frame + i + 90.0) * math.pi / 180.0);
+      final x = i * 1.0;
+      final sin = math.sin((frame + i + 90.0) * math.pi / 180.0);
       path.lineTo(x, height - sin * 8.0);
     }
 
@@ -143,14 +143,15 @@ class _WavesPainter extends CustomPainter {
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    path.reset();
-    path.moveTo(0.0, height + baseHeight);
-    path.lineTo(width, height + baseHeight);
-    path.moveTo(0.0, height + baseHeight);
+    path
+      ..reset()
+      ..moveTo(0, height + baseHeight)
+      ..lineTo(width, height + baseHeight)
+      ..moveTo(0, height + baseHeight);
 
     for (int i = 0; i < size.width.toInt(); i += 3) {
-      var x = i * 1.0;
-      var sin = math.sin((frame + i + 180.0) * math.pi / 180.0);
+      final x = i * 1.0;
+      final sin = math.sin((frame + i + 180.0) * math.pi / 180.0);
       path.lineTo(x, height - sin * 6.0);
     }
 
@@ -163,14 +164,15 @@ class _WavesPainter extends CustomPainter {
       ..blendMode = BlendMode.softLight
       ..style = PaintingStyle.stroke;
 
-    path.reset();
-    path.moveTo(0.0, height + baseHeight);
-    path.lineTo(width, height + baseHeight);
-    path.moveTo(0.0, height + baseHeight);
+    path
+      ..reset()
+      ..moveTo(0, height + baseHeight)
+      ..lineTo(width, height + baseHeight)
+      ..moveTo(0, height + baseHeight);
 
     for (int i = 0; i < size.width.toInt(); i += 3) {
-      var x = i * 1.0;
-      var sin = math.sin((frame + i + 135.0) * math.pi / 180.0);
+      final x = i * 1.0;
+      final sin = math.sin((frame + i + 135.0) * math.pi / 180.0);
       path.lineTo(x, height - sin * 8.0);
     }
 

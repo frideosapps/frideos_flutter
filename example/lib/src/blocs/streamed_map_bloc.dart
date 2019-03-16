@@ -15,9 +15,9 @@ class StreamedMapBloc extends BlocBase with Validators {
     streamedKey.setTransformer(validateKey);
 
     // Activate the debug console messages on disposing
-    streamedKey.debugMode();
-    streamedKey.debugMode();
     streamedMap.debugMode();
+    streamedText.debugMode();
+    streamedKey.debugMode();
   }
 
   final streamedMap = StreamedMap<int, String>(initialData: Map());
@@ -28,9 +28,9 @@ class StreamedMapBloc extends BlocBase with Validators {
       streamedText.outTransformed, streamedKey.outTransformed, (a, b) => true);
 
   // Add to the streamed map the key/value pair put by the user
-  addText() {
-    var key = int.parse(streamedKey.value);
-    var value = streamedText.value;
+  void addText() {
+    final key = int.parse(streamedKey.value);
+    final value = streamedText.value;
 
     streamedMap.addKey(key, value);
 
@@ -39,7 +39,8 @@ class StreamedMapBloc extends BlocBase with Validators {
     //streamedMap.refresh();
   }
 
-  dispose() {
+  @override
+  void dispose() {
     print('-------StreamedMap BLOC DISPOSE--------');
     streamedMap.dispose();
     streamedText.dispose();
@@ -59,7 +60,7 @@ class Validators {
 
   final validateKey =
       StreamTransformer<String, int>.fromHandlers(handleData: (key, sink) {
-    var k = int.tryParse(key);
+    final k = int.tryParse(key);
     if (k != null) {
       sink.add(k);
     } else {

@@ -25,7 +25,7 @@ class StreamedListBloc extends BlocBase {
   });
 
   // Add to the streamed list the string from the textfield
-  addText() {
+  void addText() {
     streamedList.addElement(streamedText.value);
 
     // Or, as an alternative:
@@ -33,7 +33,7 @@ class StreamedListBloc extends BlocBase {
     // streamedList.refresh(); // To refresh the stream with the new value
   }
 
-  dispose() {
+  void dispose() {
     print('-------StreamedList BLOC DISPOSE--------');
     streamedText.dispose();
     streamedList.dispose();

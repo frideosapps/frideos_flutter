@@ -5,7 +5,7 @@ import 'package:frideos/frideos_flutter.dart';
 import '../blocs/streamed_values_bloc.dart';
 
 class HistoryPage extends StatelessWidget {
-  HistoryPage(this.bloc);
+  const HistoryPage(this.bloc);
 
   final StreamedValuesBloc bloc;
 
@@ -13,7 +13,7 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History page'),
+        title: const Text('History page'),
       ),
       body: Container(
         child: ValueBuilder<List<int>>(
@@ -30,7 +30,7 @@ class HistoryPage extends StatelessWidget {
                   dense: true,
                 );
               }),
-          noDataChild: Text('NO DATA'),
+          noDataChild: const Text('NO DATA'),
         ),
       ),
     );

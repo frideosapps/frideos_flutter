@@ -12,13 +12,13 @@ import '../../frideos_dart/models/stage.dart';
 ///
 ///
 class FadeOutWidget extends StatefulWidget {
-  FadeOutWidget(
-      {Key key,
-      @required this.child,
+  const FadeOutWidget(
+      {@required this.child,
       @required this.duration,
+      Key key,
       this.curve = Curves.linear})
-      : assert(child != null, "The child argument is null."),
-        assert(duration != null, "The duration argument is null."),
+      : assert(child != null, 'The child argument is null.'),
+        assert(duration != null, 'The duration argument is null.'),
         super(key: key);
 
   final Widget child;
@@ -27,7 +27,7 @@ class FadeOutWidget extends StatefulWidget {
 
   @override
   _FadeOutWidgetState createState() {
-    return new _FadeOutWidgetState();
+    return _FadeOutWidgetState();
   }
 }
 
@@ -42,11 +42,10 @@ class _FadeOutWidgetState extends State<FadeOutWidget>
 
     controller = AnimationController(
         duration: Duration(milliseconds: widget.duration), vsync: this);
-    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve);
-
-    animationCurve.addListener(() {
-      setState(() {});
-    });
+    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve)
+      ..addListener(() {
+        setState(() {});
+      });
 
     controller.forward();
   }
@@ -77,13 +76,13 @@ class _FadeOutWidgetState extends State<FadeOutWidget>
 ///
 ///
 class FadeInWidget extends StatefulWidget {
-  FadeInWidget(
-      {Key key,
-      @required this.child,
+  const FadeInWidget(
+      {@required this.child,
       @required this.duration,
+      Key key,
       this.curve = Curves.linear})
-      : assert(child != null, "The child argument is null."),
-        assert(duration != null, "The duration argument is null."),
+      : assert(child != null, 'The child argument is null.'),
+        assert(duration != null, 'The duration argument is null.'),
         super(key: key);
 
   final Widget child;
@@ -92,7 +91,7 @@ class FadeInWidget extends StatefulWidget {
 
   @override
   _FadeInWidgetState createState() {
-    return new _FadeInWidgetState();
+    return _FadeInWidgetState();
   }
 }
 
@@ -107,11 +106,10 @@ class _FadeInWidgetState extends State<FadeInWidget>
 
     controller = AnimationController(
         duration: Duration(milliseconds: widget.duration), vsync: this);
-    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve);
-
-    animationCurve.addListener(() {
-      setState(() {});
-    });
+    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve)
+      ..addListener(() {
+        setState(() {});
+      });
 
     controller.forward();
   }
@@ -140,27 +138,29 @@ class _FadeInWidgetState extends State<FadeInWidget>
 /// Class used in the cross fading between two stages
 ///
 class StageBridge {
+  StageBridge(this.currentStage, this.old, this.next);
+
   int currentStage;
   Stage old;
   Stage next;
-  StageBridge(this.currentStage, this.old, this.next);
 }
 
 ///
 ///
-/// Linear cross fading transition between two widgets, it can be used with the [StagedObject].
+/// Linear cross fading transition between two widgets, it can be used
+/// with the `StagedObject`.
 ///
 ///
 class LinearTransition extends StatefulWidget {
-  LinearTransition(
-      {Key key,
-      @required this.firstWidget,
-      @required this.secondWidget,
-      @required this.transitionDuration})
-      : assert(firstWidget != null, "The firstWidget argument is null."),
-        assert(secondWidget != null, "The secondWidget argument is null."),
+  const LinearTransition({
+    @required this.firstWidget,
+    @required this.secondWidget,
+    @required this.transitionDuration,
+    Key key,
+  })  : assert(firstWidget != null, 'The firstWidget argument is null.'),
+        assert(secondWidget != null, 'The secondWidget argument is null.'),
         assert(transitionDuration != null,
-            "The transitionDuration argument is null."),
+            'The transitionDuration argument is null.'),
         super(key: key);
 
   final Widget firstWidget;
@@ -169,17 +169,17 @@ class LinearTransition extends StatefulWidget {
 
   @override
   _LinearTransitionState createState() {
-    return new _LinearTransitionState();
+    return _LinearTransitionState();
   }
 }
 
 class _LinearTransitionState extends State<LinearTransition> {
-  final opacity = StreamedValue<double>();
+  final StreamedValue<double> opacity = StreamedValue<double>();
   Timer timer;
   int interval;
   double opacityVel;
 
-  _updateOpacity(Timer t) {
+  void _updateOpacity(Timer t) {
     var newOpacity = opacity.value + opacityVel;
     if (newOpacity > 1.0) {
       newOpacity = 1.0;
@@ -225,7 +225,7 @@ class _LinearTransitionState extends State<LinearTransition> {
             ],
           );
         },
-        noDataChild: Text('NO DATA'),
+        noDataChild: const Text('NO DATA'),
       ),
     );
   }
@@ -233,21 +233,21 @@ class _LinearTransitionState extends State<LinearTransition> {
 
 ///
 ///
-/// Cross fading transition between two widgets. This uses the Flutter way to make an
-/// animation.
+/// Cross fading transition between two widgets. This uses the Flutter
+/// way to make an animation.
 ///
 ///
 class CurvedTransition extends StatefulWidget {
-  CurvedTransition(
-      {Key key,
-      @required this.firstWidget,
+  const CurvedTransition(
+      {@required this.firstWidget,
       @required this.secondWidget,
       @required this.transitionDuration,
+      Key key,
       this.curve})
-      : assert(firstWidget != null, "The firstWidget argument is null."),
-        assert(secondWidget != null, "The secondWidget argument is null."),
+      : assert(firstWidget != null, 'The firstWidget argument is null.'),
+        assert(secondWidget != null, 'The secondWidget argument is null.'),
         assert(transitionDuration != null,
-            "The transitionDuration argument is null."),
+            'The transitionDuration argument is null.'),
         super(key: key);
 
   final Widget firstWidget;
@@ -257,7 +257,7 @@ class CurvedTransition extends StatefulWidget {
 
   @override
   _CurvedTransitionState createState() {
-    return new _CurvedTransitionState();
+    return _CurvedTransitionState();
   }
 }
 
@@ -273,11 +273,10 @@ class _CurvedTransitionState extends State<CurvedTransition>
     controller = AnimationController(
         duration: Duration(milliseconds: widget.transitionDuration),
         vsync: this);
-    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve);
-
-    animationCurve.addListener(() {
-      setState(() {});
-    });
+    animationCurve = CurvedAnimation(parent: controller, curve: widget.curve)
+      ..addListener(() {
+        setState(() {});
+      });
 
     controller.forward();
   }

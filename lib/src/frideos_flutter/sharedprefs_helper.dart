@@ -13,26 +13,26 @@ class Prefs {
   /// ```dart
   ///   Prefs.savePref<int>('Key', 1);
   /// ```
-  static savePref<T>(String key, T value) async {
+  static Future<void> savePref<T>(String key, T value) async {
     assert(T == bool || T == int || T == double || T == String);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
 
     switch (T) {
       case bool:
-        prefs.setBool(key, value as bool);
+        await prefs.setBool(key, value as bool);
         break;
       case int:
-        prefs.setInt(key, value as int);
+        await prefs.setInt(key, value as int);
         break;
       case double:
-        prefs.setDouble(key, value as double);
+        await prefs.setDouble(key, value as double);
         break;
       case String:
-        prefs.setString(key, value as String);
+        await prefs.setString(key, value as String);
         break;
       case List:
-        prefs.setStringList(key, value as List<String>);
+        await prefs.setStringList(key, value as List<String>);
         break;
     }
   }
@@ -44,9 +44,9 @@ class Prefs {
   /// ```dart
   ///   Prefs.saveStringList('Key', ['test1', ['test2']);
   /// ```
-  static saveStringList(String key, List<String> list) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList(key, list);
+  static Future<void> saveStringList(String key, List<String> list) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(key, list);
   }
 
   /// To get the data associated with a key.
@@ -57,10 +57,9 @@ class Prefs {
   ///   String str = await Prefs.getPref('Key');
   /// ```
   ///
-  static dynamic getPref(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var pref = prefs.get(key);
-    return pref;
+  static Future<dynamic> getPref(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.get(key);
   }
 
   /// To get all the keys saved.
@@ -71,9 +70,8 @@ class Prefs {
   ///   var keys = await Prefs.getKeys('Key');
   /// ```
   static Future<Set<String>> getKeys() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var keys = prefs.getKeys();
-    return keys;
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getKeys();
   }
 
   /// To remove a key/value pair.
@@ -84,7 +82,7 @@ class Prefs {
   ///   Prefs.remove('Key');
   /// ```
   static Future<bool> remove(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);
   }
 }

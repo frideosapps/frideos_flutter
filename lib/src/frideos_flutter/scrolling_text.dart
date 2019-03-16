@@ -12,14 +12,14 @@ import 'extended_asyncwidgets.dart';
 /// over a given time.
 ///
 class ScrollingText extends StatefulWidget {
-  ScrollingText(
-      {Key key,
-      @required this.text,
+  const ScrollingText(
+      {@required this.text,
       @required this.scrollingDuration,
+      Key key,
       this.style})
-      : assert(text != null, "The text argument is null."),
+      : assert(text != null, 'The text argument is null.'),
         assert(
-            scrollingDuration != null, "The scrollDuration argument is null."),
+            scrollingDuration != null, 'The scrollDuration argument is null.'),
         super(key: key);
 
   final String text;
@@ -28,15 +28,15 @@ class ScrollingText extends StatefulWidget {
 
   @override
   _ScrollingTextState createState() {
-    return new _ScrollingTextState();
+    return _ScrollingTextState();
   }
 }
 
 class _ScrollingTextState extends State<ScrollingText> {
-  final textStream = StreamedValue<String>();
+  final StreamedValue<String> textStream = StreamedValue<String>();
   Timer timer;
 
-  showText(String str) {
+  void showText(String str) {
     if (timer != null) {
       if (timer.isActive) {
       } else {
@@ -47,7 +47,7 @@ class _ScrollingTextState extends State<ScrollingText> {
     }
   }
 
-  startShowingText(String str) {
+  void startShowingText(String str) {
     timer = Utils.sendText(str, textStream, null, widget.scrollingDuration);
   }
 
@@ -68,14 +68,14 @@ class _ScrollingTextState extends State<ScrollingText> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       child: StreamedWidget<String>(
         initialData: '',
         stream: textStream.outStream,
         builder: (context, snapshot) {
           return Text(snapshot.data, style: widget.style);
         },
-        noDataChild: Text('NO DATA'),
+        noDataChild: const Text('NO DATA'),
       ),
     );
   }

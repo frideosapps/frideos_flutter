@@ -71,6 +71,7 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
   Function(Map<K, V>) get inStream => stream.inStream;
 
   /// Stream getter
+  @override
   Stream<Map<K, V>> get outStream => stream.outStream;
 
   /// The initial event of the stream
@@ -82,6 +83,7 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
   /// timesUpdate shows how many times the got updated
   int timesUpdated = 0;
 
+  @override
   Map<K, V> get value => stream.value;
 
   int get length => stream.value.length;
@@ -117,7 +119,7 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
 
   /// Used to remove a key from the map and update the stream.
   V removeKey(K key) {
-    V removed = value.remove(key);
+    final removed = value.remove(key);
     refresh();
     return removed;
   }

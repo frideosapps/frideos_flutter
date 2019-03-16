@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 import '../extended_asyncwidgets.dart';
 import '../../frideos_dart/animated_object.dart';
 
-const initialBlurVel = 0.1;
-const blurRefreshTime = 20;
+const double initialBlurVel = 0.1;
+const int blurRefreshTime = 20;
 
 ///
 /// Fixed Blur
 ///
 class BlurWidget extends StatelessWidget {
-  BlurWidget(
-      {Key key,
-      @required this.child,
-      @required this.sigmaX,
-      @required this.sigmaY})
-      : assert(child != null, "The child argument is null."),
-        assert(sigmaX != null, "The sigmaX argument is null."),
-        assert(sigmaY != null, "The sigmaY argument is null."),
+  const BlurWidget({
+    @required this.child,
+    @required this.sigmaX,
+    @required this.sigmaY,
+    Key key,
+  })  : assert(child != null, 'The child argument is null.'),
+        assert(sigmaX != null, 'The sigmaX argument is null.'),
+        assert(sigmaY != null, 'The sigmaY argument is null.'),
         super(key: key);
 
   ///
@@ -40,7 +40,7 @@ class BlurWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => Stack(
+      builder: (context, constraints) => Stack(
             children: <Widget>[
               Container(
                   height: constraints.maxHeight,
@@ -63,9 +63,9 @@ class BlurWidget extends StatelessWidget {
 /// Animated blur
 ///
 class AnimatedBlurWidget extends StatefulWidget {
-  AnimatedBlurWidget(
-      {Key key,
-      @required this.child,
+  const AnimatedBlurWidget(
+      {@required this.child,
+      Key key,
       this.initialSigmaX = 0.0,
       this.initialSigmaY = 0.0,
       this.finalSigmaX = 4.0,
@@ -74,7 +74,7 @@ class AnimatedBlurWidget extends StatefulWidget {
       this.reverseAnimation = true,
       this.loop = true,
       this.refreshTime = blurRefreshTime})
-      : assert(child != null, "The child argument is null."),
+      : assert(child != null, 'The child argument is null.'),
         super(key: key);
 
   ///
@@ -125,7 +125,7 @@ class AnimatedBlurWidget extends StatefulWidget {
 
   @override
   _AnimatedBlurWidgetState createState() {
-    return new _AnimatedBlurWidgetState();
+    return _AnimatedBlurWidgetState();
   }
 }
 
@@ -209,27 +209,26 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) =>
-          ValueBuilder<double>(
-              stream: blur.animation,
-              builder: (context, snapshot) {
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                        height: constraints.maxHeight,
-                        width: constraints.maxWidth,
-                        child: widget.child),
-                    BackdropFilter(
-                        filter: ui.ImageFilter.blur(
-                            sigmaX: snapshot.data, sigmaY: blurSigmaY),
-                        child: Container(
-                          height: constraints.maxHeight,
-                          width: constraints.maxWidth,
-                          color: Colors.transparent,
-                        )),
-                  ],
-                );
-              }),
+      builder: (context, constraints) => ValueBuilder<double>(
+          stream: blur.animation,
+          builder: (context, snapshot) {
+            return Stack(
+              children: <Widget>[
+                Container(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    child: widget.child),
+                BackdropFilter(
+                    filter: ui.ImageFilter.blur(
+                        sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                    child: Container(
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth,
+                      color: Colors.transparent,
+                    )),
+              ],
+            );
+          }),
     );
   }
 }
@@ -238,14 +237,14 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
 /// Blur in
 ///
 class BlurInWidget extends StatefulWidget {
-  BlurInWidget(
-      {Key key,
-      @required this.child,
+  const BlurInWidget(
+      {@required this.child,
+      Key key,
       this.initialSigmaX = 4.0,
       this.initialSigmaY = 6.0,
       this.duration = 5000,
       this.refreshTime = blurRefreshTime})
-      : assert(child != null, "The child argument is null."),
+      : assert(child != null, 'The child argument is null.'),
         super(key: key);
 
   ///
@@ -275,7 +274,7 @@ class BlurInWidget extends StatefulWidget {
 
   @override
   _BlurInWidgetState createState() {
-    return new _BlurInWidgetState();
+    return _BlurInWidgetState();
   }
 }
 
@@ -294,7 +293,7 @@ class _BlurInWidgetState extends State<BlurInWidget> {
     // Calculate the step of the blur
     //
     var blurVelX = widget.initialSigmaX / (widget.duration / blurRefreshTime);
-    var blurVelY = widget.initialSigmaY / (widget.duration / blurRefreshTime);
+    final blurVelY = widget.initialSigmaY / (widget.duration / blurRefreshTime);
 
     blur.start((t) {
       blur.value -= blurVelX;
@@ -317,27 +316,26 @@ class _BlurInWidgetState extends State<BlurInWidget> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) =>
-          ValueBuilder<double>(
-              stream: blur.animation,
-              builder: (context, snapshot) {
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                        height: constraints.maxHeight,
-                        width: constraints.maxWidth,
-                        child: widget.child),
-                    BackdropFilter(
-                        filter: ui.ImageFilter.blur(
-                            sigmaX: snapshot.data, sigmaY: blurSigmaY),
-                        child: Container(
-                          height: constraints.maxHeight,
-                          width: constraints.maxWidth,
-                          color: Colors.transparent,
-                        )),
-                  ],
-                );
-              }),
+      builder: (context, constraints) => ValueBuilder<double>(
+          stream: blur.animation,
+          builder: (context, snapshot) {
+            return Stack(
+              children: <Widget>[
+                Container(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    child: widget.child),
+                BackdropFilter(
+                    filter: ui.ImageFilter.blur(
+                        sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                    child: Container(
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth,
+                      color: Colors.transparent,
+                    )),
+              ],
+            );
+          }),
     );
   }
 }
@@ -346,14 +344,14 @@ class _BlurInWidgetState extends State<BlurInWidget> {
 /// Blur out
 ///
 class BlurOutWidget extends StatefulWidget {
-  BlurOutWidget(
-      {Key key,
-      @required this.child,
+  const BlurOutWidget(
+      {@required this.child,
+      Key key,
       this.finalSigmaX = 4.0,
       this.finalSigmaY = 6.0,
       this.duration = 5000,
       this.refreshTime = blurRefreshTime})
-      : assert(child != null, "The child argument is null."),
+      : assert(child != null, 'The child argument is null.'),
         super(key: key);
 
   ///
@@ -383,25 +381,24 @@ class BlurOutWidget extends StatefulWidget {
 
   @override
   _BlurOutWidgetState createState() {
-    return new _BlurOutWidgetState();
+    return _BlurOutWidgetState();
   }
 }
 
 class _BlurOutWidgetState extends State<BlurOutWidget> {
   AnimatedObject<double> blur;
-  double blurSigmaY = 0.0;
+  double blurSigmaY = 0;
 
   @override
   void initState() {
     super.initState();
 
-    blur = AnimatedObject(initialValue: 0.0, interval: blurRefreshTime);
-    //blur.animation.value = 0.0;
+    blur = AnimatedObject(initialValue: 0, interval: blurRefreshTime);
 
     // Calculate the step of the blur
     //
     var blurVelX = widget.finalSigmaX / (widget.duration / blurRefreshTime);
-    var blurVelY = widget.finalSigmaY / (widget.duration / blurRefreshTime);
+    final blurVelY = widget.finalSigmaY / (widget.duration / blurRefreshTime);
 
     blur.start((t) {
       blur.value += blurVelX;
@@ -424,27 +421,26 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) =>
-          ValueBuilder<double>(
-              stream: blur.animation,
-              builder: (context, snapshot) {
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                        height: constraints.maxHeight,
-                        width: constraints.maxWidth,
-                        child: widget.child),
-                    BackdropFilter(
-                        filter: ui.ImageFilter.blur(
-                            sigmaX: snapshot.data, sigmaY: blurSigmaY),
-                        child: Container(
-                          height: constraints.maxHeight,
-                          width: constraints.maxWidth,
-                          color: Colors.transparent,
-                        )),
-                  ],
-                );
-              }),
+      builder: (context, constraints) => ValueBuilder<double>(
+          stream: blur.animation,
+          builder: (context, snapshot) {
+            return Stack(
+              children: <Widget>[
+                Container(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    child: widget.child),
+                BackdropFilter(
+                    filter: ui.ImageFilter.blur(
+                        sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                    child: Container(
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth,
+                      color: Colors.transparent,
+                    )),
+              ],
+            );
+          }),
     );
   }
 }

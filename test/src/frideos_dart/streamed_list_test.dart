@@ -11,11 +11,12 @@ void main() {
       streamedList.value = List<int>();
 
       Timer.run(() {
-        streamedList.addElement(1);
-        streamedList.addElement(2);
-        streamedList.addElement(3);
-        streamedList.addElement(4);
-        streamedList.addElement(5);
+        streamedList
+          ..addElement(1)
+          ..addElement(2)
+          ..addElement(3)
+          ..addElement(4)
+          ..addElement(5);
       });
 
       expect(
@@ -28,11 +29,12 @@ void main() {
       final streamedList = StreamedList<int>(initialData: [33, 66, 99]);
 
       Timer.run(() {
-        streamedList.addElement(1);
-        streamedList.addElement(2);
-        streamedList.addElement(3);
-        streamedList.addElement(4);
-        streamedList.addElement(5);
+        streamedList
+          ..addElement(1)
+          ..addElement(2)
+          ..addElement(3)
+          ..addElement(4)
+          ..addElement(5);
       });
 
       expect(
@@ -66,12 +68,14 @@ void main() {
       expect(streamedList.value.remove(99), true);
       expect(streamedList.value.remove(99), false);
 
-      streamedList.addElement(99);
-      streamedList.removeAt(0);
+      streamedList
+        ..addElement(99)
+        ..removeAt(0);
       expect(streamedList.value.length, 0);
 
-      streamedList.addElement(99);
-      streamedList.clear();
+      streamedList
+        ..addElement(99)
+        ..clear();
       expect(streamedList.length, 0);
       expect(streamedList.value.length, 0);
     });

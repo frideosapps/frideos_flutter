@@ -7,34 +7,35 @@ class BlurPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Blur'),
+        title: const Text('Blur'),
       ),
       body: Container(
         color: Colors.blue[800],
         child: Column(
           children: <Widget>[
             Container(
-              height: 12.0,
+              height: 12,
             ),
             Expanded(
               child: LinearTransition(
                 transitionDuration: 1000,
                 firstWidget: Container(),
                 secondWidget: BlurWidget(
-                  sigmaX: 2.0,
-                  sigmaY: 3.0,
+                  sigmaX: 2,
+                  sigmaY: 3,
                   child: Container(
                     color: Colors.blue[800],
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Text('Fixed blur', style: TextStyle(fontSize: 34.0)),
-                        FlutterLogo(
-                          size: 64.0,
+                        const Text('Fixed blur',
+                            style: TextStyle(fontSize: 34)),
+                        const FlutterLogo(
+                          size: 64,
                         ),
                         Container(
-                          height: 12.0,
+                          height: 12,
                         )
                       ],
                     ),
@@ -47,20 +48,21 @@ class BlurPage extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: BlurInWidget(
-                      initialSigmaX: 2.0,
-                      initialSigmaY: 22.0,
+                      initialSigmaX: 2,
+                      initialSigmaY: 22,
                       child: Container(
                         color: Colors.blue[800],
                         alignment: Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Text('Blur in', style: TextStyle(fontSize: 34.0)),
-                            FlutterLogo(
-                              size: 64.0,
+                            const Text('Blur in',
+                                style: TextStyle(fontSize: 34)),
+                            const FlutterLogo(
+                              size: 64,
                             ),
                             Container(
-                              height: 22.0,
+                              height: 22,
                             )
                           ],
                         ),
@@ -69,20 +71,21 @@ class BlurPage extends StatelessWidget {
                   ),
                   Expanded(
                     child: BlurOutWidget(
-                      finalSigmaX: 2.0,
-                      finalSigmaY: 12.0,
+                      finalSigmaX: 2,
+                      finalSigmaY: 12,
                       child: Container(
                         color: Colors.blue[800],
                         alignment: Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Text('Blur out', style: TextStyle(fontSize: 34.0)),
-                            FlutterLogo(
-                              size: 64.0,
+                            const Text('Blur out',
+                                style: TextStyle(fontSize: 34)),
+                            const FlutterLogo(
+                              size: 64,
                             ),
                             Container(
-                              height: 22.0,
+                              height: 22,
                             )
                           ],
                         ),
@@ -98,7 +101,7 @@ class BlurPage extends StatelessWidget {
                 firstWidget: Container(),
                 secondWidget: Container(
                   child: AnimatedBlurWidget(
-                    finalSigmaY: 12.0,
+                    finalSigmaY: 12,
                     child: Container(
                       alignment: Alignment.center,
                       child: WavesWidget(
@@ -110,13 +113,13 @@ class BlurPage extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Text('Animated blur',
-                                  style: TextStyle(fontSize: 34.0)),
-                              FlutterLogo(
-                                size: 64.0,
+                              const Text('Animated blur',
+                                  style: TextStyle(fontSize: 34)),
+                              const FlutterLogo(
+                                size: 64,
                               ),
                               Container(
-                                height: 22.0,
+                                height: 22,
                               )
                             ],
                           ),

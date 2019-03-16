@@ -10,7 +10,7 @@ import '../../frideos_dart.dart';
 /// To modify the list (e.g. adding items) and update the stream automatically
 /// use these methods:
 ///
-/// - [AddAll]
+/// - [addAll]
 /// - [addElement]
 /// - [clear]
 /// - [removeAt]
@@ -73,6 +73,7 @@ class StreamedList<T> implements StreamedObject<List<T>> {
   Function(List<T>) get inStream => stream.inStream;
 
   /// Stream getter
+  @override
   Stream<List<T>> get outStream => stream.outStream;
 
   /// The initial event of the stream
@@ -84,12 +85,13 @@ class StreamedList<T> implements StreamedObject<List<T>> {
   /// timesUpdated shows how many times the stream got updated
   int timesUpdated = 0;
 
+  @override
   List<T> get value => stream.value;
 
   int get length => stream.value.length;
 
   /// This function will be called every time the stream updates.
-  void Function(List<T> data) _onChange = (list) {};
+  void Function(List<T> data) _onChange = (data) {};
 
   /// Set the new value and update the stream
   set value(List<T> list) {
@@ -124,15 +126,15 @@ class StreamedList<T> implements StreamedObject<List<T>> {
   }
 
   /// Used to remove an item from the list and update the stream.
-  bool removeElement(element) {
-    var result = value.remove(element);
+  bool removeElement(T element) {
+    final result = value.remove(element);
     refresh();
     return result;
   }
 
   /// Used to remove an item from the list and update the stream.
   T removeAt(int index) {
-    T removed = value.removeAt(index);
+    final removed = value.removeAt(index);
     refresh();
     return removed;
   }
@@ -145,7 +147,7 @@ class StreamedList<T> implements StreamedObject<List<T>> {
 
   /// To replace an element
   void replace(T oldElement, T newElement) {
-    var index = stream.value.indexOf(oldElement);
+    final index = stream.value.indexOf(oldElement);
     replaceAt(index, newElement);
   }
 

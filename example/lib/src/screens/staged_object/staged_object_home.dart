@@ -12,12 +12,12 @@ import 'staged_object_page_two.dart';
 class StagedHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    StagedObjectBloc bloc = BlocProvider.of(context);
+    final StagedObjectBloc bloc = BlocProvider.of(context);
 
-    var width = MediaQuery.of(context).size.width * 0.7;
-    var height = MediaQuery.of(context).size.height * 0.6;
+    final width = MediaQuery.of(context).size.width * 0.7;
+    final height = MediaQuery.of(context).size.height * 0.6;
 
-    _background(MaterialColor color) {
+    Widget _background(MaterialColor color) {
       return Container(
         height: height,
         width: width,
@@ -36,28 +36,28 @@ class StagedHomePage extends StatelessWidget {
       );
     }
 
-    var backgrounds = [
+    final backgrounds = [
       _background(Colors.blue),
       _background(Colors.pink),
       _background(Colors.blueGrey),
       _background(Colors.orange),
     ];
 
-    var stagesMap = <int, Stage>{
+    final stagesMap = <int, Stage>{
       0: Stage(
           widget: Container(
             width: width,
             height: height,
             color: Colors.blue[100],
             alignment: Alignment.center,
-            key: Key('0'),
+            key: const Key('0'),
             child: ScrollingText(
                 text:
                     'This stage will last 7 seconds. By the onShow call back it is possibile to assign an action when the widget shows.',
                 scrollingDuration: 3000,
                 style: TextStyle(
                     color: Colors.blueGrey[900],
-                    fontSize: 18.0,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500)),
           ),
           time: 7000,
@@ -68,13 +68,13 @@ class StagedHomePage extends StatelessWidget {
             height: height,
             color: Colors.orange[200],
             alignment: Alignment.center,
-            key: Key('1'),
+            key: const Key('1'),
             child: ScrollingText(
               text: 'The next widgets will cross fade.',
               scrollingDuration: 2000,
               style: TextStyle(
                   color: Colors.blueGrey[900],
-                  fontSize: 18.0,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -82,7 +82,7 @@ class StagedHomePage extends StatelessWidget {
           onShow: () {}),
       2: Stage(
           widget: Container(
-              key: Key('2'),
+              key: const Key('2'),
               child: LinearTransition(
                 firstWidget: backgrounds[0],
                 secondWidget: backgrounds[1],
@@ -92,7 +92,7 @@ class StagedHomePage extends StatelessWidget {
           onShow: () {}),
       3: Stage(
           widget: Container(
-              key: Key('3'),
+              key: const Key('3'),
               child: CurvedTransition(
                 firstWidget: backgrounds[2],
                 secondWidget: backgrounds[3],
@@ -103,7 +103,7 @@ class StagedHomePage extends StatelessWidget {
           onShow: () {}),
       4: Stage(
           widget: Container(
-              key: Key('4'),
+              key: const Key('4'),
               child: LinearTransition(
                 firstWidget: backgrounds[1],
                 secondWidget: backgrounds[2],
@@ -113,7 +113,7 @@ class StagedHomePage extends StatelessWidget {
           onShow: () {}),
       5: Stage(
           widget: Container(
-              key: Key('5'),
+              key: const Key('5'),
               child: CurvedTransition(
                 firstWidget: backgrounds[3],
                 secondWidget: backgrounds[0],
@@ -127,21 +127,21 @@ class StagedHomePage extends StatelessWidget {
             width: width,
             height: height,
             alignment: Alignment.center,
-            key: Key('6'),
+            key: const Key('6'),
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: Text(
                       'Choose the widget to stage in the page one and play the StagedObject in page two.',
                       style: TextStyle(
                           color: Colors.blueGrey[900],
-                          fontSize: 16.0,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500)),
                 ),
                 Expanded(
                   child: Transform.scale(
-                    scale: 1.0,
+                    scale: 1,
                     child: StagedPageOne(
                       bloc: bloc.blocA,
                     ),
@@ -159,11 +159,11 @@ class StagedHomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('StagedObject'),
+        title: const Text('StagedObject'),
       ),
       body: Container(
         color: Colors.blueGrey[50],
-        padding: EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12),
         child: Column(
           children: <Widget>[
             Row(
@@ -172,7 +172,7 @@ class StagedHomePage extends StatelessWidget {
                 Expanded(
                   child: RaisedButton(
                       color: Colors.lightBlueAccent,
-                      child: Text('Page one'),
+                      child: const Text('Page one'),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -184,11 +184,11 @@ class StagedHomePage extends StatelessWidget {
                         );
                       }),
                 ),
-                Container(width: 40.0),
+                Container(width: 40),
                 Expanded(
                   child: RaisedButton(
                       color: Colors.lightBlueAccent,
-                      child: Text('Page two'),
+                      child: const Text('Page two'),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -203,7 +203,7 @@ class StagedHomePage extends StatelessWidget {
               ],
             ),
             Container(
-              height: 16.0,
+              height: 16,
             ),
             ValueBuilder<StageStatus>(
                 stream: bloc.staged.getStatus,
@@ -216,20 +216,20 @@ class StagedHomePage extends StatelessWidget {
                             : Container(
                                 color: Colors.yellow,
                                 alignment: Alignment.center,
-                                height: 32.0,
-                                child: Text(
+                                height: 32,
+                                child: const Text(
                                     'Click on start to show the widgets staged animation.')),
                       ]);
                 }),
             Container(
-              height: 16.0,
+              height: 16,
             ),
             Expanded(
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent, width: 2.0),
-                  borderRadius: BorderRadius.circular(25.0),
+                  border: Border.all(color: Colors.blueAccent, width: 2),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 child: SizedBox(
                   width: width,
@@ -244,19 +244,19 @@ class StagedHomePage extends StatelessWidget {
               ),
             ),
             Container(
-              height: 16.0,
+              height: 16,
             ),
             Center(
                 child: ValueBuilder(
                     stream: bloc.text,
                     builder: (context, snapshot) => Text(snapshot.data))),
             SizedBox(
-              height: 80.0,
-              width: 80.0,
+              height: 80,
+              width: 80,
               child: FittedBox(
                 fit: BoxFit.contain,
                 child: Padding(
-                  padding: const EdgeInsets.all(28.0),
+                  padding: const EdgeInsets.all(28),
                   child: ValueBuilder(
                     stream: bloc.widget,
                     builder: (context, snapshot) => snapshot.data,
@@ -273,26 +273,22 @@ class StagedHomePage extends StatelessWidget {
                     snapshot.data == StageStatus.active
                         ? RaisedButton(
                             color: Colors.lightBlueAccent,
-                            child: Text('Reset'),
-                            onPressed: () {
-                              bloc.staged.resetStages();
-                            })
+                            child: const Text('Reset'),
+                            onPressed: bloc.staged.resetStages,
+                          )
                         : Container(),
                     snapshot.data == StageStatus.stop
                         ? RaisedButton(
                             color: Colors.lightBlueAccent,
-                            child: Text('Start'),
-                            onPressed: () {
-                              bloc.start();
-                            })
+                            child: const Text('Start'),
+                            onPressed: bloc.start)
                         : Container(),
                     snapshot.data == StageStatus.active
                         ? RaisedButton(
                             color: Colors.lightBlueAccent,
-                            child: Text('Stop'),
-                            onPressed: () {
-                              bloc.staged.stopStages();
-                            })
+                            child: const Text('Stop'),
+                            onPressed: bloc.staged.stopStages,
+                          )
                         : Container(),
                   ],
                 );

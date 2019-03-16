@@ -14,14 +14,15 @@ class SlidersBloc extends BlocBase {
   double initialAngle = 2.2;
   double initialScale = 1.8;
 
-  horizontalSlider(value) {
+  void horizontalSlider(value) {
     angle.value = value;
   }
 
-  verticalSlider(value) {
+  void verticalSlider(value) {
     scale.value = value;
   }
 
+  @override
   void dispose() {
     angle.dispose();
     scale.dispose();

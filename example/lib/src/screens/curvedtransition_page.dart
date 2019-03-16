@@ -5,7 +5,7 @@ import 'package:frideos/frideos.dart';
 class CurvedTransitionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _firstChild() {
+    Widget _firstChild() {
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -22,16 +22,16 @@ class CurvedTransitionPage extends StatelessWidget {
       );
     }
 
-    _secondChild() {
+    Widget _secondChild() {
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text('CurvedTransition', style: TextStyle(fontSize: 34.0)),
-            FlutterLogo(
-              size: 192.0,
+            const Text('CurvedTransition', style: TextStyle(fontSize: 34)),
+            const FlutterLogo(
+              size: 192,
             ),
             Container(
-              height: 12.0,
+              height: 12,
             )
           ]);
     }
@@ -39,7 +39,7 @@ class CurvedTransitionPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('CurvedTransition'),
+          title: const Text('CurvedTransition'),
         ),
         body: Container(
           alignment: Alignment.center,
