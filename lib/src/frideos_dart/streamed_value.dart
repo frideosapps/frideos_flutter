@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'streamed_list.dart';
 
-import '../frideos_dart/interfaces/streamed_object.dart';
+import 'interfaces/streamed_object.dart';
 
 /// It's the simplest class that implements the [StreamedObject] interface.
 ///
@@ -31,12 +31,8 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 /// counter.value += 1;
 /// ```
 ///
-///
 /// It can be used even with `StreamedWidget` and `StreamBuilder` by using its
-/// stream getter `outStream`. In this case, it is necessary to pass to the
-/// `initialData` parameter the current value of the [StreamedValue]
-/// (e.g. using the getter `value`).
-///
+/// stream getter `outStream`.
 ///
 /// N.B. when the type is not a basic type (e.g int, double, String etc.) and
 /// the value of a property of the object is changed, it is necessary to call
@@ -56,7 +52,7 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 ///
 /// // View
 /// ValueBuilder<int>(
-///     stream: bloc.count, // no need of the outStream getter with ValueBuilder
+///     streamed: bloc.count, // no need of the outStream getter with ValueBuilder
 ///     builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
 ///     noDataChild: Text('NO DATA'),
 /// ),
@@ -71,7 +67,6 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 /// // As an alternative:
 /// //
 /// // StreamedWidget<int>(
-/// //   initialData: bloc.count.value
 /// //   stream: bloc.count.outStream,
 /// //   builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
 /// //   noDataChild: Text('NO DATA'),
@@ -89,25 +84,28 @@ import '../frideos_dart/interfaces/streamed_object.dart';
 ///
 class StreamedValue<T> implements StreamedObject<T> {
   StreamedValue({this.initialData}) {
-    stream = StreamController<T>.broadcast();
+    stream = BehaviorSubject<T>();
 
     stream.stream.listen((e) {
       _lastValue = e;
-      _onChange(e);
+      if (_onChange != null) {
+        _onChange(e);
+      }
     });
 
     if (initialData != null) {
       _lastValue = initialData;
-      stream.add(_lastValue);
+      stream.sink.add(_lastValue);
     }
   }
 
-  /// The stream
-  StreamController<T> stream;
+  /// Stream of type [BehaviorSubject] in order to emit
+  /// the last event to every new listener.
+  BehaviorSubject<T> stream;
 
   /// Stream getter
   @override
-  Stream<T> get outStream => stream.stream;
+  Stream<T> get outStream => stream;
 
   /// Sink for the stream
   Function get inStream => stream.sink.add;
@@ -125,16 +123,16 @@ class StreamedValue<T> implements StreamedObject<T> {
   bool _debugMode = false;
 
   /// This function will be called every time the stream updates.
-  Function _onChange = (T data) {};
+  Function(T data) _onChange;
 
-  /// Value getter
+  /// Getter for the last value emitted by the stream
   @override
   T get value => _lastValue;
 
-  /// Value setter
+  /// To send to stream a new event
   set value(T value) {
     _lastValue = value;
-    stream.add(value);
+    stream.sink.add(value);
     timesUpdated++;
   }
 
@@ -146,7 +144,7 @@ class StreamedValue<T> implements StreamedObject<T> {
   /// Method to refresh the stream (e.g to use when the type it is not
   /// a basic type, and a property of an object has changed).
   void refresh() {
-    inStream(value);
+    stream.sink.add(value);
     timesUpdated++;
   }
 
@@ -326,7 +324,7 @@ class TimerObject extends StreamedValue<int> {
   ///
   void startTimer() {
     if (!isTimerActive) {
-      _timer = Timer.periodic(_interval, (t) => updateTime(t));
+      _timer = Timer.periodic(_interval, updateTime);
       isTimerActive = true;
     }
 
@@ -469,11 +467,13 @@ class TimerObject extends StreamedValue<int> {
 ///
 ///
 class StreamedTransformed<T, S> implements StreamedObject {
-  StreamedTransformed({T initialData}) {
-    stream = BehaviorSubject<T>(seedValue: initialData)
+  StreamedTransformed() {
+    stream = BehaviorSubject<T>()
       ..listen((e) {
         _lastValue = e;
-        _onChange(e);
+        if (_onChange != null) {
+          _onChange(e);
+        }
       });
   }
 
@@ -512,7 +512,7 @@ class StreamedTransformed<T, S> implements StreamedObject {
   set value(T value) => inStream(value);
 
   /// This function will be called every time the stream updates.
-  Function _onChange = (T data) {};
+  Function(T data) _onChange;
 
   /// This function will be called every time the stream updates.
   void onChange(Function(T data) onDataChanged) {

@@ -6,52 +6,41 @@ import 'package:frideos/frideos.dart';
 
 void main() {
   group('StreamedList', () {
-    test('addElement', () {
+    test('addElement', () async {
       final streamedList = StreamedList<int>();
-      streamedList.value = List<int>();
 
-      Timer.run(() {
-        streamedList
-          ..addElement(1)
-          ..addElement(2)
-          ..addElement(3)
-          ..addElement(4)
-          ..addElement(5);
-      });
+      streamedList.value = [1, 3, 5];
+      streamedList..addElement(2)..addElement(4);
 
-      expect(
+      await expectLater(
         streamedList.outStream,
-        emits([1, 2, 3, 4, 5]),
+        emits([1, 3, 5, 2, 4]),
       );
     });
 
-    test('addElement with initialData', () {
+    test('addElement with initialData', () async {
       final streamedList = StreamedList<int>(initialData: [33, 66, 99]);
 
-      Timer.run(() {
-        streamedList
-          ..addElement(1)
-          ..addElement(2)
-          ..addElement(3)
-          ..addElement(4)
-          ..addElement(5);
-      });
-
-      expect(
+      await expectLater(
         streamedList.outStream,
-        emits([33, 66, 99, 1, 2, 3, 4, 5]),
+        emits([33, 66, 99]),
+      );
+
+      streamedList..addElement(2)..addElement(4);
+
+      await expectLater(
+        streamedList.outStream,
+        emits([33, 66, 99, 2, 4]),
       );
     });
 
-    test('addAll', () {
+    test('addAll', () async {
       final streamedList = StreamedList<int>();
       streamedList.value = List<int>();
 
-      Timer.run(() {
-        streamedList.addAll([1, 2, 3, 4, 5]);
-      });
+      streamedList.addAll([1, 2, 3, 4, 5]);
 
-      expect(
+      await expectLater(
         streamedList.outStream,
         emits([1, 2, 3, 4, 5]),
       );

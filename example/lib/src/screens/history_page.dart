@@ -17,7 +17,7 @@ class HistoryPage extends StatelessWidget {
       ),
       body: Container(
         child: ValueBuilder<List<int>>(
-          stream: bloc.countHistory.historyStream,
+          streamed: bloc.countHistory.historyStream,
           builder: (context, snapshot) => ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {

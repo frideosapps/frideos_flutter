@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../frideos_dart/streamed_value.dart';
-import '../frideos_dart/utils.dart';
+import 'package:frideos/frideos_dart.dart';
 
 import 'extended_asyncwidgets.dart';
 

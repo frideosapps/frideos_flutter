@@ -4,21 +4,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frideos/frideos.dart';
 
 class Model {
+  Model({this.counter, this.text});
+
   int counter;
   String text;
-  Model({this.counter, this.text});
 }
 
 class AppState extends AppStateModel {
-  final model = StreamedValue<Model>();
-
   AppState() {
     print('-------APP STATE INIT--------');
-    model.value = Model(counter: 33, text: 'Lorem ipsum');
   }
 
+  final model = StreamedValue<Model>();
+
   @override
-  void init() {}
+  void init() {
+    model.value = Model(counter: 33, text: 'Lorem ipsum');
+  }
 
   @override
   void dispose() {
@@ -43,17 +45,17 @@ class App extends StatelessWidget {
 class MaterialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var model = AppStateProvider.of<AppState>(context).model;
+    final model = AppStateProvider.of<AppState>(context).model;
 
     return ValueBuilder<Model>(
-        stream: model,
+        streamed: model,
         builder: (context, snapshot) {
           return MaterialApp(
             home: Container(
               child: Column(
                 children: <Widget>[
-                  Text(model.value.text),
-                  Text(model.value.counter.toString()),
+                  Text(snapshot.data.text),
+                  Text(snapshot.data.counter.toString()),
                 ],
               ),
             ),
@@ -69,6 +71,8 @@ void main() {
     await tester.pumpWidget(App(
       appState: appState,
     ));
+
+    await tester.pump();
 
     expect(find.text('Lorem ipsum'), findsOneWidget);
     expect(find.text('33'), findsOneWidget);

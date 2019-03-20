@@ -73,7 +73,7 @@ class StagedWidgetPage extends StatelessWidget {
                   FadeInWidget(
                     child: Center(
                       child: ValueBuilder(
-                          stream: bloc.rotateAnimation.animation,
+                          streamed: bloc.rotateAnimation.animation,
                           builder: (context, snapshot) {
                             return Transform.rotate(
                                 angle: snapshot.data,
@@ -130,7 +130,7 @@ class StagedWidgetPage extends StatelessWidget {
                     ),
                     secondWidget: Center(
                       child: ValueBuilder(
-                          stream: bloc.scaleAnimation.animation,
+                          streamed: bloc.scaleAnimation.animation,
                           builder: (context, snapshot) {
                             return FadeInWidget(
                               duration: 2000,

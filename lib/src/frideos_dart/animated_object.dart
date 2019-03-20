@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import 'interfaces/streamed_object.dart';
 import 'streamed_value.dart';
@@ -62,7 +62,7 @@ enum AnimatedType { increment, decrement }
 ///            children: <Widget>[
 ///              Container(height: 20.0,),
 ///              ValueBuilder<AnimatedStatus>(
-///                stream: bloc.scaleAnimation.status,
+///                streamed: bloc.scaleAnimation.status,
 ///                builder: (context, snapshot) {
 ///                 return Row(
 ///                    mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +97,7 @@ enum AnimatedType { increment, decrement }
 ///              ),
 ///              Expanded(
 ///                child: ValueBuilder<double>(
-///                    stream: bloc.scaleAnimation,
+///                    streamed: bloc.scaleAnimation,
 ///                    builder: (context, snapshot) {
 ///                      return Transform.scale(
 ///                          scale: snapshot.data, child: FlutterLogo());
@@ -170,8 +170,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
   void start(Function(Timer t) callback) {
     if (!timer.isTimerActive) {
       animation.value = initialValue;
-      timer.startPeriodic(
-          Duration(milliseconds: interval), (Timer t) => callback(t));
+      timer.startPeriodic(Duration(milliseconds: interval), callback);
       status.value = AnimatedStatus.active;
     }
   }

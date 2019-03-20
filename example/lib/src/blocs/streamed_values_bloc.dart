@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:frideos/frideos_dart.dart';
 
 import '../blocs/bloc.dart';

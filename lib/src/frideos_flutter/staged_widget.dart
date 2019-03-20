@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'extended_asyncwidgets.dart';
-import '../frideos_dart/models/stage.dart';
-import '../frideos_dart/staged_object.dart';
+import 'package:frideos/frideos.dart';
 
 ///
 ///
@@ -73,6 +71,6 @@ class _StagedWidgetState extends State<StagedWidget> {
     final stage = staged.getStage(0);
     assert(stage != null);
     return ValueBuilder(
-        stream: staged, builder: (context, snapshot) => snapshot.data);
+        streamed: staged, builder: (context, snapshot) => snapshot.data);
   }
 }

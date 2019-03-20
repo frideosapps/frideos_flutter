@@ -22,7 +22,7 @@ class MultipleSelectionPageTwo extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: ValueBuilder<List<Item>>(
-                  stream: bloc.items,
+                  streamed: bloc.items,
                   builder: (c, s) {
                     return GridView.builder(
                         itemCount: s.data.length,

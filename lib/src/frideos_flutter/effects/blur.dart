@@ -2,8 +2,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import 'package:frideos/frideos_dart.dart';
+
 import '../extended_asyncwidgets.dart';
-import '../../frideos_dart/animated_object.dart';
 
 const double initialBlurVel = 0.1;
 const int blurRefreshTime = 20;
@@ -210,7 +211,7 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => ValueBuilder<double>(
-          stream: blur.animation,
+          streamed: blur.animation,
           builder: (context, snapshot) {
             return Stack(
               children: <Widget>[
@@ -317,7 +318,7 @@ class _BlurInWidgetState extends State<BlurInWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => ValueBuilder<double>(
-          stream: blur.animation,
+          streamed: blur.animation,
           builder: (context, snapshot) {
             return Stack(
               children: <Widget>[
@@ -422,7 +423,7 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => ValueBuilder<double>(
-          stream: blur.animation,
+          streamed: blur.animation,
           builder: (context, snapshot) {
             return Stack(
               children: <Widget>[

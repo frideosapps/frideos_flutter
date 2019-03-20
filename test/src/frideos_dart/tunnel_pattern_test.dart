@@ -4,37 +4,34 @@ import 'package:frideos/frideos_dart.dart';
 
 import '../../../example/lib/src/blocs/bloc.dart';
 
-class BlocHolder extends BlocBase {
+class BlocsHolder {
   final blocA = BlocA();
   final blocB = BlocB();
 
-  BlocHolder() {
+  BlocsHolder() {
     blocA.sender.setReceiver(blocB.streamedValue);
   }
 
-  dispose() {
-    blocA.dispose();
+  void dispose() {
     blocB.dispose();
   }
 }
 
-class BlocA extends BlocBase {
+class BlocA {
   final sender = StreamedSender<String>();
-
-  dispose() {}
 }
 
-class BlocB extends BlocBase {
+class BlocB {
   final streamedValue = StreamedValue<String>();
 
-  dispose() {
+  void dispose() {
     streamedValue.dispose();
   }
 }
 
 void main() {
   test('TunnelPattern', () {
-    var bloc = BlocHolder();
+    var bloc = BlocsHolder();
 
     bloc.blocA.sender.send('SENDING FROM BLOCA TO BLOCB');
 

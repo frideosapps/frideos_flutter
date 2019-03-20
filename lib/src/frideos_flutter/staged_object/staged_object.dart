@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'streamed_value.dart';
-import 'interfaces/streamed_object.dart';
-import 'models/stage.dart';
+import '../../frideos_dart/streamed_value.dart';
+import '../../frideos_dart/interfaces/streamed_object.dart';
+import 'stage.dart';
 
 ///
 /// Enum to handle the Status of the StagedObject

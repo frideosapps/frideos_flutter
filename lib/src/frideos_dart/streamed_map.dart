@@ -61,7 +61,9 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
     }
 
     stream.onChange((data) {
-      _onChange(data);
+      if (_onChange != null) {
+        _onChange(data);
+      }
     });
   }
 
@@ -89,7 +91,7 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
   int get length => stream.value.length;
 
   /// This function will be called every time the stream updates.
-  void Function(Map<K, V> data) _onChange = (map) {};
+  void Function(Map<K, V> data) _onChange;
 
   /// Clear the map, add all the key/value pairs of the map passed
   /// and update the stream

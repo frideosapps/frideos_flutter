@@ -78,7 +78,7 @@ class StreamedListWidget extends StatelessWidget {
         Container(height: 20),
         Expanded(
           child: ValueBuilder<List<String>>(
-            stream: bloc.streamedList,
+            streamed: bloc.streamedList,
             builder: (context, snapshot) {
               return ListView.builder(
                   itemCount: snapshot.data.length,

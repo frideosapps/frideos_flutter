@@ -57,13 +57,13 @@ class StreamedValueWidget extends StatelessWidget {
               const Text('StreamedValue', style: styleHeader),
               Container(height: 20),
               ValueBuilder<int>(
-                stream: bloc.count,
+                streamed: bloc.count,
                 builder: (context, snapshot) =>
                     Text('Value: ${snapshot.data}', style: styleValue),
                 noDataChild: const Text('NO DATA'),
               ),
               ValueBuilder<Counter>(
-                stream: bloc.counterObj,
+                streamed: bloc.counterObj,
                 builder: (context, snapshot) {
                   return Column(
                     children: <Widget>[
@@ -98,7 +98,7 @@ class MemoryWidget extends StatelessWidget {
             const Text('MemoryObject', style: styleHeader),
             Container(height: 20),
             ValueBuilder<int>(
-              stream: bloc.countMemory,
+              streamed: bloc.countMemory,
               builder: (context, snapshot) => Column(
                     children: <Widget>[
                       Text('Value: ${snapshot.data}', style: styleValue),
@@ -133,7 +133,7 @@ class HistoryWidget extends StatelessWidget {
             const Text('HistoryObject', style: styleHeader),
             Container(height: 20),
             ValueBuilder<int>(
-              stream: bloc.countHistory,
+              streamed: bloc.countHistory,
               builder: (context, snapshot) => Column(
                     children: <Widget>[
                       Text('Value: ${bloc.countHistory.value}',
@@ -145,7 +145,7 @@ class HistoryWidget extends StatelessWidget {
               noDataChild: const Text('NO DATA'),
             ),
             ValueBuilder<List<int>>(
-              stream: bloc.countHistory.historyStream,
+              streamed: bloc.countHistory.historyStream,
               builder: (context, snapshot) => Text(
                   'History length: ${snapshot.data.length}',
                   style: styleValue),
@@ -165,7 +165,7 @@ class HistoryWidget extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     ValueBuilder(
-                      stream: bloc.countHistory,
+                      streamed: bloc.countHistory,
                       builder: (context, snapshot) => RaisedButton(
                             color: buttonColor,
                             child: const Text('Save to history'),

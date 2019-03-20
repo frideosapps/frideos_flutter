@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../frideos_dart/streamed_value.dart';
-import '../frideos_dart/utils.dart';
+import 'package:frideos/frideos_dart.dart';
 
 ///
 /// A simple vertical slider

@@ -39,21 +39,21 @@ class TimerObjectPage extends StatelessWidget {
                             const Text('TimerObject', style: styleHeader),
                             Container(height: 20),
                             ValueBuilder<int>(
-                              stream: bloc.timerObject,
+                              streamed: bloc.timerObject,
                               builder: (context, snapshot) => Text(
                                   'Value: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
                                   style: styleValue),
                               noDataChild: const Text('NO DATA'),
                             ),
                             ValueBuilder<int>(
-                              stream: bloc.timerObject.stopwatch,
+                              streamed: bloc.timerObject.stopwatch,
                               builder: (context, snapshot) => Text(
                                   'Time passed: ${(snapshot.data * 0.001).toStringAsFixed(2)} secs',
                                   style: styleValue),
                               noDataChild: const Text('NO DATA'),
                             ),
                             ValueBuilder<int>(
-                              stream: bloc.timerObject,
+                              streamed: bloc.timerObject,
                               builder: (context, snapshot) {
                                 return Row(
                                   mainAxisAlignment:

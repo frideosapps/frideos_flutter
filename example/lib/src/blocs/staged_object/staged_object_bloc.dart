@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos/frideos_dart.dart';
-import 'package:frideos/frideos_flutter.dart';
+import 'package:frideos/frideos.dart';
 
 import '../../blocs/bloc.dart';
 

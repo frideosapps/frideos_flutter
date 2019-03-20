@@ -126,7 +126,7 @@ class StreamedMapWidget extends StatelessWidget {
         Container(height: 20),
         Expanded(
           child: ValueBuilder<Map<int, String>>(
-            stream: bloc.streamedMap,
+            streamed: bloc.streamedMap,
             builder: (context, snapshot) {
               return ListView.builder(
                   itemCount: snapshot.data.length,

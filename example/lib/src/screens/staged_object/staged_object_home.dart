@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:frideos/frideos_flutter.dart';
-import 'package:frideos/frideos_dart.dart';
 
 import '../../blocs/bloc.dart';
 import '../../blocs/staged_object/staged_object_bloc.dart';
@@ -206,7 +205,7 @@ class StagedHomePage extends StatelessWidget {
               height: 16,
             ),
             ValueBuilder<StageStatus>(
-                stream: bloc.staged.getStatus,
+                streamed: bloc.staged.getStatus,
                 builder: (context, snapshot) {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +247,7 @@ class StagedHomePage extends StatelessWidget {
             ),
             Center(
                 child: ValueBuilder(
-                    stream: bloc.text,
+                    streamed: bloc.text,
                     builder: (context, snapshot) => Text(snapshot.data))),
             SizedBox(
               height: 80,
@@ -258,14 +257,14 @@ class StagedHomePage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(28),
                   child: ValueBuilder(
-                    stream: bloc.widget,
+                    streamed: bloc.widget,
                     builder: (context, snapshot) => snapshot.data,
                   ),
                 ),
               ),
             ),
             ValueBuilder<StageStatus>(
-              stream: bloc.staged.getStatus,
+              streamed: bloc.staged.getStatus,
               builder: (context, snapshot) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

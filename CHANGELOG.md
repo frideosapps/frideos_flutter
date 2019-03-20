@@ -1,3 +1,9 @@
+## Version 0.5.0 (21-03-19)
+- *Breaking change*: the name of the parameter `stream` of the `ValueBuilder` widget was changed to `streamed` to highlight this is intended to use with the classes that implement the `StreamedObject` interface.
+- Code refactoring
+- Tests updated
+- `README.md` updated
+
 ## Version 0.4.2 (16-03-19)
 - Code refactoring
 - Update Readme.md

@@ -181,7 +181,7 @@ class StagedPageOne extends StatelessWidget {
                   ),
                   Container(height: 12),
                   ValueBuilder(
-                      stream: bloc.totalWidgets,
+                      streamed: bloc.totalWidgets,
                       builder: (context, snapshot) => Text(
                             'Widgets added: ${snapshot.data}',
                             style: TextStyle(

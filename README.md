@@ -2,16 +2,13 @@
 
 Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets, scrollingtext, etc.).
 
+#### _frideos_core_ and _frideos_light_
 
-#### *frideos_core* and *frideos_light*
+- In next release, the core of the library will be replaced by the new [frideos_core](https://pub.dartlang.org/packages/frideos_core) package.
 
-- In next releases, the core of the library will be replaced by the new [frideos_core](https://pub.dartlang.org/packages/frideos_core) package, so it will become mandatory for the apps based on the frideos package to add it as a dependency.
- 
 - A light version of this package without dependencies other than the frideos_core package, has been released as [frideos_light](https://pub.dartlang.org/packages/frideos_light).
 
-
 #### [Helpers for state management](#state-management)
-
 - AppStateModel
 - AppStateProvider
 
@@ -31,7 +28,6 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
 - ListSender
 - MapSender
 
-#### [Helper class with static methods for the SharedPreferences package](#sharedpreferences-helper)
 
 #### [Widgets for streams and futures](#widgets)
 
@@ -59,6 +55,8 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
 - AnimatedBlurWidget
 - WavesWidget
 
+#### [Helper class with static methods for the SharedPreferences package](#sharedpreferences-helper)
+
 #### [Various widgets](#various)
 
 - ScrollingText
@@ -82,7 +80,7 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
 
 By extending the AppStateModel interface it is possible to create a class to drive the AppStateProvider in order to provide the data to the widgets.
 
-From the "theme changer" example:
+From the "theme changer" example (N.B. in this "light" version of the frideos package there is no SharedPreferences helper class):
 
 #### 1. Create a model for the app state:
 
@@ -138,8 +136,8 @@ class AppState extends AppStateModel {
   void init() async {
     String lastTheme = await Prefs.getPref('theme');
     if (lastTheme != null) {
-      currentTheme.value =
-          themes.firstWhere((theme) => theme.name == lastTheme);
+      currentTheme.value = themes.firstWhere((theme) => theme.name == lastTheme,
+          orElse: () => themes[0]);
     } else {
       currentTheme.value = themes[1];
     }
@@ -191,7 +189,7 @@ class MaterialPage extends StatelessWidget {
     var theme = AppStateProvider.of<AppState>(context).currentTheme;
 
     return ValueBuilder<MyTheme>(
-        stream: theme,
+        streamed: theme,
         builder: (context, snapshot) {
           return MaterialApp(
               title: "Theme and drawer starter app",
@@ -252,7 +250,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 ValueBuilder<MyTheme>(
-                    stream: appState.currentTheme,
+                    streamed: appState.currentTheme,
                     builder: (context, snapshot) {
                       return DropdownButton<MyTheme>(
                         hint: Text("Status"),
@@ -275,7 +273,7 @@ class SettingsPage extends StatelessWidget {
 
 Utility classes to make a little bit easier working with streams.
 
-This example (you can find it in the example folder of this repo) shows how to use some classes of this library, and a comparison code without it. It is just a page with two textfields to add a key/value pair to a map. The map is then used to drive a ListView.builder showing all the pairs.
+This example (you can find it in the example folder of this repo) shows how to use some classes of this library, and a comparison code without it. It is just a page with two textfields to add a key/value pair to a map. The map is then used to drive a `ListView.builder` showing all the pairs.
 
 #### Common code
 
@@ -292,7 +290,7 @@ class Validators {
 
   final validateKey =
       StreamTransformer<String, int>.fromHandlers(handleData: (key, sink) {
-    var k = int.tryParse(key);
+    final k = int.tryParse(key);
     if (k != null) {
       sink.add(k);
     } else {
@@ -370,7 +368,7 @@ class StreamedMapBloc extends BlocBase with Validators {
     streamedKey.debugMode();
   }
 
-  final streamedMap = StreamedMap<int, String>(initialData: Map());
+  final streamedMap = StreamedMap<int, String>(initialData: {});
   final streamedText = StreamedTransformed<String, String>();
   final streamedKey = StreamedTransformed<String, int>();
 
@@ -403,11 +401,9 @@ As you can see the code is more clean, easier to read and to mantain.
 
 ### StreamedValue
 
-It's the simplest class that implements the [StreamedObject] interface.
+It's the simplest class that implements the `StreamedObject` interface.
 
-Every time a new value is set, this is compared to the oldest one and if it is different, it is sent to stream.
-
-Used in tandem with [ValueBuilder] it automatically triggers the rebuild of the widgets returned by its builder.
+Every time a new value is set, this is compared to the oldest one and if it is different, it is sent to stream. Used in tandem with `ValueBuilder` it automatically triggers the rebuild of the widgets returned by its builder.
 
 So for example, instead of:
 
@@ -422,7 +418,7 @@ It becomes just:
 counter.value += 1;
 ```
 
-It can be used even with [StreamedWidget] and [StreamBuilder] by using its stream getter `outStream`. In this case, it is necessary to pass to the `initialData` parameter the current value of the [StreamedValue] (e.g. using the getter `value`).
+It can be used even with `StreamedWidget` and `StreamBuilder` by using its stream getter `outStream`.
 
 N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the `refresh` method to update the stream.
 
@@ -438,7 +434,7 @@ incrementCounter() {
 
 // View
 ValueBuilder<int>(
-  stream: bloc.count, // no need of the outStream getter with ValueBuilder
+  streamed: bloc.count, // no need of the outStream getter with ValueBuilder
   builder: (context, snapshot) =>
     Text('Value: ${snapshot.data}'),
   noDataChild: Text('NO DATA'),
@@ -454,20 +450,19 @@ RaisedButton(
 // As an alternative:
 //
 // StreamedWidget<int>(
-//    initialData: bloc.count.value
 //    stream: bloc.count.outStream,
 //    builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
 //    noDataChild: Text('NO DATA'),
 //),
 ```
 
-On update the [timesUpdated] increases showing how many times the value has been updated.
+On update the `timesUpdated` increases showing how many times the value has been updated.
 
-N.B. For collections use [StreamedList] and [StreamedMap] instead.
+N.B. For collections use `StreamedList` and `StreamedMap` instead.
 
 ### StreamedTransformed
 
-A particular class the implement the StreamedObject interface, to use when there is the need of a StreamTransformer (e.g. stream transformation, validation of input
+A particular class the implement the `StreamedObject` interface, to use when there is the need of a `StreamTransformer` (e.g. stream transformation, validation of input
 fields, etc.).
 
 #### Usage
@@ -531,21 +526,21 @@ StreamBuilder<int>(
 
 ### StreamedList
 
-This class has been created to work with lists. It works like [StreamedValue].
+This class has been created to work with lists. It works like `StreamedValue`.
 
 To modify the list (e.g. adding items) and update the stream automatically
 use these methods:
 
-- [AddAll]
-- [addElement]
-- [clear]
-- [removeAt]
-- [removeElement]
-- [replace]
-- [replaceAt]
+- `AddAll`
+- `addElement`
+- `clear`
+- `removeAt`
+- `removeElement`
+- `replace`
+- `replaceAt`
 
 For other direct actions on the list, to update the stream call
-the [refresh] method instead.
+the `refresh` method instead.
 
 #### Usage
 
@@ -580,17 +575,17 @@ From the StreamedList example:
 
 ### StreamedMap
 
-This class has been created to work with maps, it works like [StreamedList].
+This class has been created to work with maps, it works like `StreamedList`.
 
 To modify the list (e.g. adding items) and update the stream automatically
 use these methods:
 
-- [addKey]
-- [removeKey]
-- [clear]
+- `addKey`
+- `removeKey`
+- `clear`
 
 For other direct actions on the map, to update the stream call
-the [refresh] method instead.
+the `refresh` method instead.
 
 #### Usage
 
@@ -628,7 +623,7 @@ From the streamed map example:
 
 ### MemoryValue
 
-The MemoryObject has a property to preserve the previous value. The setter checks for the new value, if it is different from the one already stored, this one is given [oldValue] before storing and streaming the new one.
+The `MemoryValue` has a property to preserve the previous value. The setter checks for the new value, if it is different from the one already stored, this one is given `oldValue` before storing and streaming the new one.
 
 #### Usage
 
@@ -641,7 +636,7 @@ couneMemory.oldValue // previous value
 
 ## HistoryObject
 
-Extends the [MemoryValue] class, adding a [StreamedCollection]. Useful when it is need to store a value in a list.
+Extends the `MemoryValue` class, adding a `StreamedList`. Useful when it is need to store a value in a list.
 
 ```dart
 final countHistory = HistoryObject<int>();
@@ -723,44 +718,6 @@ tunnelList.send(list);
 tunnelMap.send(map);
 ```
 
-# SharedPreferences helper
-
-### - savePrefs(String Key, T value)
-
-### - saveStringList(String Key, List<String> list)
-
-### - getPref(String key)
-
-### - getKeys()
-
-### - remove(String key)
-
-From the "Theme changer" example:
-
-##### - Save the theme choosed so that the next time it will be set on startup
-
-```dart
-void setTheme(MyTheme theme) {
-  currentTheme.value = theme;
-  Prefs.savePref<String>('apptheme', theme.name);
-}
-```
-
-##### - Load the theme when the app starts
-
-```dart
-@override
-void init() async {
-  String lastTheme = await Prefs.getPref('apptheme');
-  if (lastTheme != null) {
-    currentTheme.value =
-      themes.firstWhere((theme) => theme.name == lastTheme, orElse: () => themes[0]);
-  } else {
-    currentTheme.value = themes[0];
-  }
-}
-```
-
 ## Widgets
 
 ### ValueBuilder
@@ -769,14 +726,15 @@ ValueBuilder extends the [StreamBuilder] widget providing some callbacks to hand
 
 N.B. To use when there is no need to receive a _null value_.
 
-It takes as a `stream` parameter an object implementing the [StreamedObject] interface and triggers the rebuild of the widget whenever the stream emits a new event.
+It takes as a `streamed` parameter an object implementing the [StreamedObject] interface and triggers the rebuild of the widget whenever the stream emits a new event.
 
 #### Usage
 
 ```dart
 ValueBuilder<String>(
-  stream: streamedValue,
+  streamed: streamedValue,
   builder: (context, snasphot) => Text(snasphot.data),
+  initialData: // Data to provide for the initial snapshot
   noDataChild: // Widget to show when the stream has no data
   onNoData: () => // or Callback
   errorChild: // Widget to show on error
@@ -853,6 +811,7 @@ FuturedWidget is a wrapper for the [FutureBuilder] widget. It provides some call
 FuturedWidget<String>(
   future: future,
   builder: (context, snasphot) => Text(snasphot.data),
+  initialData: // Data to provide if the snapshot is null or still not completed
   waitingChild: // Widget to show on waiting
   onWaiting: () => // or Callback
   errorChild: // Widget to show on error
@@ -959,7 +918,7 @@ From the AnimatedObject example:
             children: <Widget>[
               Container(height: 20.0,),
                ValueBuilder<AnimatedStatus>(
-                stream: bloc.scaleAnimation.status,
+                streamed: bloc.scaleAnimation.status,
                 builder: (context, snapshot) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -994,7 +953,7 @@ From the AnimatedObject example:
               ),
               Expanded(
                 child: ValueBuilder<double>(
-                    stream: bloc.scaleAnimation,
+                    streamed: bloc.scaleAnimation,
                     builder: (context, snapshot) {
                       return Transform.scale(
                           scale: snapshot.data,
@@ -1197,7 +1156,7 @@ StagedWidget(
 
 ### LinearTransition
 
-Linear cross fading transition between two widgets, it can be used with the [StagedObject].
+Linear cross fading transition between two widgets, it can be used with the `StagedObject`.
 
 ![LinearTransition](https://i.imgur.com/viGPpCu.gif)
 
@@ -1342,6 +1301,44 @@ WavesWidget(
   child: Container(
     color: Colors.red[400],
  ),
+```
+
+## SharedPreferences helper
+
+#### - savePrefs(String Key, T value)
+
+#### - saveStringList(String Key, List<String> list)
+
+#### - getPref(String key)
+
+#### - getKeys()
+
+#### - remove(String key)
+
+From the "Theme changer" example:
+
+##### - Save the theme choosed so that the next time it will be set on startup
+
+```dart
+void setTheme(MyTheme theme) {
+  currentTheme.value = theme;
+  Prefs.savePref<String>('apptheme', theme.name);
+}
+```
+
+##### - Load the theme when the app starts
+
+```dart
+@override
+void init() async {
+  String lastTheme = await Prefs.getPref('apptheme');
+  if (lastTheme != null) {
+    currentTheme.value =
+      themes.firstWhere((theme) => theme.name == lastTheme, orElse: () => themes[0]);
+  } else {
+    currentTheme.value = themes[0];
+  }
+}
 ```
 
 ## Various

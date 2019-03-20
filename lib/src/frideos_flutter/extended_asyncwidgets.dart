@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../frideos_dart.dart';
+import 'package:frideos/frideos_dart.dart';
 
 ///
 ///
@@ -20,7 +20,7 @@ typedef WaitingCallback = Widget Function();
 ///
 /// N.B. To use when there is no need to receive a *null value*.
 ///
-/// It takes as a `stream` parameter an object implementing the
+/// It takes as a `streamed` parameter an object implementing the
 /// [StreamedObject] interface and triggers the rebuild of the widget
 /// whenever the stream emits a new event.
 ///
@@ -29,8 +29,9 @@ typedef WaitingCallback = Widget Function();
 ///
 /// ```dart
 /// ValueBuilder<String>(
-///   stream: streamedValue,
+///   streamed: streamedValue,
 ///   builder: (BuildContext context, snasphot) => Text(snasphot.data),
+///   initialData: // Data to provide for the initial snapshot
 ///   noDataChild: // Widget to show when the stream has no data
 ///   onNoData: () => // or Callback
 ///   errorChild: // Widget to show on error
@@ -51,19 +52,20 @@ typedef WaitingCallback = Widget Function();
 ///
 class ValueBuilder<T> extends StreamBuilder<T> {
   ValueBuilder(
-      {@required StreamedObject<T> stream,
+      {@required StreamedObject<T> streamed,
       @required this.builder,
       Key key,
+      T initialData,
       this.noDataChild,
       this.onNoData,
       this.errorChild,
       this.onError})
-      : assert(stream != null, 'The stream argument is null.'),
+      : assert(streamed != null, 'The streamed argument is null.'),
         assert(builder != null, 'The builder argument is null.'),
         super(
             key: key,
-            initialData: stream.value,
-            stream: stream.outStream,
+            initialData: initialData,
+            stream: streamed.outStream,
             builder: builder);
 
   final AsyncWidgetBuilder<T> builder;
@@ -124,6 +126,7 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 /// StreamedWidget<String>(
 ///   stream: stream,
 ///   builder: (context, snasphot) => Text(snasphot.data),
+///   initialData: // Data to provide for the initial snapshot
 ///   noDataChild: // Widget to show when the stream has no data
 ///   onNoData: () => // or Callback
 ///   errorChild: // Widget to show on error
@@ -138,6 +141,7 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 /// StreamedWidget<String>(
 ///   stream: streamedObject.outStream, // outStream getter
 ///   builder: (context, snasphot) => Text(snasphot.data),
+///   initialData: // Data to provide for the initial snapshot
 ///   noDataChild: // Widget to show when the stream has no data
 ///   onNoData: () => // or Callback
 ///   errorChild: // Widget to show on error
@@ -223,6 +227,7 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 /// FuturedWidget<String>(
 ///   future: future,
 ///   builder: (BuildContext context, snasphot) => Text(snasphot.data),
+///   initialData: // Data to provide if the snapshot is null or still not completed
 ///   waitingChild: // Widget to show on waiting
 ///   onWaiting: () => // or Callback
 ///   errorChild: // Widget to show on error

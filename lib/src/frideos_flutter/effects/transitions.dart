@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:frideos/frideos_dart.dart';
+
 import '../extended_asyncwidgets.dart';
-import '../../frideos_dart/streamed_value.dart';
-import '../../frideos_dart/models/stage.dart';
 
 ///
 ///
@@ -135,17 +135,6 @@ class _FadeInWidgetState extends State<FadeInWidget>
 }
 
 ///
-/// Class used in the cross fading between two stages
-///
-class StageBridge {
-  StageBridge(this.currentStage, this.old, this.next);
-
-  int currentStage;
-  Stage old;
-  Stage next;
-}
-
-///
 ///
 /// Linear cross fading transition between two widgets, it can be used
 /// with the `StagedObject`.
@@ -210,7 +199,7 @@ class _LinearTransitionState extends State<LinearTransition> {
   Widget build(BuildContext context) {
     return Container(
       child: ValueBuilder<double>(
-        stream: opacity,
+        streamed: opacity,
         builder: (context, snapshot) {
           return Stack(
             children: <Widget>[

@@ -9,3 +9,5 @@ export 'src/frideos_flutter/vertical_slider.dart';
 export 'src/frideos_flutter/effects/blur.dart';
 export 'src/frideos_flutter/effects/transitions.dart';
 export 'src/frideos_flutter/effects/waves.dart';
+export 'src/frideos_flutter/staged_object/stage.dart';
+export 'src/frideos_flutter/staged_object/staged_object.dart';
