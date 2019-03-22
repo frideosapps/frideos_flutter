@@ -2,14 +2,14 @@ import 'package:test/test.dart';
 
 import 'package:frideos/frideos_dart.dart';
 
-import '../../../example/lib/src/blocs/bloc.dart';
-
 class BlocsHolder {
   final blocA = BlocA();
   final blocB = BlocB();
 
   BlocsHolder() {
-    blocA.sender.setReceiver(blocB.streamedValue);
+    blocA.streamedSender.setReceiver(blocB.streamedValue);
+    blocA.listSender.setReceiver(blocB.streamedList);
+    blocA.mapSender.setReceiver(blocB.streamedMap);
   }
 
   void dispose() {
@@ -18,26 +18,50 @@ class BlocsHolder {
 }
 
 class BlocA {
-  final sender = StreamedSender<String>();
+  final streamedSender = StreamedSender<String>();
+  final listSender = ListSender<String>();
+  final mapSender = MapSender<int, String>();
 }
 
 class BlocB {
   final streamedValue = StreamedValue<String>();
+  final streamedList = StreamedList<String>();
+  final streamedMap = StreamedMap<int, String>();
 
   void dispose() {
     streamedValue.dispose();
+    streamedList.dispose();
+    streamedMap.dispose();
   }
 }
 
 void main() {
-  test('TunnelPattern', () {
-    var bloc = BlocsHolder();
+  group('Tunnel Pattern', () {
+    test('streamedSender', () async {
+      final bloc = BlocsHolder();
 
-    bloc.blocA.sender.send('SENDING FROM BLOCA TO BLOCB');
+      bloc.blocA.streamedSender.send('SENDING FROM BLOCA TO BLOCB');
 
-    bloc.blocB.streamedValue.outStream.listen((value) {
-      expect(value, 'SENDING FROM BLOCA TO BLOCB');
-      bloc.dispose();
+      await expectLater(bloc.blocB.streamedValue.outStream,
+          emits('SENDING FROM BLOCA TO BLOCB'));
+    });
+
+    test('listSender', () async {
+      final bloc = BlocsHolder();
+
+      bloc.blocA.listSender.send(['a', 'b', 'c']);
+
+      await expectLater(
+          bloc.blocB.streamedList.outStream, emits(['a', 'b', 'c']));
+    });
+
+    test('mapSender', () async {
+      final bloc = BlocsHolder();
+
+      bloc.blocA.mapSender.send({1: 'a', 2: 'b', 3: 'c'});
+
+      await expectLater(
+          bloc.blocB.streamedMap.outStream, emits({1: 'a', 2: 'b', 3: 'c'}));
     });
   });
 }

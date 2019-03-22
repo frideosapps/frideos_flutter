@@ -2,7 +2,7 @@ name: frideos
 author: Francesco Mineo <frideosapps@gmail.com>
 homepage: https://github.com/frideosapps/frideos_flutter
 description: Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets etc.).
-version: 0.5.0
+version: 0.5.0+1
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

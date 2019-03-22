@@ -1,3 +1,13 @@
+## Version 0.5.0+1 (23-03-19)
+
+- Update the README.md: added a new example app (a Todo app).
+
+- Package refactoring: in the example folder there is now a simple example of a counter implemented with this library (the previous examples in this [repository](https://github.com/frideosapps/frideos_examples)).
+
+- Added some unit tests.
+
+
+
 ## Version 0.5.0 (21-03-19)
 - *Breaking change*: the name of the parameter `stream` of the `ValueBuilder` widget was changed to `streamed` to highlight this is intended to use with the classes that implement the `StreamedObject` interface.
 - Code refactoring

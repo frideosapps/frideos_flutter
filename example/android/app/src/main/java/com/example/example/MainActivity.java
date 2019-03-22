@@ -1,4 +1,4 @@
-package com.example.frideosgeneral;
+package com.example.example;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

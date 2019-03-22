@@ -24,6 +24,16 @@ void main() {
       );
     });
 
+    test('onChange', () {
+      final streamedValue = StreamedValue<int>();
+
+      streamedValue.value = 123;
+
+      streamedValue.onChange((value) {
+        expect(value, 123);
+      });
+    });
+
     //
     // StreamedTransformed test
     //
@@ -46,6 +56,10 @@ void main() {
 
       streamedTransformed.outTransformed.listen((value) {
         expect(value, 157);
+      });
+
+      streamedTransformed.onChange((value) {
+        expect(value, '157');
       });
     });
 

@@ -2,17 +2,20 @@
 
 Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets, scrollingtext, etc.).
 
-#### _frideos_core_ and _frideos_light_
+**frideos_core**  [![pub package](https://img.shields.io/pub/v/frideos_core.svg)](https://pub.dartlang.org/packages/frideos_core)
 
-- In next release, the core of the library will be replaced by the new [frideos_core](https://pub.dartlang.org/packages/frideos_core) package.
+- In next release, the core of the library will be replaced by the new  frideos_core package.
 
+
+**frideos_light** [![pub package](https://img.shields.io/pub/v/frideos_light.svg)](https://pub.dartlang.org/packages/frideos_light)
 - A light version of this package without dependencies other than the frideos_core package, has been released as [frideos_light](https://pub.dartlang.org/packages/frideos_light).
 
-#### [Helpers for state management](#state-management)
+##### 1. [Helpers for state management](#state-management)
+
 - AppStateModel
 - AppStateProvider
 
-#### [Helpers for streams and BLoC pattern](#streams-and-bloc-pattern):
+##### 2. [Helpers for streams and BLoC pattern](#streams-and-bloc-pattern):
 
 - StreamedValue
 - StreamedTransformed
@@ -22,28 +25,28 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
 - HistoryObject
 - StreamedSender
 
-#### [Helpers for tunnel pattern](#tunnel-pattern)
+##### 3. [Helpers for tunnel pattern](#tunnel-pattern)
 
 - StreamedSender
 - ListSender
 - MapSender
 
 
-#### [Widgets for streams and futures](#widgets)
+##### 4. [Widgets for streams and futures](#widgets)
 
 - ValueBuilder
 - StreamedWidget
 - ReceiverWidget
 - FuturedWidget
 
-#### [Classes for animations and timing](#animations-and-timing)
+##### 5. [Classes for animations and timing](#animations-and-timing)
 
 - TimerObject
 - AnimatedObject
 - StagedObject
 - StagedWidget
 
-#### [Widgets for effects](#effects)
+##### 6. [Widgets for effects](#effects)
 
 - LinearTransition
 - CurvedTransition
@@ -55,27 +58,65 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
 - AnimatedBlurWidget
 - WavesWidget
 
-#### [Helper class with static methods for the SharedPreferences package](#sharedpreferences-helper)
+##### 7. [Helper class with static methods for the SharedPreferences package](#sharedpreferences-helper)
+  
 
-#### [Various widgets](#various)
+##### 8. [Various widgets](#various)
 
 - ScrollingText
 - HorizontalSlider
 - VerticalSlider
 
-#### [Examples built with this library](#examples)
-
-- Example app
-- Theme changer and persistent theme with SharedPreferences
-- Counter app
-- Blood pressure example app
-- Pair game
-
 ### Dependencies
 
 - [RxDart](https://pub.dartlang.org/packages/rxdart)
 - [SharedPreferences](https://pub.dartlang.org/packages/shared_preferences)
+    
+### Examples built with this library:
 
+#### [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/frideos_library)
+An implementation of the Todo App of the [Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples) repository using this package.
+
+#### [Frideos examples](https://github.com/frideosapps/frideos_examples)
+
+An example app to show how to use some features of this library.
+
+- Streamed objects
+- Streamed collections
+- TimerObject: a simple stopwatch
+- StagedObject
+- StagedWidget
+- AnimatedObject
+- Multiple selection and tunnel pattern (to share data between two blocs)
+- LinearTransition
+- CurvedTransition
+- Blur (fixed, in, out, animated)
+- WavesWidget
+- Sliders
+
+#### [Theme changer](https://github.com/frideosapps/theme_changer)
+
+A simple starter app with a drawer, app state management, dynamic theme changer and persistent theme using the sharedpreferences.
+
+#### [Counter](https://github.com/frideosapps/counter)
+
+A simple app using the BLoC pattern showing a counter implemented with this library.
+
+#### [Blood pressure](https://github.com/frideosapps/bloodpressure)
+
+An example of a medical app built with Flutter for the classification of the arterial blood pressure.
+
+#### [Pair game](https://github.com/frideosapps/pair_game)
+
+A simple pair game (multiple selections, animations, tunnel pattern).
+  
+
+  
+
+---  
+  
+    
+    
 ## State management
 
 By extending the AppStateModel interface it is possible to create a class to drive the AppStateProvider in order to provide the data to the widgets.
@@ -1393,38 +1434,3 @@ VerticalSlider(
   },
 )
 ```
-
-## Examples
-
-### 1. [General](https://github.com/frideosapps/frideos_flutter/tree/master/example)
-
-An example app to show how to use this library.
-
-- Streamed objects
-- Streamed collections
-- TimerObject: a simple stopwatch
-- StagedObject
-- StagedWidget
-- AnimatedObject
-- Multiple selection and tunnel pattern (to share data between two blocs)
-- LinearTransition
-- CurvedTransition
-- Blur (fixed, in, out, animated)
-- WavesWidget
-- Sliders
-
-### 2. [Theme changer](https://github.com/frideosapps/theme_changer)
-
-A simple starter app with a drawer, app state management, dynamic theme changer and persistent theme using the sharedpreferences.
-
-### 3. [Counter](https://github.com/frideosapps/counter)
-
-A simple app using the BLoC pattern showing a counter implemented with this library.
-
-### 4. [Blood pressure](https://github.com/frideosapps/bloodpressure)
-
-An example of a medical app built with Flutter for the classification of the arterial blood pressure.
-
-### 5. [Pair game](https://github.com/frideosapps/pair_game)
-
-A simple pair game (multiple selections, animations, tunnel pattern).

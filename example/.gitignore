@@ -1,9 +1,5 @@
-.old/
-doc/
-
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp
@@ -29,7 +25,7 @@ doc/
 .packages
 .pub-cache/
 .pub/
-build/
+/build/
 
 # Android related
 **/android/**/gradle-wrapper.jar

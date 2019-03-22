@@ -50,5 +50,15 @@ void main() {
 
       streamedMap.dispose();
     });
+
+    test('onChange', () {
+      final streamedMap = StreamedMap<int, String>();
+
+      streamedMap.value = {1: 'a', 3: 'b', 5: 'c'};
+
+      streamedMap.onChange((map) {
+        expect(map, {1: 'a', 3: 'b', 5: 'c'});
+      });
+    });
   });
 }
