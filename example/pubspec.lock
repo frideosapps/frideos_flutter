@@ -52,7 +52,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.5.0+1"
+    version: "0.6.0"
+  frideos_core:
+    dependency: transitive
+    description:
+      name: frideos_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2+1"
   matcher:
     dependency: transitive
     description:
@@ -94,7 +101,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.1"
+    version: "0.21.0"
   shared_preferences:
     dependency: transitive
     description:

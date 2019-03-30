@@ -67,6 +67,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  frideos_core:
+    dependency: "direct main"
+    description:
+      name: frideos_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2+1"
   front_end:
     dependency: transitive
     description:
@@ -220,7 +227,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.1"
+    version: "0.21.0"
   shared_preferences:
     dependency: "direct main"
     description:

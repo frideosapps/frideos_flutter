@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:frideos_core/frideos_core.dart';
 import 'package:frideos/frideos.dart';
 
 void main() => runApp(MyApp());
 
 class AppState extends AppStateModel {
-  factory AppState() {
-    return _singletonAppState;
-  }
+  factory AppState() => _singletonAppState;
 
   AppState._internal();
 
@@ -131,7 +130,7 @@ class SecondPage extends StatelessWidget {
                 ValueBuilder<int>(
                   streamed: appState.counter,
                   builder: (context, snapshot) => Text('${snapshot.data}'),
-                  noDataChild: Text('null'),
+                  noDataChild: const Text('null'),
                 ),
               ],
             ),

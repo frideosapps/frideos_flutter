@@ -1,3 +1,11 @@
+## Version 0.6.0 (31-03-19)
+
+- **Breaking change**: integrated the [frideos_core](https://pub.dartlang.org/packages/frideos_core) package. It now mandatory to import the file `frideos_core/frideos_core.dart` to use the StreamedObjects.
+
+- Updated the README.md.
+
+- Updated dependency to RxDart version ^0.21
+
 ## Version 0.5.0+1 (23-03-19)
 
 - Update the README.md: added a new example app (a Todo app).

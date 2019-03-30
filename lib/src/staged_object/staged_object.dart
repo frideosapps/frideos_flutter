@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../frideos_dart/streamed_value.dart';
-import '../../frideos_dart/interfaces/streamed_object.dart';
+import 'package:frideos_core/frideos_core.dart';
+
 import 'stage.dart';
 
 ///

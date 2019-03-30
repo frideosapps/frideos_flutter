@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:frideos/frideos_dart.dart';
+import 'package:frideos_core/frideos_core.dart';
 
 ///
 ///

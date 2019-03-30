@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../frideos_dart/interfaces/app_state.dart';
+import 'interfaces/app_state.dart';
 
 /// Simple state provider that extends a StatefulWidget and use
 /// an InheritedWidget to share the state with the widgets on the tree.
