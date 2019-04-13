@@ -1,3 +1,8 @@
+## Version 0.6.1 (13-04-19)
+- Update README.md: added a new example.
+  
+- Bugfix to the `LinearTransition` widget.
+
 ## Version 0.6.0 (31-03-19)
 
 - **Breaking change**: integrated the [frideos_core](https://pub.dartlang.org/packages/frideos_core) package. It now mandatory to import the file `frideos_core/frideos_core.dart` to use the StreamedObjects.

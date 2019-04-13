@@ -214,7 +214,7 @@ class _LinearTransitionState extends State<LinearTransition> {
             ],
           );
         },
-        noDataChild: const Text('NO DATA'),
+        noDataChild: widget.firstWidget,
       ),
     );
   }

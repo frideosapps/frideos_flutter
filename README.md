@@ -56,6 +56,11 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
     
 ### Examples built with this library:
 
+#### [Quiz game](https://github.com/frideosapps/trivia_example)
+A simple trivia game built with Flutter and this package.
+
+You can read an article about this example here: https://medium.com/flutter-community/flutter-how-to-build-a-quiz-game-596d0f369575
+
 #### [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/frideos_library)
 An implementation of the Todo App of the [Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples) repository using this package.
 
