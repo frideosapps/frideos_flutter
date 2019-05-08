@@ -10,12 +10,14 @@ import 'interfaces/app_state.dart';
 /// tree.
 ///
 class AppStateProvider<T extends AppStateModel> extends StatefulWidget {
-  const AppStateProvider({@required this.appState, @required this.child})
+  const AppStateProvider(
+      {@required this.appState, @required this.child, this.initAppState = true})
       : assert(appState != null, 'The appState argument is null.'),
         assert(child != null, 'The child argument is null.');
 
   final T appState;
   final Widget child;
+  final bool initAppState;
 
   @override
   _AppStateProviderState createState() {
@@ -33,7 +35,9 @@ class _AppStateProviderState extends State<AppStateProvider> {
   @override
   void initState() {
     super.initState();
-    widget.appState.init();
+    if (widget.initAppState) {
+      widget.appState.init();
+    }
   }
 
   @override
@@ -43,9 +47,8 @@ class _AppStateProviderState extends State<AppStateProvider> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _InheritedState(state: widget.appState, child: widget.child);
-  }
+  Widget build(BuildContext context) =>
+      _InheritedState(state: widget.appState, child: widget.child);
 }
 
 class _InheritedState extends InheritedWidget {

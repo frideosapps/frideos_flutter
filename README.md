@@ -56,53 +56,39 @@ Helpers for state management, streams and BLoC pattern, SharedPreferences and va
     
 ### Examples built with this library:
 
-#### [Quiz game](https://github.com/frideosapps/trivia_example)
-A simple trivia game built with Flutter and this package.
+- [Quiz game](https://github.com/frideosapps/trivia_example): a simple trivia game built with Flutter and this package. You can read an article about this example here: https://medium.com/flutter-community/flutter-how-to-build-a-quiz-game-596d0f369575
 
-You can read an article about this example here: https://medium.com/flutter-community/flutter-how-to-build-a-quiz-game-596d0f369575
+- [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/frideos_library): an implementation of the Todo App of the [Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples) repository using this package.
 
-#### [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/frideos_library)
-An implementation of the Todo App of the [Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples) repository using this package.
-
-#### [Frideos examples](https://github.com/frideosapps/frideos_examples)
-
-An example app to show how to use some features of this library.
-
-- Streamed objects
-- Streamed collections
-- TimerObject: a simple stopwatch
-- StagedObject
-- StagedWidget
-- AnimatedObject
-- Multiple selection and tunnel pattern (to share data between two blocs)
-- LinearTransition
-- CurvedTransition
-- Blur (fixed, in, out, animated)
-- WavesWidget
-- Sliders
-
-#### [Theme changer](https://github.com/frideosapps/theme_changer)
-
-A simple starter app with a drawer, app state management, dynamic theme changer and persistent theme using the sharedpreferences.
-
-#### [Counter](https://github.com/frideosapps/counter)
-
-A simple app using the BLoC pattern showing a counter implemented with this library.
-
-#### [Blood pressure](https://github.com/frideosapps/bloodpressure)
-
-An example of a medical app built with Flutter for the classification of the arterial blood pressure.
-
-#### [Pair game](https://github.com/frideosapps/pair_game)
-
-A simple pair game (multiple selections, animations, tunnel pattern).
+- [Frideos examples](https://github.com/frideosapps/frideos_examples): an example app to show how to use some features of this library. 
+  - Streamed objects
+  - Streamed collections
+  - TimerObject: a simple stopwatch
+  - StagedObject
+  - StagedWidget
+  - AnimatedObject
+  - Multiple selection and tunnel pattern (to share data between two blocs)
+  - LinearTransition
+  - CurvedTransition
+  - Blur (fixed, in, out, animated)
+  - WavesWidget
+  - Sliders
+  - Products catalog
   
+- [Dynamic fields validation](https://github.com/frideosapps/dynamic_fields_validation): a Flutter example on how to validate dynamically created fields with the BLoC pattern and this package.
 
+- [Theme changer](https://github.com/frideosapps/theme_changer): a simple starter app with a drawer, app state management, dynamic theme changer and persistent theme using the sharedpreferences.
+
+- [Counter](https://github.com/frideosapps/counter): a simple app using the BLoC pattern showing a counter implemented with this library.
+
+- [Blood pressure](https://github.com/frideosapps/bloodpressure): an example of a medical app built with Flutter for the classification of the arterial blood pressure.
+
+- [Pair game](https://github.com/frideosapps/pair_game): a simple pair game (multiple selections, animations, tunnel pattern).
   
+ 
 
 ---  
-  
-    
+      
     
 ## State management
 

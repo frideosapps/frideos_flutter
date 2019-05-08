@@ -1,3 +1,9 @@
+## Version 0.6.2 (08-05-19)
+- Added the parameter `initAppState` (set to `true` by default) to the `AppStateProvider` widget. Setting it to `false` the `init` method of the `AppStateModel` derived class passed to the `appState` parameter won't be called to the `initState` method of the `AppStateProvider`.
+- Bugfix to the `Blur` widgets.
+- Update README.md: added a `Dynamic fields validation` example.
+- Updated to frideos_core 0.4.4.
+
 ## Version 0.6.1 (13-04-19)
 - Update README.md: added a new example.
   

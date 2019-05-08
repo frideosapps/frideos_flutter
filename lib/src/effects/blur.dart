@@ -47,13 +47,15 @@ class BlurWidget extends StatelessWidget {
                   height: constraints.maxHeight,
                   width: constraints.maxWidth,
                   child: child),
-              BackdropFilter(
-                  filter: ui.ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-                  child: Container(
-                    height: constraints.maxHeight,
-                    width: constraints.maxWidth,
-                    color: Colors.transparent,
-                  )),
+              ClipRect(
+                child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
+                    child: Container(
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth,
+                      color: Colors.transparent,
+                    )),
+              ),
             ],
           ),
     );
@@ -219,14 +221,16 @@ class _AnimatedBlurWidgetState extends State<AnimatedBlurWidget> {
                     height: constraints.maxHeight,
                     width: constraints.maxWidth,
                     child: widget.child),
-                BackdropFilter(
-                    filter: ui.ImageFilter.blur(
-                        sigmaX: snapshot.data, sigmaY: blurSigmaY),
-                    child: Container(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      color: Colors.transparent,
-                    )),
+                ClipRect(
+                  child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(
+                          sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                      child: Container(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        color: Colors.transparent,
+                      )),
+                ),
               ],
             );
           }),
@@ -326,14 +330,16 @@ class _BlurInWidgetState extends State<BlurInWidget> {
                     height: constraints.maxHeight,
                     width: constraints.maxWidth,
                     child: widget.child),
-                BackdropFilter(
-                    filter: ui.ImageFilter.blur(
-                        sigmaX: snapshot.data, sigmaY: blurSigmaY),
-                    child: Container(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      color: Colors.transparent,
-                    )),
+                ClipRect(
+                  child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(
+                          sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                      child: Container(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        color: Colors.transparent,
+                      )),
+                ),
               ],
             );
           }),
@@ -431,14 +437,16 @@ class _BlurOutWidgetState extends State<BlurOutWidget> {
                     height: constraints.maxHeight,
                     width: constraints.maxWidth,
                     child: widget.child),
-                BackdropFilter(
-                    filter: ui.ImageFilter.blur(
-                        sigmaX: snapshot.data, sigmaY: blurSigmaY),
-                    child: Container(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      color: Colors.transparent,
-                    )),
+                ClipRect(
+                  child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(
+                          sigmaX: snapshot.data, sigmaY: blurSigmaY),
+                      child: Container(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        color: Colors.transparent,
+                      )),
+                ),
               ],
             );
           }),
