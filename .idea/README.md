@@ -2,8 +2,6 @@
 
 Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets, scrollingtext, etc.).
 
-UPDATE (21-06-19): in the next major version will be removed the helper for the SharedPreferences package.
-
 **frideos_core**  [![pub package](https://img.shields.io/pub/v/frideos_core.svg)](https://pub.dartlang.org/packages/frideos_core)
 
 - **Breaking change**: it is now mandatory to import the file `frideos_core/frideos_core.dart` to use the `StreamedObjects` of the frideos_core package.
