@@ -1,4 +1,5 @@
 lib/src/frideos_flutter/exp
+.idea
 
 .DS_Store
 .dart_tool/
