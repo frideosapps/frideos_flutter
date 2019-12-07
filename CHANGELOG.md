@@ -1,4 +1,10 @@
-## Version 0.7.0 (21-06-19)
+# Version 0.8.0 (08-12-19)
+- Updated to RxDart 22.6
+- Updated to SharedPreferences 0.5.4
+- Removed sliders widgets
+- Added helpers class for animations: TweenAnimation, CurvedTween, CompositeAnimation, CompositeTween
+
+## Version 0.7.0+1 (21-06-19)
 - Updated to frideos_core 0.5.0
 - Updated to RxDart 0.22.0
 

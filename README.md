@@ -30,7 +30,14 @@ UPDATE (21-06-19): in the next major version will be removed the helper for the 
 - StagedObject
 - StagedWidget
 
-##### 4. [Widgets for effects](#effects)
+##### 4. [Helpers for animations](#animations)
+
+- TweenAnimation
+- CurvedTween
+- CompositeAnimation
+- CompositeTween
+
+##### 5. [Widgets for effects](#effects)
 
 - LinearTransition
 - CurvedTransition
@@ -48,8 +55,6 @@ UPDATE (21-06-19): in the next major version will be removed the helper for the 
 ##### 6. [Various widgets](#various)
 
 - ScrollingText
-- HorizontalSlider
-- VerticalSlider
 
 ### Dependencies
 
@@ -572,6 +577,141 @@ StagedWidget(
   }),
 ```
 
+## Animations
+
+### TweenAnimation
+
+```dart
+anim = TweenAnimation<double>(
+        duration: Duration(milliseconds: 120000),
+        setState: setState,
+        tickerProvider: this,
+        begin: 360.0,
+        end: 1.0,
+        onAnimating: _onAnimating);
+
+opacityAnim = TweenAnimation<double>(
+  begin: 0.5,
+  end: 1.0,
+  controller: anim.baseController,
+);
+
+growAnim = TweenAnimation<double>(
+  begin: 1.0,
+  end: 30.0,
+  controller: anim.baseController,
+);
+
+// Play animation
+anim.forward();
+
+
+// Called on each frame
+void _onAnimating(AnimationStatus status) {   
+  if (status == AnimationStatus.completed) {
+    anim.reverse();
+  }
+  if (status == AnimationStatus.dismissed) {
+    anim.forward();
+  }
+}
+
+
+// Example
+Opacity(
+  opacity: opacityAnim.value,
+  child: Container(
+    alignment: Alignment.center,
+    height: 100 + growAnim.value,
+    width: 100 + growAnim.value,
+    decoration: BoxDecoration(
+      color: Colors.blue,
+        boxShadow: [
+          BoxShadow(blurRadius: anim.value),
+        ],        
+  ),
+),
+```
+
+### CurvedTween
+
+```dart
+ circleAnim = CurvedTween<double>(
+        duration: Duration(milliseconds: 7000),
+        setState: setState,
+        tickerProvider: this,
+        begin: 360.0,
+        end: 1.0,
+        curve: Curves.bounceInOut,
+        onAnimating: _onAnimating);
+
+circleAnim.forward();
+
+```
+
+### CompositeTween and CompositeAnimation
+
+```dart
+    compAnim = CompositeAnimation(
+        duration: Duration(milliseconds: 1750),
+        setState: setState,
+        tickerProvider: this,
+        composite: {
+          'background': CompositeTween<Color>(
+              begin: Colors.amber, end: Colors.blue, curve: Curves.elasticIn),
+          'grow': CompositeTween<double>(begin: 1.0, end: 40.0),
+          'rotate': CompositeTween<double>(
+              begin: math.pi / 4, end: math.pi, curve: Curves.easeIn),
+          'color': CompositeTween<Color>(
+              begin: Colors.green, end: Colors.orange, curve: Curves.elasticIn),
+          'shadow': CompositeTween<double>(begin: 5.0, end: 30.0),
+          'rounded': CompositeTween<double>(
+            begin: 0.0,
+            end: 150.0,
+            curve: Curves.easeIn,
+          )
+        });
+
+    movAnim = CompositeAnimation(
+        duration: Duration(milliseconds: 1750),
+        setState: setState,
+        tickerProvider: this,
+        composite: {
+          'upper': CompositeTween<Offset>(
+              begin: Offset(-60.0, -30.0),
+              end: Offset(80.0, 15.0),
+              curve: Curves.easeIn),
+          'lower': CompositeTween<Offset>(
+              begin: Offset(-80.0, 0.0),
+              end: Offset(70.0, -25.0),
+              curve: Curves.easeInCirc),
+        });
+
+
+
+// Example
+Transform.translate(
+  offset: movAnim.value('lower'),
+  child: Transform.rotate(
+    angle: compAnim.value('rotate'),
+    child: Container(
+      alignment: Alignment.center,
+      height: 100 + compAnim.value('grow'),
+      width: 100 + compAnim.value('grow'),
+      decoration: BoxDecoration(
+        color: compAnim.value('color'),
+        boxShadow: [
+          BoxShadow(blurRadius: compAnim.value('shadow')),
+          ],
+        borderRadius: BorderRadius.circular(
+          compAnim.value('rounded'),
+          ),
+       ),
+    ),
+  ),
+),
+```
+
 ## Effects
 
 ### LinearTransition
@@ -776,40 +916,3 @@ ScrollingText(
 ),
 ```
 
-### Sliders
-
-![Sliders](https://i.imgur.com/H16VE01.gif)
-
-#### Usage
-
-```dart
-HorizontalSlider(
-  key: _horizontalSliderKey,
-  rangeMin: 0.0,
-  rangeMax: 3.14,
-  //step: 1.0,
-  initialValue: bloc.initialAngle,
-  backgroundBar: Colors.indigo[50],
-  foregroundBar: Colors.indigo[500],
-  triangleColor: Colors.red,
-  onSliding: (slider) {
-    bloc.horizontalSlider(slider);
-  },
-)
-
-
-
-VerticalSlider(
-  key: _verticalSliderKey,
-  rangeMin: 0.5,
-  rangeMax: 5.5,
-  step: 1.0, // Default value 1.0
-  initialValue: bloc.initialScale,
-  backgroundBar: Colors.indigo[50],
-  foregroundBar: Colors.indigo[500],
-  triangleColor: Colors.red,
-  onSliding: (slider) {
-    bloc.verticalSlider(slider);
-  },
-)
-```

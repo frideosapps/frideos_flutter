@@ -42,22 +42,22 @@ class BlurWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Stack(
-            children: <Widget>[
-              Container(
+        children: <Widget>[
+          Container(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: child),
+          ClipRect(
+            child: BackdropFilter(
+                filter: ui.ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
+                child: Container(
                   height: constraints.maxHeight,
                   width: constraints.maxWidth,
-                  child: child),
-              ClipRect(
-                child: BackdropFilter(
-                    filter: ui.ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-                    child: Container(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      color: Colors.transparent,
-                    )),
-              ),
-            ],
+                  color: Colors.transparent,
+                )),
           ),
+        ],
+      ),
     );
   }
 }
