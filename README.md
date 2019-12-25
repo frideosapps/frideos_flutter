@@ -25,10 +25,12 @@ UPDATE (21-06-19): in the next major version will be removed the helper for the 
 - ReceiverWidget
 - FuturedWidget
 
-##### 3. [StagedObject and StagedWidget for widgets timing](#widgets-timing)
+##### 3. [Timing display of widgets/scense](#widgets-timing)
 
+- ScenesObject
+- ScenesWidget
 - StagedObject
-- StagedWidget
+- StagedWidget  
 
 ##### 4. [Helpers for animations](#animations)
 
@@ -398,6 +400,161 @@ If no [errorChild] widget or no [onError] callback is provided then a [Container
 N.B. The callbacks are executed only if their respective child is not provided.
 
 ## Widgets timing
+
+
+### ScenesObject
+A complex class to hadle the rendering of scenes over the time.
+It takes a collection of "Scenes" and triggers the visualization of
+the widgets at a given time (relative o absolute timing).
+For example to make a demostration on how to use an application,
+showing the widgets and pages along with explanations.
+
+Every scene is handled by using the Scene class:
+
+```dart
+ class Scene {
+   Widget widget;
+   int time; // milliseconds
+   Function onShow = () {};
+   Scene({this.widget, this.time, this.onShow});
+ }
+ ```
+
+ ##### N.B. The onShow callback is used to trigger an action when the scene shows
+
+ #### Usage
+ From the ScenesObject example:
+
+ #### 1 - Declare a list of scenes
+
+ ```dart
+ final ScenesObject scenesObject = ScenesObject();
+ ```
+ 
+ #### 2 - Add some scenes
+ 
+ ```dart
+ scenes.addAll([
+   Scene(
+     time: 4000,
+     widget: SingleScene(text: 'Scene 1', color: Colors.blueGrey),
+     onShow: () => print('Showing scene 1'),
+   ),
+   Scene(
+     time: 4000,
+     widget: SingleScene(text: 'Scene 2', color: Colors.orange),
+     onShow: () => print('Showing scene 1'),
+   )
+ ]);
+ 
+ 
+ // The singleScene widget:
+ 
+ class SingleScene extends StatelessWidget {
+   const SingleScene({Key key, this.text, this.color}) : super(key: key);
+ 
+   final String text;
+   final Color color;
+ 
+   @override
+   Widget build(BuildContext context) {
+     return Container(
+       alignment: Alignment.center,
+       color: color,
+       child: Text(text),
+     );
+   }
+ }
+ ```
+ #### 3 - Setup the ScenesObject and play the scenes
+
+ ```dart
+ scenesObject
+   ..setScenesList(scenes)
+   ..setCallback(() => print('Called on start'))
+   ..setOnEndCallback(scenesObject.startScenes); // Replay the scenes at the end
+ 
+ // For e.g. on tap on a button:
+ scenesObject.startScenes();
+ ```
+
+### ScenesWidget
+
+ This widget uses a [ScenesObject] for the timing of the widgets
+ visualization.
+
+ It takes as a parameter a List<Scene> and plays every [Scene].
+
+ By default to change the stage is used the relative time, so the time
+ parameter of the [Scene] indicates how much time the stage will lasts.
+ Instead, to specify the absolute time, set to true the [absoluteTiming]
+ flag, in this case the time parameter indicates the absolute time when
+ to show the scene.
+
+ The [onStart] is used to call a function when the ScenesObject begins
+ to play the stages.
+
+ The [onEnd] callback is called at the end of the last stage when the timeing
+ is relative (the [absoluteTiming] flag is set to false).
+
+ #### Usage
+ From the ScenesObject example:
+ 
+ ```dart
+ScenesWidget(
+  scenes: [
+    Scene(
+        widget: SingleScene(
+          color: Colors.white,
+          text: 'Scene 1',
+        ),
+        time: 3500,
+        onShow: () {
+          print('Showing scene 1');
+        }),
+    Scene(
+        widget: SingleScene(
+          color: Colors.blue,
+          text: 'Scene 2',
+        ),
+        time: 3500,
+        onShow: () {
+          print('Showing scene 2');
+        }),
+    Scene(
+        widget: SingleScene(
+          color: Colors.brown,
+          text: 'Scene 3',
+        ),
+        time: 3500,
+        onShow: () {
+          print('Showing scene 3');
+        }),
+  ],
+  onStart: () => print('Start playing scenes!'),
+  onEnd: () => print('End playing scenes!'),
+),
+
+
+// The singleScene widget:
+
+class SingleScene extends StatelessWidget {
+  const SingleScene({Key key, this.text, this.color}) : super(key: key);
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      color: color,
+      child: Text(text),
+    );
+  }
+}
+```
+
 
 ### StagedObject
 

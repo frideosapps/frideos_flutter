@@ -79,3 +79,8 @@ class _ScrollingTextState extends State<ScrollingText> {
     );
   }
 }
+
+///
+/// A simple widget that animates a input string making a scrolling text
+/// over a given time.
+///

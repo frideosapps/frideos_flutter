@@ -1,3 +1,7 @@
+# Version 0.9.0 (25-12-19)
+- Updated to RxDart 23.1
+- Added classes for managing scenes: ScenesObject and ScenesWidget.
+  
 # Version 0.8.0 (08-12-19)
 - Updated to RxDart 22.6
 - Updated to SharedPreferences 0.5.4
