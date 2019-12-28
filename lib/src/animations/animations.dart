@@ -301,7 +301,7 @@ class CompositeItem<T> {
   final Curve curve;
   final Curve reverseCurve;
 
-  Animation<T> animation;
+  Animation<dynamic> animation;
 }
 
 ///
