@@ -27,7 +27,7 @@ import 'package:frideos/src/scenes_object/scenes_object.dart';
 /// From the ScenesObject example:
 ///
 /// ```dart
-///ScenesWidget(
+///ScenesCreate(
 ///  scenes: [
 ///    Scene(
 ///         widget: SingleScene(
@@ -80,8 +80,8 @@ import 'package:frideos/src/scenes_object/scenes_object.dart';
 ///   }
 /// }
 /// ```
-class ScenesWidget extends StatefulWidget {
-  const ScenesWidget(
+class ScenesCreate extends StatefulWidget {
+  const ScenesCreate(
       {@required this.scenes,
       Key key,
       this.absoluteTiming = false,
@@ -96,12 +96,12 @@ class ScenesWidget extends StatefulWidget {
   final Function onEnd;
 
   @override
-  _ScenesWidgetState createState() {
-    return _ScenesWidgetState();
+  _ScenesCreateState createState() {
+    return _ScenesCreateState();
   }
 }
 
-class _ScenesWidgetState extends State<ScenesWidget> {
+class _ScenesCreateState extends State<ScenesCreate> {
   final ScenesObject scenesObject = ScenesObject();
 
   @override
