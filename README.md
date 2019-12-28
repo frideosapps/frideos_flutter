@@ -28,16 +28,19 @@ UPDATE (21-06-19): in the next major version will be removed the helper for the 
 ##### 3. [Timing display of widgets/scense](#widgets-timing)
 
 - ScenesObject
-- ScenesWidget
+- ScenesCreate
 - StagedObject
 - StagedWidget  
 
 ##### 4. [Helpers for animations](#animations)
 
-- TweenAnimation
-- CurvedTween
-- CompositeAnimation
-- CompositeTween
+- AnimationTween
+- AnimationCurved
+- AnimationCreate
+  
+- CompositeItem
+- AnimationComposite
+- CompositeCreate
 
 ##### 5. [Widgets for effects](#effects)
 
@@ -478,7 +481,7 @@ Every scene is handled by using the Scene class:
  scenesObject.startScenes();
  ```
 
-### ScenesWidget
+### ScenesCreate
 
  This widget uses a [ScenesObject] for the timing of the widgets
  visualization.
@@ -501,7 +504,7 @@ Every scene is handled by using the Scene class:
  From the ScenesObject example:
  
  ```dart
-ScenesWidget(
+ScenesCreate(
   scenes: [
     Scene(
         widget: SingleScene(
@@ -736,24 +739,25 @@ StagedWidget(
 
 ## Animations
 
-### TweenAnimation
+### AnimationTween
 
 ```dart
-anim = TweenAnimation<double>(
+anim = AnimationTween<double>(
         duration: Duration(milliseconds: 120000),
         setState: setState,
         tickerProvider: this,
         begin: 360.0,
         end: 1.0,
-        onAnimating: _onAnimating);
+        onAnimating: _onAnimating,
+);
 
-opacityAnim = TweenAnimation<double>(
+opacityAnim = AnimationTween<double>(
   begin: 0.5,
   end: 1.0,
   controller: anim.baseController,
 );
 
-growAnim = TweenAnimation<double>(
+growAnim = AnimationTween<double>(
   begin: 1.0,
   end: 30.0,
   controller: anim.baseController,
@@ -790,55 +794,79 @@ Opacity(
 ),
 ```
 
-### CurvedTween
+### AnimationCreate
 
 ```dart
- circleAnim = CurvedTween<double>(
+ AnimationCreate<double>(
+        begin: 0.1,
+        end: 1.0,
+        curve: Curves.easeIn,
+        duration: 1000,
+        repeat: true,
+        reverse: true,
+        builder: (context, anim) {          
+          return Opacity(
+                opacity: anim.value,
+                child: Text(
+                  'Loading...',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26.0,
+                  ),
+                ),
+              );
+```
+
+
+### AnimationCurved
+
+```dart
+ circleAnim = AnimationCurved<double>(
         duration: Duration(milliseconds: 7000),
         setState: setState,
         tickerProvider: this,
         begin: 360.0,
         end: 1.0,
         curve: Curves.bounceInOut,
-        onAnimating: _onAnimating);
+        onAnimating: _onAnimating,
+);
 
 circleAnim.forward();
-
 ```
 
-### CompositeTween and CompositeAnimation
+### CompositeItem and AnimationComposite
 
 ```dart
-    compAnim = CompositeAnimation(
+    compAnim = AnimationComposite(
         duration: Duration(milliseconds: 1750),
         setState: setState,
         tickerProvider: this,
         composite: {
-          'background': CompositeTween<Color>(
+          'background': CompositeItem<Color>(
               begin: Colors.amber, end: Colors.blue, curve: Curves.elasticIn),
-          'grow': CompositeTween<double>(begin: 1.0, end: 40.0),
-          'rotate': CompositeTween<double>(
+          'grow': CompositeItem<double>(begin: 1.0, end: 40.0),
+          'rotate': CompositeItem<double>(
               begin: math.pi / 4, end: math.pi, curve: Curves.easeIn),
-          'color': CompositeTween<Color>(
+          'color': CompositeItem<Color>(
               begin: Colors.green, end: Colors.orange, curve: Curves.elasticIn),
-          'shadow': CompositeTween<double>(begin: 5.0, end: 30.0),
-          'rounded': CompositeTween<double>(
+          'shadow': CompositeItem<double>(begin: 5.0, end: 30.0),
+          'rounded': CompositeItem<double>(
             begin: 0.0,
             end: 150.0,
             curve: Curves.easeIn,
           )
         });
 
-    movAnim = CompositeAnimation(
+    movAnim = AnimationComposite(
         duration: Duration(milliseconds: 1750),
         setState: setState,
         tickerProvider: this,
         composite: {
-          'upper': CompositeTween<Offset>(
+          'upper': CompositeItem<Offset>(
               begin: Offset(-60.0, -30.0),
               end: Offset(80.0, 15.0),
               curve: Curves.easeIn),
-          'lower': CompositeTween<Offset>(
+          'lower': CompositeItem<Offset>(
               begin: Offset(-80.0, 0.0),
               end: Offset(70.0, -25.0),
               curve: Curves.easeInCirc),
@@ -867,6 +895,63 @@ Transform.translate(
     ),
   ),
 ),
+```
+
+### CompositeCreate
+
+```dart
+
+enum AnimationType {
+  fadeIn,  
+  scale,  
+  fadeOut,  
+}
+
+
+ @override
+  Widget build(BuildContext context) {
+    return CompositeCreate(
+      duration: duration,
+      repeat: false,
+      compositeMap: {
+        AnimationType.fadeIn: CompositeItem<double>(
+          begin: 0.2,
+          end: 1.0,
+          curve: const Interval(
+            0.0,
+            0.2,
+            curve: Curves.linear,
+          ),
+        ),
+        AnimationType.scale: CompositeItem<double>(
+          begin: reverse ? 0.8 : 1.0,
+          end: reverse ? 1.0 : 0.8,
+          curve: const Interval(
+            0.2,
+            0.6,
+            curve: Curves.linear,
+          ),
+        ),
+        AnimationType.fadeOut: CompositeItem<double>(
+          begin: 1.0,
+          end: 0.0,
+          curve: Interval(
+            0.7,
+            0.8,
+            curve: Curves.linear,
+          ),
+        ),
+      },
+      onCompleted: onCompleted,
+      builder: (context, comp) {
+        return Transform.scale(
+          scale: comp.value(AnimationType.scale),
+          child: Opacity(
+                  opacity: comp.value(AnimationType.fadeIn),
+                  child: Opacity(
+                    opacity: comp.value(AnimationType.fadeOut),
+                    child: Text(
+                      'Text',
 ```
 
 ## Effects

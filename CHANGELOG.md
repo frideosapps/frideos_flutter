@@ -1,3 +1,13 @@
+# Version 0.10.0 (28-12-19)
+- ScenesWidget class renamed to ScenesCreate
+- TweenAnimation to AnimationTween
+- CurvedTween to AnimationCurved
+- AnimationWidget to AnimationCreate
+- CompositeTween to CompositeItem
+- CompositeAnimation to AnimationComposite
+- CompositeAnimationWidget to CompositeCreate
+- Improved the AnimationCreate widget.
+
 # Version 0.9.0 (25-12-19)
 - Updated to RxDart 23.1
 - Added classes for managing scenes: ScenesObject and ScenesWidget.
