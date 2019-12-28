@@ -1,3 +1,6 @@
+# version 0.10.0+1 (28-12-19)
+- CompositeItem fix
+
 # Version 0.10.0 (28-12-19)
 - ScenesWidget class renamed to ScenesCreate
 - TweenAnimation to AnimationTween
