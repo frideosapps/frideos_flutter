@@ -1,3 +1,6 @@
+# Version 1.0.0+1 (05-01-20)
+- Fix package description
+
 # Version 1.0.0 (05-01-20)
 - Integrated frideos_core in the package
 - Removed shared preferences helpers  
