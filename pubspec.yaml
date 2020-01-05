@@ -1,7 +1,7 @@
 name: frideos
 homepage: https://github.com/frideosapps/frideos_flutter
-description: Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets etc.).
-version: 0.10.0+1
+description: An all-in-one package flutter cfor state management, reactive objects, animations, effects, timed widgets etc.
+version: 1.0.0
 
 environment:
   sdk: ">=2.0.0 <3.0.0"
@@ -9,9 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  frideos_core: ^0.6.0  
-  rxdart: ^0.23.1
-  shared_preferences: ^0.5.4  
+  
+  rxdart: ^0.23.1  
 
 dev_dependencies:
   flutter_test:

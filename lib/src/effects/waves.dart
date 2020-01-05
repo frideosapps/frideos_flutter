@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'package:frideos_core/frideos_core.dart';
+import '../core/core.dart';
 
 import '../extended_asyncwidgets.dart';
 

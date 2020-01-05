@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:frideos_core/frideos_core.dart';
 import 'package:frideos/frideos.dart';
 
 void main() => runApp(MyApp());

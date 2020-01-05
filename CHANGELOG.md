@@ -1,4 +1,9 @@
-# version 0.10.0+1 (28-12-19)
+# Version 1.0.0 (05-01-20)
+- Integrated frideos_core in the package
+- Removed shared preferences helpers  
+- Improved Readme.md, added an article
+  
+# Version 0.10.0+1 (28-12-19)
 - CompositeItem fix
 
 # Version 0.10.0 (28-12-19)

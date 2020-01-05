@@ -1,49 +1,46 @@
 # Frideos [![pub package](https://img.shields.io/pub/v/frideos.svg)](https://pub.dartlang.org/packages/frideos)
 
-Helpers for state management, streams and BLoC pattern, SharedPreferences and various widgets (animations, blur, transitions, timed widgets, scrollingtext, etc.).
+An all-in-one package for state management, streams and BLoC pattern, animations and timed widgets, effects.
 
-UPDATE (21-06-19): in the next major version will be removed the helper for the SharedPreferences package.
+## Contents
 
-**frideos_core**  [![pub package](https://img.shields.io/pub/v/frideos_core.svg)](https://pub.dartlang.org/packages/frideos_core)
-
-- **Breaking change**: it is now mandatory to import the file `frideos_core/frideos_core.dart` to use the `StreamedObjects` of the frideos_core package.
-
-
-**frideos_light** [![pub package](https://img.shields.io/pub/v/frideos_light.svg)](https://pub.dartlang.org/packages/frideos_light)
-- A light version of this package without dependencies other than the frideos_core package, has been released as [frideos_light](https://pub.dartlang.org/packages/frideos_light).
-
-##### 1. [Helpers for state management](#state-management)
-
+### [1. State management](#state-management)
+**Getting started**
+- StreamedValue
 - AppStateModel
 - AppStateProvider
-
-
-##### 2. [Widgets for streams and futures](#widgets)
-
 - ValueBuilder
 - StreamedWidget
-- ReceiverWidget
-- FuturedWidget
 
-##### 3. [Timing display of widgets/scense](#widgets-timing)
-
-- ScenesObject
-- ScenesCreate
-- StagedObject
-- StagedWidget  
-
-##### 4. [Helpers for animations](#animations)
-
-- AnimationTween
-- AnimationCurved
-- AnimationCreate
   
+#### Specialized StreamedObjects
+- StreamedList
+- StreamedMap
+- HistoryObject
+- MemoryValue
+- StreamedTransformed
+
+##### Other
+- FuturedWidget
+- ReceiverWidget
+- StreamedSender, ListSender, and MapSender
+
+
+### [2. Animations and timing](#animations)
+- AnimationTween
+- AnimationCreate
+- AnimationCurved
 - CompositeItem
 - AnimationComposite
 - CompositeCreate
+- ScenesObject
+- ScenesCreate
+- StagedObject
+- StagedWidget
+- WavesWidget
+- ScrollingText
 
-##### 5. [Widgets for effects](#effects)
-
+### [3. Effects](#effects)
 - LinearTransition
 - CurvedTransition
 - FadeInWidget
@@ -52,21 +49,11 @@ UPDATE (21-06-19): in the next major version will be removed the helper for the 
 - BlurInWidget
 - BlurOutWidget
 - AnimatedBlurWidget
-- WavesWidget
 
-##### 5. [Helper class with static methods for the SharedPreferences package](#sharedpreferences-helper)
-  
 
-##### 6. [Various widgets](#various)
+## Articles and examples
 
-- ScrollingText
-
-### Dependencies
-
-- [RxDart](https://pub.dartlang.org/packages/rxdart)
-- [SharedPreferences](https://pub.dartlang.org/packages/shared_preferences)
-    
-### Examples built with this library:
+- [A book trailer with Flutter web](https://itnext.io/me-flutter-web-and-the-making-of-an-experimental-book-trailer-8f1625173759)
 
 - [Quiz game](https://github.com/frideosapps/trivia_example): a simple trivia game built with Flutter and this package. You can read an article about this example here: https://medium.com/flutter-community/flutter-how-to-build-a-quiz-game-596d0f369575
 
@@ -97,16 +84,107 @@ UPDATE (21-06-19): in the next major version will be removed the helper for the 
 
 - [Pair game](https://github.com/frideosapps/pair_game): a simple pair game (multiple selections, animations, tunnel pattern).
   
- 
+## Dependencies
 
----  
-      
+- [RxDart](https://pub.dartlang.org/packages/rxdart)
+
+   
     
-## State management
+# State management
 
-By extending the AppStateModel interface it is possible to create a class to drive the AppStateProvider in order to provide the data to the widgets.
+### Getting started
 
-From the "theme changer" example (N.B. in this "light" version of the frideos package there is no SharedPreferences helper class):
+The core of the package consists of classes that implement the StramedObject interface:
+
+```dart
+///
+/// Interface for all the StreamedObjects
+///
+abstract class StreamedObject<T> {
+  /// Getter for the stream exposed by the classes that implement
+  /// the StreamedObject interface.
+  Stream<T> get outStream;
+
+  /// Getter for the last value emitted by the stream
+  T get value;
+}
+```
+
+- HistoryObject
+- MemoryValue
+- StreamedList
+- StreamedMap
+- StreamedTransformed
+- StreamedValue
+
+These objects are then used (e.g. in classes extending the AppStateModel interface) in combination with the **ValueBuilder** widget (or StreamedWidget/StreamBuilder), to make the UI reactive to their changes.
+
+### StreamedValue
+
+The **StreamedValue** is the simplest class that implements this interface.
+Every time a new value is set, this is compared to the latest one and if it is different, it is sent to stream. Used in tandem with `ValueBuilder` (or StreamedWidget/StreamBuilder) it automatically triggers the rebuild of the widgets returned by its builder.
+
+So for example, instead of:
+
+```dart
+counter += 1;
+stream.sink.add(counter);
+```
+
+It becomes just:
+
+```dart
+counter.value += 1;
+```
+
+It can be used even with `StreamedWidget` and `StreamBuilder` by using its stream getter `outStream`.
+
+N.B. when the type is not a basic type (e.g int, double, String etc.) and the value of a property of the object is changed, it is necessary to call the `refresh` method to update the stream.
+
+#### Example
+
+```dart
+// In the BLoC
+final count = StreamedValue<int>(initialData: 0);
+
+incrementCounter() {
+  count.value += 2.0;
+}
+
+// View
+ValueBuilder<int>(
+  streamed: bloc.count, // no need of the outStream getter with ValueBuilder
+  builder: (context, snapshot) =>
+    Text('Value: ${snapshot.data}'),
+  noDataChild: Text('NO DATA'),
+),
+RaisedButton(
+    color: buttonColor,
+    child: Text('+'),
+    onPressed: () {
+      bloc.incrementCounter();
+    },
+),
+
+// As an alternative:
+//
+// StreamedWidget<int>(    
+//    stream: bloc.count.outStream,
+//    builder: (context, snapshot) => Text('Value: ${snapshot.data}'),
+//    noDataChild: Text('NO DATA'),
+//),
+```
+
+If on debugMode, on each update the `timesUpdated` increases showing how many times the value has been updated.
+
+N.B. For collections use `StreamedList` and `StreamedMap` instead.
+
+
+### AppStateModel and AppStateProvider
+
+These reactive objects can be used in classes extending the AppStateModel interface, and provided to the widgets tree using the AppStateProvider widget.
+
+From the "theme changer" example:
 
 #### 1. Create a model for the app state:
 
@@ -153,21 +231,12 @@ class AppState extends AppStateModel {
     currentTheme = StreamedValue();
   }
 
-  void setTheme(MyTheme theme) {
-    currentTheme.value = theme;
-    Prefs.savePref<String>('theme', theme.name);
-  }
+  void setTheme(MyTheme theme) => currentTheme.value = theme;    
+  
 
   @override
-  void init() async {
-    String lastTheme = await Prefs.getPref('theme');
-    if (lastTheme != null) {
-      currentTheme.value = themes.firstWhere((theme) => theme.name == lastTheme,
-          orElse: () => themes[0]);
-    } else {
-      currentTheme.value = themes[1];
-    }
-  }
+  void init() => currentTheme.value = themes[0];    
+ 
 
   @override
   dispose() {
@@ -220,8 +289,10 @@ class MaterialPage extends StatelessWidget {
           return MaterialApp(
               title: "Theme and drawer starter app",
               theme: _buildThemeData(snapshot.data),
-              home: HomePage());
-        });
+              home: HomePage(),
+            );
+        },
+    );
   }
 
   _buildThemeData(MyTheme appTheme) {
@@ -276,15 +347,16 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 ValueBuilder<MyTheme>(
-                    streamed: appState.currentTheme,
-                    builder: (context, snapshot) {
-                      return DropdownButton<MyTheme>(
-                        hint: Text("Status"),
-                        value: snapshot.data,
-                        items: _buildThemesList(),
-                        onChanged: appState.setTheme,
-                      );
-                    }),
+                  streamed: appState.currentTheme,
+                  builder: (context, snapshot) {
+                    return DropdownButton<MyTheme>(
+                      hint: Text("Status"),
+                      value: snapshot.data,
+                      items: _buildThemesList(),
+                      onChanged: appState.setTheme,
+                    );
+                  },
+                ),
               ],
             ),
           ],
@@ -294,8 +366,6 @@ class SettingsPage extends StatelessWidget {
   }
 }
 ```
-
-## Widgets
 
 ### ValueBuilder
 
@@ -368,15 +438,201 @@ StreamedWidget<String>(
 
 N.B. The callbacks are executed only if their respective child is not provided.
 
-### ReceiverWidget
 
-Used with a StreamedValue when the type is a widget to directly stream a widget to the view. Under the hood a StreamedWidget handles the stream and shows the widget.
+## Specialized StreamedObjects
+
+### StreamedList
+
+This class has been created to work with lists. It works like `StreamedValue`.
+
+To modify the list (e.g. adding items) and update the stream automatically
+use these methods:
+
+- `AddAll`
+- `addElement`
+- `clear`
+- `removeAt`
+- `removeElement`
+- `replace`
+- `replaceAt`
+
+For other direct actions on the list, to update the stream call
+the `refresh` method instead.
+
+#### Usage
+
+e.g. adding an item:
+
+```dart
+ streamedList.addElement(item);
+```
+
+it is the same as:
+
+```dart
+  streamedList.value.add(item);
+  streamedList.refresh();
+```
+
+From the StreamedList example:
+
+```dart
+  final streamedList = StreamedList<String>();
+
+
+  // Add to the streamed list the string from the textfield
+  addText() {
+    streamedList.addElement(streamedText.value);
+
+    // Or, as an alternative:
+    // streamedList.value.add(streamedText.value);
+    // streamedList.refresh(); // To refresh the stream with the new value
+  }
+```
+
+### StreamedMap
+
+This class has been created to work with maps, it works like `StreamedList`.
+
+To modify the list (e.g. adding items) and update the stream automatically
+use these methods:
+
+- `addKey`
+- `removeKey`
+- `clear`
+
+For other direct actions on the map, to update the stream call
+the `refresh` method instead.
+
+#### Usage
+
+e.g. adding a key/value pair:
+
+```dart
+  streamedMap.addKey(1, 'first');
+```
+
+it is the same as:
+
+```dart
+   streamedMap.value[1] = 'first';
+   streamedList.refresh();
+```
+
+From the streamed map example:
+
+```dart
+  final streamedMap = StreamedMap<int, String>();
+
+
+  // Add to the streamed map the key/value pair put by the user
+  addText() {
+    var key = int.parse(streamedKey.value);
+    var value = streamedText.value;
+
+    streamedMap.addKey(key, value);
+
+    // Or, as an alternative:
+    //streamedMap.value[key] = value;
+    //streamedMap.refresh();
+  }
+```
+
+### MemoryValue
+
+The `MemoryValue` has a property to preserve the previous value. The setter checks for the new value, if it is different from the one already stored, this one is given `oldValue` before storing and streaming the new one.
 
 #### Usage
 
 ```dart
-ReceiverWidget(stream: streamedValue.outStream),
+final countMemory = MemoryValue<int>();
+
+countMemory.value // current value
+couneMemory.oldValue // previous value
 ```
+
+### HistoryObject
+
+Extends the `MemoryValue` class, adding a `StreamedList`. Useful when it is need to store a value in a list.
+
+```dart
+final countHistory = HistoryObject<int>();
+
+incrementCounterHistory() {
+  countHistory.value++;
+}
+
+saveToHistory() {
+  countHistory.saveValue();
+}
+```
+
+### StreamedTransformed
+
+A particular class the implement the `StreamedObject` interface, to use when there is the need of a `StreamTransformer` (e.g. stream transformation, validation of input
+fields, etc.).
+
+#### Usage
+
+From the StreamedMap example:
+
+```dart
+// In the BLoC class
+final streamedKey = StreamedTransformed<String, int>();
+
+
+
+// In the constructor of the BLoC class
+streamedKey.setTransformer(validateKey);
+
+
+
+// Validation (e.g. in the BLoC or in a mixin class)
+final validateKey =
+      StreamTransformer<String, int>.fromHandlers(handleData: (key, sink) {
+    var k = int.tryParse(key);
+    if (k != null) {
+      sink.add(k);
+    } else {
+      sink.addError('The key must be an integer.');
+    }
+  });
+
+
+// In the view:
+StreamBuilder<int>(
+            stream: bloc.streamedKey.outTransformed,
+            builder: (context, snapshot) {
+              return Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12.0,
+                      horizontal: 20.0,
+                    ),
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: 'Key:',
+                        hintText: 'Insert an integer...',
+                        errorText: snapshot.error,
+                      ),
+                      // To avoid the user could insert text use the TextInputType.number
+                      // Here is commented to show the error msg.
+                      //keyboardType: TextInputType.number,
+                      onChanged: bloc.streamedKey.inStream,
+                    ),
+                  ),
+                ],
+              );
+            }),
+```
+
+
+## Other
 
 ### FuturedWidget
 
@@ -402,7 +658,303 @@ If no [errorChild] widget or no [onError] callback is provided then a [Container
 
 N.B. The callbacks are executed only if their respective child is not provided.
 
-## Widgets timing
+
+
+### ReceiverWidget
+
+Used with a StreamedValue when the type is a widget to directly stream a widget to the view. Under the hood a StreamedWidget handles the stream and shows the widget.
+
+#### Usage
+
+```dart
+ReceiverWidget(stream: streamedValue.outStream),
+```
+
+### StreamedSender
+
+Used to make a one-way tunnel beetween two blocs (from blocA to a StremedValue on blocB).
+
+#### Usage
+
+1. #### Define an object that implements the `StreamedObject` interface in the blocB (e.g. a `StreamedValue`):
+
+```dart
+final receiverStr = StreamedValue<String>();
+```
+
+2. #### Define a `StreamedSender` in the blocA:
+
+```dart
+final tunnelSenderStr = StreamedSender<String>();
+```
+
+3. #### Set the receiver in the sender on the class the holds the instances of the blocs:
+
+```dart
+blocA.tunnelSenderStr.setReceiver(blocB.receiverStr);
+```
+
+4. #### To send data from blocA to blocB then:
+
+```dart
+tunnelSenderStr.send("Text from blocA to blocB");
+```
+
+### ListSender and MapSender
+
+Like the StreamedSender, but used with collections.
+
+#### Usage
+
+1. #### Define a `StreamedList` or `StreamedMap` object in the blocB
+
+```dart
+final receiverList = StreamedList<int>();
+final receiverMap = StreamedMap<int, String>();
+```
+
+2. #### Define a `ListSender`/`MapSender` in the blocA
+
+```dart
+final tunnelList = ListSender<int>();
+final tunnelMap = MapSender<int, String>();
+```
+
+3. #### Set the receiver in the sender on the class the holds the instances of the blocs
+
+```dart
+blocA.tunnelList.setReceiver(blocB.receiverList);
+blocA.tunnelMap.setReceiver(blocB.receiverMap);
+```
+
+4. #### To send data from blocA to blocB then:
+
+```dart
+tunnelList.send(list);
+tunnelMap.send(map);
+```
+
+
+# Animations
+
+### AnimationTween
+
+```dart
+anim = AnimationTween<double>(
+        duration: Duration(milliseconds: 120000),
+        setState: setState,
+        tickerProvider: this,
+        begin: 360.0,
+        end: 1.0,
+        onAnimating: _onAnimating,
+);
+
+opacityAnim = AnimationTween<double>(
+  begin: 0.5,
+  end: 1.0,
+  controller: anim.baseController,
+);
+
+growAnim = AnimationTween<double>(
+  begin: 1.0,
+  end: 30.0,
+  controller: anim.baseController,
+);
+
+// Play animation
+anim.forward();
+
+
+// Called on each frame
+void _onAnimating(AnimationStatus status) {   
+  if (status == AnimationStatus.completed) {
+    anim.reverse();
+  }
+  if (status == AnimationStatus.dismissed) {
+    anim.forward();
+  }
+}
+
+
+// Example
+Opacity(
+  opacity: opacityAnim.value,
+  child: Container(
+    alignment: Alignment.center,
+    height: 100 + growAnim.value,
+    width: 100 + growAnim.value,
+    decoration: BoxDecoration(
+      color: Colors.blue,
+        boxShadow: [
+          BoxShadow(blurRadius: anim.value),
+        ],        
+  ),
+),
+```
+
+### AnimationCreate
+
+```dart
+ AnimationCreate<double>(
+        begin: 0.1,
+        end: 1.0,
+        curve: Curves.easeIn,
+        duration: 1000,
+        repeat: true,
+        reverse: true,
+        builder: (context, anim) {          
+          return Opacity(
+                opacity: anim.value,
+                child: Text(
+                  'Loading...',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26.0,
+                  ),
+                ),
+              );
+```
+
+
+### AnimationCurved
+
+```dart
+ circleAnim = AnimationCurved<double>(
+        duration: Duration(milliseconds: 7000),
+        setState: setState,
+        tickerProvider: this,
+        begin: 360.0,
+        end: 1.0,
+        curve: Curves.bounceInOut,
+        onAnimating: _onAnimating,
+);
+
+circleAnim.forward();
+```
+
+### CompositeItem and AnimationComposite
+
+```dart
+    compAnim = AnimationComposite(
+        duration: Duration(milliseconds: 1750),
+        setState: setState,
+        tickerProvider: this,
+        composite: {
+          'background': CompositeItem<Color>(
+              begin: Colors.amber, end: Colors.blue, curve: Curves.elasticIn),
+          'grow': CompositeItem<double>(begin: 1.0, end: 40.0),
+          'rotate': CompositeItem<double>(
+              begin: math.pi / 4, end: math.pi, curve: Curves.easeIn),
+          'color': CompositeItem<Color>(
+              begin: Colors.green, end: Colors.orange, curve: Curves.elasticIn),
+          'shadow': CompositeItem<double>(begin: 5.0, end: 30.0),
+          'rounded': CompositeItem<double>(
+            begin: 0.0,
+            end: 150.0,
+            curve: Curves.easeIn,
+          )
+        });
+
+    movAnim = AnimationComposite(
+        duration: Duration(milliseconds: 1750),
+        setState: setState,
+        tickerProvider: this,
+        composite: {
+          'upper': CompositeItem<Offset>(
+              begin: Offset(-60.0, -30.0),
+              end: Offset(80.0, 15.0),
+              curve: Curves.easeIn),
+          'lower': CompositeItem<Offset>(
+              begin: Offset(-80.0, 0.0),
+              end: Offset(70.0, -25.0),
+              curve: Curves.easeInCirc),
+        });
+
+
+
+// Example
+Transform.translate(
+  offset: movAnim.value('lower'),
+  child: Transform.rotate(
+    angle: compAnim.value('rotate'),
+    child: Container(
+      alignment: Alignment.center,
+      height: 100 + compAnim.value('grow'),
+      width: 100 + compAnim.value('grow'),
+      decoration: BoxDecoration(
+        color: compAnim.value('color'),
+        boxShadow: [
+          BoxShadow(blurRadius: compAnim.value('shadow')),
+          ],
+        borderRadius: BorderRadius.circular(
+          compAnim.value('rounded'),
+          ),
+       ),
+    ),
+  ),
+),
+```
+
+### CompositeCreate
+
+```dart
+
+enum AnimationType {
+  fadeIn,  
+  scale,  
+  fadeOut,  
+}
+
+
+ @override
+  Widget build(BuildContext context) {
+    return CompositeCreate(
+      duration: duration,
+      repeat: false,
+      compositeMap: {
+        AnimationType.fadeIn: CompositeItem<double>(
+          begin: 0.2,
+          end: 1.0,
+          curve: const Interval(
+            0.0,
+            0.2,
+            curve: Curves.linear,
+          ),
+        ),
+        AnimationType.scale: CompositeItem<double>(
+          begin: reverse ? 0.8 : 1.0,
+          end: reverse ? 1.0 : 0.8,
+          curve: const Interval(
+            0.2,
+            0.6,
+            curve: Curves.linear,
+          ),
+        ),
+        AnimationType.fadeOut: CompositeItem<double>(
+          begin: 1.0,
+          end: 0.0,
+          curve: Interval(
+            0.7,
+            0.8,
+            curve: Curves.linear,
+          ),
+        ),
+      },
+      onCompleted: onCompleted,
+      builder: (context, comp) {
+        return Transform.scale(
+          scale: comp.value(AnimationType.scale),
+          child: Opacity(
+                  opacity: comp.value(AnimationType.fadeIn),
+                  child: Opacity(
+                    opacity: comp.value(AnimationType.fadeOut),
+                    child: Text(
+                      'Text',
+```
+
+
+
+
 
 
 ### ScenesObject
@@ -737,224 +1289,34 @@ StagedWidget(
   }),
 ```
 
-## Animations
+### WavesWidget
 
-### AnimationTween
+#### Usage
 
 ```dart
-anim = AnimationTween<double>(
-        duration: Duration(milliseconds: 120000),
-        setState: setState,
-        tickerProvider: this,
-        begin: 360.0,
-        end: 1.0,
-        onAnimating: _onAnimating,
-);
-
-opacityAnim = AnimationTween<double>(
-  begin: 0.5,
-  end: 1.0,
-  controller: anim.baseController,
-);
-
-growAnim = AnimationTween<double>(
-  begin: 1.0,
-  end: 30.0,
-  controller: anim.baseController,
-);
-
-// Play animation
-anim.forward();
-
-
-// Called on each frame
-void _onAnimating(AnimationStatus status) {   
-  if (status == AnimationStatus.completed) {
-    anim.reverse();
-  }
-  if (status == AnimationStatus.dismissed) {
-    anim.forward();
-  }
-}
-
-
-// Example
-Opacity(
-  opacity: opacityAnim.value,
+WavesWidget(
+  width: 128.0,
+  height: 128.0,
+  color: Colors.red,
   child: Container(
-    alignment: Alignment.center,
-    height: 100 + growAnim.value,
-    width: 100 + growAnim.value,
-    decoration: BoxDecoration(
-      color: Colors.blue,
-        boxShadow: [
-          BoxShadow(blurRadius: anim.value),
-        ],        
-  ),
+    color: Colors.red[400],
+ ),
+```
+
+### ScrollingText
+
+#### Usage
+
+```dart
+ScrollingText(
+ text: 'Text scrolling (during 8 seconds).',
+ scrollingDuration: 2000, // in milliseconds
+ style: TextStyle(color: Colors.blue,
+    fontSize: 18.0, fontWeight: FontWeight.w500),
 ),
 ```
 
-### AnimationCreate
-
-```dart
- AnimationCreate<double>(
-        begin: 0.1,
-        end: 1.0,
-        curve: Curves.easeIn,
-        duration: 1000,
-        repeat: true,
-        reverse: true,
-        builder: (context, anim) {          
-          return Opacity(
-                opacity: anim.value,
-                child: Text(
-                  'Loading...',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26.0,
-                  ),
-                ),
-              );
-```
-
-
-### AnimationCurved
-
-```dart
- circleAnim = AnimationCurved<double>(
-        duration: Duration(milliseconds: 7000),
-        setState: setState,
-        tickerProvider: this,
-        begin: 360.0,
-        end: 1.0,
-        curve: Curves.bounceInOut,
-        onAnimating: _onAnimating,
-);
-
-circleAnim.forward();
-```
-
-### CompositeItem and AnimationComposite
-
-```dart
-    compAnim = AnimationComposite(
-        duration: Duration(milliseconds: 1750),
-        setState: setState,
-        tickerProvider: this,
-        composite: {
-          'background': CompositeItem<Color>(
-              begin: Colors.amber, end: Colors.blue, curve: Curves.elasticIn),
-          'grow': CompositeItem<double>(begin: 1.0, end: 40.0),
-          'rotate': CompositeItem<double>(
-              begin: math.pi / 4, end: math.pi, curve: Curves.easeIn),
-          'color': CompositeItem<Color>(
-              begin: Colors.green, end: Colors.orange, curve: Curves.elasticIn),
-          'shadow': CompositeItem<double>(begin: 5.0, end: 30.0),
-          'rounded': CompositeItem<double>(
-            begin: 0.0,
-            end: 150.0,
-            curve: Curves.easeIn,
-          )
-        });
-
-    movAnim = AnimationComposite(
-        duration: Duration(milliseconds: 1750),
-        setState: setState,
-        tickerProvider: this,
-        composite: {
-          'upper': CompositeItem<Offset>(
-              begin: Offset(-60.0, -30.0),
-              end: Offset(80.0, 15.0),
-              curve: Curves.easeIn),
-          'lower': CompositeItem<Offset>(
-              begin: Offset(-80.0, 0.0),
-              end: Offset(70.0, -25.0),
-              curve: Curves.easeInCirc),
-        });
-
-
-
-// Example
-Transform.translate(
-  offset: movAnim.value('lower'),
-  child: Transform.rotate(
-    angle: compAnim.value('rotate'),
-    child: Container(
-      alignment: Alignment.center,
-      height: 100 + compAnim.value('grow'),
-      width: 100 + compAnim.value('grow'),
-      decoration: BoxDecoration(
-        color: compAnim.value('color'),
-        boxShadow: [
-          BoxShadow(blurRadius: compAnim.value('shadow')),
-          ],
-        borderRadius: BorderRadius.circular(
-          compAnim.value('rounded'),
-          ),
-       ),
-    ),
-  ),
-),
-```
-
-### CompositeCreate
-
-```dart
-
-enum AnimationType {
-  fadeIn,  
-  scale,  
-  fadeOut,  
-}
-
-
- @override
-  Widget build(BuildContext context) {
-    return CompositeCreate(
-      duration: duration,
-      repeat: false,
-      compositeMap: {
-        AnimationType.fadeIn: CompositeItem<double>(
-          begin: 0.2,
-          end: 1.0,
-          curve: const Interval(
-            0.0,
-            0.2,
-            curve: Curves.linear,
-          ),
-        ),
-        AnimationType.scale: CompositeItem<double>(
-          begin: reverse ? 0.8 : 1.0,
-          end: reverse ? 1.0 : 0.8,
-          curve: const Interval(
-            0.2,
-            0.6,
-            curve: Curves.linear,
-          ),
-        ),
-        AnimationType.fadeOut: CompositeItem<double>(
-          begin: 1.0,
-          end: 0.0,
-          curve: Interval(
-            0.7,
-            0.8,
-            curve: Curves.linear,
-          ),
-        ),
-      },
-      onCompleted: onCompleted,
-      builder: (context, comp) {
-        return Transform.scale(
-          scale: comp.value(AnimationType.scale),
-          child: Opacity(
-                  opacity: comp.value(AnimationType.fadeIn),
-                  child: Opacity(
-                    opacity: comp.value(AnimationType.fadeOut),
-                    child: Text(
-                      'Text',
-```
-
-## Effects
+# Effects
 
 ### LinearTransition
 
@@ -1090,71 +1452,3 @@ AnimatedBlurWidget(
   child: Text('Fixed blur')
 )
 ```
-
-### WavesWidget
-
-#### Usage
-
-```dart
-WavesWidget(
-  width: 128.0,
-  height: 128.0,
-  color: Colors.red,
-  child: Container(
-    color: Colors.red[400],
- ),
-```
-
-## SharedPreferences helper
-
-#### - savePrefs(String Key, T value)
-
-#### - saveStringList(String Key, List<String> list)
-
-#### - getPref(String key)
-
-#### - getKeys()
-
-#### - remove(String key)
-
-From the "Theme changer" example:
-
-##### - Save the theme choosed so that the next time it will be set on startup
-
-```dart
-void setTheme(MyTheme theme) {
-  currentTheme.value = theme;
-  Prefs.savePref<String>('apptheme', theme.name);
-}
-```
-
-##### - Load the theme when the app starts
-
-```dart
-@override
-void init() async {
-  String lastTheme = await Prefs.getPref('apptheme');
-  if (lastTheme != null) {
-    currentTheme.value =
-      themes.firstWhere((theme) => theme.name == lastTheme, orElse: () => themes[0]);
-  } else {
-    currentTheme.value = themes[0];
-  }
-}
-```
-
-## Various
-
-### ScrollingText
-
-#### Usage
-
-```dart
-ScrollingText(
- text: 'Text scrolling (during 8 seconds).',
- scrollingDuration: 2000, // in milliseconds
- style: TextStyle(color: Colors.blue,
-    fontSize: 18.0, fontWeight: FontWeight.w500),
-),
-```
-
