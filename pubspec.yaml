@@ -1,7 +1,7 @@
 name: frideos
 homepage: https://github.com/frideosapps/frideos_flutter
 description: An all-in-one package for state management, reactive objects, animations, effects, timed widgets etc.
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ">=2.0.0 <3.0.0"
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  rxdart: ^0.23.1  
+  rxdart: ^0.24.1  
 
 dev_dependencies:
   flutter_test:

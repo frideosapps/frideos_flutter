@@ -20,15 +20,10 @@ class AppStateProvider<T extends AppStateModel> extends StatefulWidget {
   final bool initAppState;
 
   @override
-  _AppStateProviderState createState() {
-    return _AppStateProviderState();
-  }
+  _AppStateProviderState createState() => _AppStateProviderState();
 
-  static T of<T extends AppStateModel>(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_InheritedState)
-            as _InheritedState)
-        .state;
-  }
+  static T of<T extends AppStateModel>(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_InheritedState>().state;
 }
 
 class _AppStateProviderState extends State<AppStateProvider> {

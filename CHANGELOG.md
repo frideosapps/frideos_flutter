@@ -1,3 +1,7 @@
+# Version 1.0.1 (17-05-20)
+- Updated RxDart to 24.1
+- Switch from inheritFromWidgetOfExactType to dependOnInheritedWidgetOfExactType on AppStateProvider class
+
 # Version 1.0.0+1 (05-01-20)
 - Fix package description
 
