@@ -42,10 +42,10 @@ class _ScrollingTextState extends State<ScrollingText> {
 
   void startShowingText(String str) {
     timer = Utils.sendText(
-      str,
-      textStream,
-      null,
-      widget.scrollingDuration,
+      text: str,
+      stream: textStream,
+      duration: null,
+      milliseconds: widget.scrollingDuration,
     );
   }
 
