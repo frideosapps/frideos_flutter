@@ -9,11 +9,10 @@ class Utils {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi feugiat quis massa at tincidunt. Proin lacus sapien, ullamcorper sed diam a, varius ornare ligula. Maecenas vitae velit ac orci lacinia convallis in vel nisl. Mauris lacinia, nisi ut porttitor finibus, metus est mattis metus, in laoreet metus lacus nec risus.';
 
   static Timer sendText(
-    String text,
-    StreamedValue stream,
-    int? duration,
-    int milliseconds,
-  ) {
+      {required String text,
+      required StreamedValue stream,
+      required int milliseconds,
+      int? duration}) {
     int index = 0;
     late Timer timer;
 
