@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:frideos/frideos.dart';
-import 'package:frideos/src/scenes_object/scene.dart';
-import 'package:frideos/src/scenes_object/scenes_object.dart';
 
 ///
 ///
@@ -82,18 +79,13 @@ import 'package:frideos/src/scenes_object/scenes_object.dart';
 /// ```
 class ScenesCreate extends StatefulWidget {
   const ScenesCreate(
-      {@required this.scenes,
-      Key key,
-      this.absoluteTiming = false,
-      this.onStart,
-      this.onEnd})
-      : assert(scenes != null, 'The scenes argument is null.'),
-        super(key: key);
+      {required this.scenes, Key? key, this.absoluteTiming = false, this.onStart, this.onEnd})
+      : super(key: key);
 
   final List<Scene> scenes;
   final bool absoluteTiming;
-  final Function onStart;
-  final Function onEnd;
+  final Function? onStart;
+  final Function? onEnd;
 
   @override
   _ScenesCreateState createState() {
@@ -108,10 +100,10 @@ class _ScenesCreateState extends State<ScenesCreate> {
   void initState() {
     super.initState();
     if (widget.onStart != null) {
-      scenesObject.setCallback(widget.onStart);
+      scenesObject.setCallback(widget.onStart!);
     }
     if (widget.onEnd != null) {
-      scenesObject.setOnEndCallback(widget.onEnd);
+      scenesObject.setOnEndCallback(widget.onEnd!);
     }
     scenesObject
       ..setScenesList(widget.scenes)
@@ -128,7 +120,6 @@ class _ScenesCreateState extends State<ScenesCreate> {
   Widget build(BuildContext context) {
     final stage = scenesObject.getScene(0);
     assert(stage != null);
-    return ValueBuilder(
-        streamed: scenesObject, builder: (context, snapshot) => snapshot.data);
+    return ValueBuilder(streamed: scenesObject, builder: (context, snapshot) => snapshot.data);
   }
 }

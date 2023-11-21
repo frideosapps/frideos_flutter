@@ -10,23 +10,25 @@ import 'interfaces/app_state.dart';
 /// tree.
 ///
 class AppStateProvider<T extends AppStateModel> extends StatefulWidget {
-  const AppStateProvider(
-      {@required this.appState, @required this.child, this.initAppState = true})
-      : assert(appState != null, 'The appState argument is null.'),
-        assert(child != null, 'The child argument is null.');
+  const AppStateProvider({
+    super.key,
+    required this.appState,
+    required this.child,
+    this.initAppState = true,
+  });
 
   final T appState;
   final Widget child;
   final bool initAppState;
 
   @override
-  _AppStateProviderState createState() => _AppStateProviderState();
+  State<AppStateProvider<T>> createState() => _AppStateProviderState<T>();
 
   static T of<T extends AppStateModel>(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<_InheritedState>().state;
+      context.dependOnInheritedWidgetOfExactType<_InheritedState<T>>()!.state;
 }
 
-class _AppStateProviderState extends State<AppStateProvider> {
+class _AppStateProviderState<T extends AppStateModel> extends State<AppStateProvider<T>> {
   @override
   void initState() {
     super.initState();
@@ -46,14 +48,14 @@ class _AppStateProviderState extends State<AppStateProvider> {
       _InheritedState(state: widget.appState, child: widget.child);
 }
 
-class _InheritedState extends InheritedWidget {
+class _InheritedState<T> extends InheritedWidget {
   const _InheritedState({
-    @required this.state,
-    @required Widget child,
-    Key key,
+    required this.state,
+    required Widget child,
+    Key? key,
   }) : super(key: key, child: child);
 
-  final AppStateModel state;
+  final T state;
 
   @override
   bool updateShouldNotify(_InheritedState old) => state != old.state;
