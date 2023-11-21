@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:frideos/frideos.dart';
 
 ///
@@ -23,24 +22,21 @@ import 'package:frideos/frideos.dart';
 ///
 ///
 class StagedWidget extends StatefulWidget {
-  const StagedWidget(
-      {@required this.stagesMap,
-      Key key,
-      this.absoluteTiming = false,
-      this.onStart,
-      this.onEnd})
-      : assert(stagesMap != null, 'The stagesMap argument is null.'),
-        super(key: key);
+  const StagedWidget({
+    required this.stagesMap,
+    Key? key,
+    this.absoluteTiming = false,
+    this.onStart,
+    this.onEnd,
+  }) : super(key: key);
 
   final Map<int, Stage> stagesMap;
   final bool absoluteTiming;
-  final Function onStart;
-  final Function onEnd;
+  final Function? onStart;
+  final Function? onEnd;
 
   @override
-  _StagedWidgetState createState() {
-    return _StagedWidgetState();
-  }
+  _StagedWidgetState createState() => _StagedWidgetState();
 }
 
 class _StagedWidgetState extends State<StagedWidget> {
@@ -50,10 +46,10 @@ class _StagedWidgetState extends State<StagedWidget> {
   void initState() {
     super.initState();
     if (widget.onStart != null) {
-      staged.setCallback(widget.onStart);
+      staged.setCallback(widget.onStart!);
     }
     if (widget.onEnd != null) {
-      staged.setOnEndCallback(widget.onEnd);
+      staged.setOnEndCallback(widget.onEnd!);
     }
     staged
       ..setStagesMap(widget.stagesMap)
@@ -70,7 +66,6 @@ class _StagedWidgetState extends State<StagedWidget> {
   Widget build(BuildContext context) {
     final stage = staged.getStage(0);
     assert(stage != null);
-    return ValueBuilder(
-        streamed: staged, builder: (context, snapshot) => snapshot.data);
+    return ValueBuilder(streamed: staged, builder: (context, snapshot) => snapshot.data);
   }
 }

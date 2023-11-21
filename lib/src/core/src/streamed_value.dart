@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'streamed_list.dart';
-
 import 'interfaces/streamed_object.dart';
+import 'streamed_list.dart';
 
 /// It's the simplest class that implements the [StreamedObject] interface.
 ///
@@ -88,22 +87,22 @@ class StreamedValue<T> implements StreamedObject<T> {
       ..stream.listen((e) {
         _lastValue = e;
         if (_onChange != null) {
-          _onChange(e);
+          _onChange!(e);
         }
       }, onError: onError);
 
     if (initialData != null) {
-      _lastValue = initialData;
+      _lastValue = initialData!;
       stream.sink.add(_lastValue);
     }
   }
 
   /// Stream of type [BehaviorSubject] in order to emit
   /// the last event to every new listener.
-  BehaviorSubject<T> stream;
+  late BehaviorSubject<T> stream;
 
   /// Callback to handle the errors
-  final Function onError;
+  final Function? onError;
 
   /// Stream getter
   @override
@@ -113,10 +112,10 @@ class StreamedValue<T> implements StreamedObject<T> {
   Function get inStream => stream.sink.add;
 
   /// Last value emitted by the stream
-  T _lastValue;
+  late T _lastValue;
 
   /// The initial event of the stream
-  T initialData;
+  T? initialData;
 
   /// timesUpdate shows how many times the stream got updated
   int timesUpdated = 0;
@@ -125,7 +124,7 @@ class StreamedValue<T> implements StreamedObject<T> {
   bool _debugMode = false;
 
   /// This function will be called every time the stream updates.
-  Function(T data) _onChange;
+  Function(T data)? _onChange;
 
   /// Getter for the last value emitted by the stream
   @override
@@ -179,10 +178,10 @@ class StreamedValue<T> implements StreamedObject<T> {
 ///
 ///
 class MemoryValue<T> extends StreamedValue<T> {
-  MemoryValue({T initialData, Function onError})
+  MemoryValue({required T initialData, Function? onError})
       : super(initialData: initialData, onError: onError);
 
-  T _oldValue;
+  late T _oldValue;
 
   T get oldValue => _oldValue;
 
@@ -210,7 +209,7 @@ class MemoryValue<T> extends StreamedValue<T> {
 /// is called to send it to the [_historyStream].
 ///
 class HistoryObject<T> extends MemoryValue<T> {
-  HistoryObject({T initialData, Function onError})
+  HistoryObject({required T initialData, Function? onError})
       : super(initialData: initialData, onError: onError);
 
   final _historyStream = StreamedList<T>(initialData: []);
@@ -297,9 +296,9 @@ const int updateTimerMilliseconds = 17;
 ///```
 ///
 class TimerObject extends StreamedValue<int> {
-  Timer _timer;
+  Timer? _timer;
 
-  Duration _interval = Duration(milliseconds: updateTimerMilliseconds);
+  Duration _interval = const Duration(milliseconds: updateTimerMilliseconds);
 
   bool isTimerActive = false;
 
@@ -377,7 +376,7 @@ class TimerObject extends StreamedValue<int> {
   /// Stop timer and stopwatch, and set to false the booleans
   void stopTimer() {
     if (isTimerActive) {
-      _timer.cancel();
+      _timer!.cancel();
       _time = 0;
       inStream(null);
       isTimerActive = false;
@@ -398,14 +397,16 @@ class TimerObject extends StreamedValue<int> {
 
   /// Method to cancel the current timer
   void pauseTimer() {
-    _timer.cancel();
+    if (_timer != null) {
+      _timer!.cancel();
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
     if (_timer != null) {
-      _timer.cancel();
+      _timer!.cancel();
     }
     _stopwatchStreamed.dispose();
     _stopwatch.stop();
@@ -484,24 +485,24 @@ class StreamedTransformed<T, S> implements StreamedObject<T> {
       ..listen((e) {
         _lastValue = e;
         if (_onChange != null) {
-          _onChange(e);
+          _onChange!(e);
         }
       }, onError: onError);
 
     if (initialData != null) {
-      _lastValue = initialData;
+      _lastValue = initialData!;
       stream.sink.add(_lastValue);
     }
   }
 
   /// Last value emitted by the stream
-  T _lastValue;
+  late T _lastValue;
 
   /// The initial event of the stream
-  T initialData;
+  T? initialData;
 
   /// Value of the last event transformed
-  S transformed;
+  S? transformed;
 
   /// timesUpdate shows how many times the stream got updated
   int timesUpdated = 0;
@@ -509,10 +510,10 @@ class StreamedTransformed<T, S> implements StreamedObject<T> {
   /// Debug mode (Default: false)
   bool _debugMode = false;
 
-  BehaviorSubject<T> stream;
+  late BehaviorSubject<T> stream;
 
   /// Callback to handle the errors
-  final Function onError;
+  final Function? onError;
 
   /// Sink for the stream
   Function get inStream => stream.sink.add;
@@ -522,7 +523,7 @@ class StreamedTransformed<T, S> implements StreamedObject<T> {
   Stream<T> get outStream => stream.stream;
 
   /// Streamtransformer
-  StreamTransformer _transformer;
+  late StreamTransformer<T, S> _transformer;
 
   /// Getter for the stream transformed
   Stream<S> get outTransformed => stream.stream.transform(_transformer);
@@ -535,7 +536,7 @@ class StreamedTransformed<T, S> implements StreamedObject<T> {
   set value(T value) => inStream(value);
 
   /// This function will be called every time the stream updates.
-  Function(T data) _onChange;
+  Function(T data)? _onChange;
 
   /// This function will be called every time the stream updates.
   void onChange(Function(T data) onDataChanged) {
@@ -543,9 +544,9 @@ class StreamedTransformed<T, S> implements StreamedObject<T> {
   }
 
   /// To set a function that will be called every time the stream updates.
-  void setTransformer(StreamTransformer<T, S> transformer) {
+  void setTransformer(StreamTransformer<T, S>? transformer) {
     assert(transformer != null, 'Invalid transformer.');
-    _transformer = transformer;
+    _transformer = transformer!;
   }
 
   /// To enable the debug mode

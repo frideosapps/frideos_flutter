@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 /// This class is used to handle the scenes:
 ///
 class Scene {
-  Scene({this.widget, this.time, this.onShow});
+  Scene({required this.widget, required this.time, this.onShow});
 
   Widget widget;
   int time; // milliseconds
-  Function onShow;
+  Function? onShow;
 }
 
 ///

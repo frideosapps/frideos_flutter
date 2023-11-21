@@ -8,13 +8,16 @@ class Utils {
   static String loremLight =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi feugiat quis massa at tincidunt. Proin lacus sapien, ullamcorper sed diam a, varius ornare ligula. Maecenas vitae velit ac orci lacinia convallis in vel nisl. Mauris lacinia, nisi ut porttitor finibus, metus est mattis metus, in laoreet metus lacus nec risus.';
 
-  static Timer sendText(String text, StreamedValue stream, int milliseconds,
-      [int duration]) {
+  static Timer sendText(
+    String text,
+    StreamedValue stream,
+    int? duration,
+    int milliseconds,
+  ) {
     int index = 0;
-    Timer timer;
+    late Timer timer;
 
-    final int refresh =
-        duration != null ? (duration ~/ text.length).toInt() : milliseconds;
+    final int refresh = duration != null ? (duration ~/ text.length).toInt() : milliseconds;
 
     timer = Timer.periodic(Duration(milliseconds: refresh), (Timer t) {
       if (index <= text.length - 1) {
@@ -28,10 +31,9 @@ class Utils {
     return timer;
   }
 
-  static Timer sendTextTo(
-      Timer timer, String text, int milliseconds, Function(String) callback) {
+  static Timer sendTextTo(Timer timer, String text, int milliseconds, Function(String) callback) {
     int index = 0;
-    Timer timer;
+    late Timer timer;
     timer = Timer.periodic(Duration(milliseconds: milliseconds), (Timer t) {
       if (index <= text.length - 1) {
         final toShow = text.substring(0, index + 1);
@@ -44,14 +46,11 @@ class Utils {
     return timer;
   }
 
-  static Timer sendParagraph(
-      String text, StreamedValue stream, int milliseconds,
-      [int duration]) {
+  static Timer sendParagraph(String text, StreamedValue stream, int milliseconds, [int? duration]) {
     int index = 0;
-    Timer timer;
+    late Timer timer;
 
-    final int refresh =
-        duration != null ? (duration ~/ text.length).toInt() : milliseconds;
+    final int refresh = duration != null ? (duration ~/ text.length).toInt() : milliseconds;
 
     final words = text.split(' ');
 
@@ -68,8 +67,7 @@ class Utils {
     return timer;
   }
 
-  static double convertRange(
-      double _min, double _max, double min, double max, double value) {
+  static double convertRange(double _min, double _max, double min, double max, double value) {
     final deltaValue = value - _min;
     final newRange = max - min;
     final oldRange = _max - _min;

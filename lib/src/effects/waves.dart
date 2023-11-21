@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../core/core.dart';
-
 import '../extended_asyncwidgets.dart';
 
 const double strokeWidth = 25;
@@ -14,17 +13,16 @@ const double baseHeight = 15;
 ///
 class WavesWidget extends StatefulWidget {
   const WavesWidget({
-    @required this.child,
-    Key key,
+    required this.child,
+    Key? key,
     this.width,
     this.height,
-    this.color,
+    required this.color,
     this.refreshTime = 20,
-  })  : assert(child != null, 'The child argument is null.'),
-        super(key: key);
+  }) : super(key: key);
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final MaterialColor color;
   final Widget child;
 
@@ -34,13 +32,13 @@ class WavesWidget extends StatefulWidget {
   final int refreshTime;
 
   @override
-  _WavesWidgetState createState() {
+  State<WavesWidget> createState() {
     return _WavesWidgetState();
   }
 }
 
 class _WavesWidgetState extends State<WavesWidget> {
-  AnimatedObject<int> frame;
+  late AnimatedObject<int> frame;
 
   @override
   void initState() {
@@ -73,8 +71,7 @@ class _WavesWidgetState extends State<WavesWidget> {
                   child: widget.child,
                 ),
                 CustomPaint(
-                  painter:
-                      _WavesPainter(frame: snapshot.data, color: widget.color),
+                  painter: _WavesPainter(frame: snapshot.data!, color: widget.color),
                   child: Container(
                     height: widget.height,
                   ),
@@ -87,7 +84,7 @@ class _WavesWidgetState extends State<WavesWidget> {
 }
 
 class _WavesPainter extends CustomPainter {
-  _WavesPainter({this.frame, this.color});
+  _WavesPainter({required this.frame, required this.color});
 
   final int frame;
   MaterialColor color;
@@ -95,7 +92,7 @@ class _WavesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color[700]
+      ..color = color[700]!
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..blendMode = BlendMode.softLight
@@ -118,7 +115,7 @@ class _WavesPainter extends CustomPainter {
     canvas.drawPath(path, paint);
 
     paint
-      ..color = color[300]
+      ..color = color[300]!
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..blendMode = BlendMode.softLight
@@ -139,7 +136,7 @@ class _WavesPainter extends CustomPainter {
     canvas.drawPath(path, paint);
 
     paint
-      ..color = color[300]
+      ..color = color[300]!
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..blendMode = BlendMode.softLight
@@ -160,7 +157,7 @@ class _WavesPainter extends CustomPainter {
     canvas.drawPath(path, paint);
 
     paint
-      ..color = color[500]
+      ..color = color[500]!
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..blendMode = BlendMode.softLight

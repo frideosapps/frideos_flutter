@@ -12,7 +12,7 @@ An all-in-one package for state management, streams and BLoC pattern, animations
 - ValueBuilder
 - StreamedWidget
 
-  
+
 #### Specialized StreamedObjects
 - StreamedList
 - StreamedMap
@@ -59,21 +59,21 @@ An all-in-one package for state management, streams and BLoC pattern, animations
 
 - [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/frideos_library): an implementation of the Todo App of the [Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples) repository using this package.
 
-- [Frideos examples](https://github.com/frideosapps/frideos_examples): an example app to show how to use some features of this library. 
-  - Streamed objects
-  - Streamed collections
-  - TimerObject: a simple stopwatch
-  - StagedObject
-  - StagedWidget
-  - AnimatedObject
-  - Multiple selection and tunnel pattern (to share data between two blocs)
-  - LinearTransition
-  - CurvedTransition
-  - Blur (fixed, in, out, animated)
-  - WavesWidget
-  - Sliders
-  - Products catalog
-  
+- [Frideos examples](https://github.com/frideosapps/frideos_examples): an example app to show how to use some features of this library.
+    - Streamed objects
+    - Streamed collections
+    - TimerObject: a simple stopwatch
+    - StagedObject
+    - StagedWidget
+    - AnimatedObject
+    - Multiple selection and tunnel pattern (to share data between two blocs)
+    - LinearTransition
+    - CurvedTransition
+    - Blur (fixed, in, out, animated)
+    - WavesWidget
+    - Sliders
+    - Products catalog
+
 - [Dynamic fields validation](https://github.com/frideosapps/dynamic_fields_validation): a Flutter example on how to validate dynamically created fields with the BLoC pattern and this package.
 
 - [Theme changer](https://github.com/frideosapps/theme_changer): a simple starter app with a drawer, app state management, dynamic theme changer and persistent theme using the sharedpreferences.
@@ -83,13 +83,13 @@ An all-in-one package for state management, streams and BLoC pattern, animations
 - [Blood pressure](https://github.com/frideosapps/bloodpressure): an example of a medical app built with Flutter for the classification of the arterial blood pressure.
 
 - [Pair game](https://github.com/frideosapps/pair_game): a simple pair game (multiple selections, animations, tunnel pattern).
-  
+
 ## Dependencies
 
 - [RxDart](https://pub.dartlang.org/packages/rxdart)
 
-   
-    
+
+
 # State management
 
 ### Getting started
@@ -975,19 +975,19 @@ Every scene is handled by using the Scene class:
  }
  ```
 
- ##### N.B. The onShow callback is used to trigger an action when the scene shows
+##### N.B. The onShow callback is used to trigger an action when the scene shows
 
- #### Usage
- From the ScenesObject example:
+#### Usage
+From the ScenesObject example:
 
- #### 1 - Declare a list of scenes
+#### 1 - Declare a list of scenes
 
  ```dart
  final ScenesObject scenesObject = ScenesObject();
  ```
- 
- #### 2 - Add some scenes
- 
+
+#### 2 - Add some scenes
+
  ```dart
  scenes.addAll([
    Scene(
@@ -1021,7 +1021,7 @@ Every scene is handled by using the Scene class:
    }
  }
  ```
- #### 3 - Setup the ScenesObject and play the scenes
+#### 3 - Setup the ScenesObject and play the scenes
 
  ```dart
  scenesObject
@@ -1035,26 +1035,26 @@ Every scene is handled by using the Scene class:
 
 ### ScenesCreate
 
- This widget uses a [ScenesObject] for the timing of the widgets
- visualization.
+This widget uses a [ScenesObject] for the timing of the widgets
+visualization.
 
- It takes as a parameter a List<Scene> and plays every [Scene].
+It takes as a parameter a List<Scene> and plays every [Scene].
 
- By default to change the stage is used the relative time, so the time
- parameter of the [Scene] indicates how much time the stage will lasts.
- Instead, to specify the absolute time, set to true the [absoluteTiming]
- flag, in this case the time parameter indicates the absolute time when
- to show the scene.
+By default to change the stage is used the relative time, so the time
+parameter of the [Scene] indicates how much time the stage will lasts.
+Instead, to specify the absolute time, set to true the [absoluteTiming]
+flag, in this case the time parameter indicates the absolute time when
+to show the scene.
 
- The [onStart] is used to call a function when the ScenesObject begins
- to play the stages.
+The [onStart] is used to call a function when the ScenesObject begins
+to play the stages.
 
- The [onEnd] callback is called at the end of the last stage when the timeing
- is relative (the [absoluteTiming] flag is set to false).
+The [onEnd] callback is called at the end of the last stage when the timeing
+is relative (the [absoluteTiming] flag is set to false).
 
- #### Usage
- From the ScenesObject example:
- 
+#### Usage
+From the ScenesObject example:
+
  ```dart
 ScenesCreate(
   scenes: [

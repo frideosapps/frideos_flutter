@@ -35,16 +35,16 @@ import 'streamed_value.dart';
 class StreamedSender<T> {
   StreamedSender();
 
-  StreamedSender.setReceiver(StreamedValue<T> receiver)
+  StreamedSender.setReceiver(StreamedValue<T>? receiver)
       : assert(receiver != null, 'The receiver argument is null.') {
-    _receiver = receiver;
+    _receiver = receiver!;
   }
 
-  StreamedValue<T> _receiver;
+  late StreamedValue<T> _receiver;
 
-  void setReceiver(StreamedValue<T> receiver) {
+  void setReceiver(StreamedValue<T>? receiver) {
     assert(receiver != null, 'The receiver argument is null.');
-    _receiver = receiver;
+    _receiver = receiver!;
   }
 
   void send(T data) {
@@ -87,16 +87,16 @@ class StreamedSender<T> {
 class ListSender<T> {
   ListSender();
 
-  ListSender.setReceiver(StreamedList<T> receiver)
+  ListSender.setReceiver(StreamedList<T>? receiver)
       : assert(receiver != null, 'The receiver argument is null.') {
-    _receiver = receiver;
+    _receiver = receiver!;
   }
 
-  StreamedList<T> _receiver;
+  late StreamedList<T> _receiver;
 
-  void setReceiver(StreamedList<T> receiver) {
+  void setReceiver(StreamedList<T>? receiver) {
     assert(receiver != null, 'The receiver argument is null.');
-    _receiver = receiver;
+    _receiver = receiver!;
   }
 
   void send(List<T> data) {
@@ -136,18 +136,18 @@ class ListSender<T> {
 class MapSender<K, V> {
   MapSender();
 
-  MapSender.setReceiver(StreamedMap<K, V> receiver)
+  MapSender.setReceiver(StreamedMap<K, V>? receiver)
       : assert(receiver != null, 'The receiver argument is null.') {
-    _receiver = receiver;
+    _receiver = receiver!;
   }
 
-  StreamedMap<K, V> _receiver;
+  late StreamedMap<K, V> _receiver;
 
   /// Method to set the [StreamedMap] on the other bloc where
   /// to send the data
-  void setReceiver(StreamedMap<K, V> receiver) {
+  void setReceiver(StreamedMap<K, V>? receiver) {
     assert(receiver != null, 'The receiver argument is null.');
-    _receiver = receiver;
+    _receiver = receiver!;
   }
 
   /// Method to send the data to the StreamedMap set by the [setReceiver]

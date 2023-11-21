@@ -51,40 +51,35 @@ typedef WaitingCallback = Widget Function();
 ///
 ///
 class ValueBuilder<T> extends StreamBuilder<T> {
-  ValueBuilder(
-      {@required StreamedObject<T> streamed,
-      @required this.builder,
-      Key key,
-      T initialData,
-      this.noDataChild,
-      this.onNoData,
-      this.errorChild,
-      this.onError})
-      : assert(streamed != null, 'The streamed argument is null.'),
-        assert(builder != null, 'The builder argument is null.'),
-        super(
-            key: key,
-            initialData: initialData,
-            stream: streamed.outStream,
-            builder: builder);
+  ValueBuilder({
+    required StreamedObject<T> streamed,
+    required this.builder,
+    Key? key,
+    T? initialData,
+    this.noDataChild,
+    this.onNoData,
+    this.errorChild,
+    this.onError,
+  }) : super(key: key, initialData: initialData, stream: streamed.outStream, builder: builder);
 
+  @override
   final AsyncWidgetBuilder<T> builder;
 
   ///
   /// If the snapshot has no data then this widget is returned
-  final Widget noDataChild;
+  final Widget? noDataChild;
 
   ///
   /// If no [noDataChild] is provided then the [onNoData] callback is called
-  final WaitingCallback onNoData;
+  final WaitingCallback? onNoData;
 
   ///
   /// This widget is returned if there is an error
-  final Widget errorChild;
+  final Widget? errorChild;
 
   ///
   /// If no [errorChild] is provided then the [onError] callback is called
-  final ErrorCallback onError;
+  final ErrorCallback? onError;
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<T> currentSummary) {
@@ -94,16 +89,16 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 
     if (currentSummary.hasError) {
       if (errorChild != null) {
-        return errorChild;
+        return errorChild!;
       } else {
-        return onError != null ? onError(currentSummary.error) : Container();
+        return onError != null ? onError!(currentSummary.error!) : Container();
       }
     }
 
     if (noDataChild != null) {
-      return noDataChild;
+      return noDataChild!;
     } else {
-      return onNoData != null ? onNoData() : Container();
+      return onNoData != null ? onNoData!() : Container();
     }
   }
 }
@@ -161,36 +156,37 @@ class ValueBuilder<T> extends StreamBuilder<T> {
 ///
 class StreamedWidget<T> extends StreamBuilder<T> {
   const StreamedWidget(
-      {@required Stream<T> stream,
-      @required this.builder,
-      Key key,
+      {required Stream<T> stream,
+      required this.builder,
+      Key? key,
       this.initialData,
       this.noDataChild,
       this.onNoData,
       this.errorChild,
       this.onError})
-      : assert(stream != null, 'The stream argument is null.'),
-        assert(builder != null, 'The builder argument is null.'),
-        super(key: key, stream: stream, builder: builder);
+      : super(key: key, stream: stream, builder: builder);
 
+  @override
   final AsyncWidgetBuilder<T> builder;
-  final T initialData;
+
+  @override
+  final T? initialData;
 
   ///
   /// If the snapshot has no data then this widget is returned
-  final Widget noDataChild;
+  final Widget? noDataChild;
 
   ///
   /// If no [noDataChild] is provided then the [onNoData] callback is called
-  final WaitingCallback onNoData;
+  final WaitingCallback? onNoData;
 
   ///
   /// This widget is returned if there is an error
-  final Widget errorChild;
+  final Widget? errorChild;
 
   ///
   /// If no [errorChild] is provided then the [onError] callback is called
-  final ErrorCallback onError;
+  final ErrorCallback? onError;
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<T> currentSummary) {
@@ -200,16 +196,16 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 
     if (currentSummary.hasError) {
       if (errorChild != null) {
-        return errorChild;
+        return errorChild!;
       } else {
-        return onError != null ? onError(currentSummary.error) : Container();
+        return onError != null ? onError!(currentSummary.error!) : Container();
       }
     }
 
     if (noDataChild != null) {
-      return noDataChild;
+      return noDataChild!;
     } else {
-      return onNoData != null ? onNoData() : Container();
+      return onNoData != null ? onNoData!() : Container();
     }
   }
 }
@@ -247,17 +243,15 @@ class StreamedWidget<T> extends StreamBuilder<T> {
 ///
 class FuturedWidget<T> extends StatelessWidget {
   const FuturedWidget(
-      {@required this.future,
-      @required this.builder,
-      Key key,
-      this.initialData,
+      {required this.future,
+      required this.builder,
+      Key? key,
+      required this.initialData,
       this.onWaitingChild,
       this.onWaiting,
       this.errorChild,
       this.onError})
-      : assert(future != null, 'The future argument is null.'),
-        assert(builder != null, 'The builder argument is null.'),
-        super(key: key);
+      : super(key: key);
 
   final T initialData;
   final Future<T> future;
@@ -265,19 +259,19 @@ class FuturedWidget<T> extends StatelessWidget {
 
   ///
   /// If the snapshot has no data then this widget is returned
-  final Widget onWaitingChild;
+  final Widget? onWaitingChild;
 
   ///
   /// If no [onWaitingChild] is provided then the [onWaiting] callback is called
-  final WaitingCallback onWaiting;
+  final WaitingCallback? onWaiting;
 
   ///
   /// This widget is returned if there is an error
-  final Widget errorChild;
+  final Widget? errorChild;
 
   ///
   /// If no [errorChild] is provided then the [onError] callback is called
-  final ErrorCallback onError;
+  final ErrorCallback? onError;
 
   @override
   Widget build(BuildContext context) {
@@ -291,16 +285,16 @@ class FuturedWidget<T> extends StatelessWidget {
 
           if (snapshot.hasError) {
             if (errorChild != null) {
-              return errorChild;
+              return errorChild!;
             } else {
-              return onError != null ? onError(snapshot.error) : Container();
+              return onError != null ? onError!(snapshot.error!) : Container();
             }
           }
 
           if (onWaitingChild != null) {
-            return onWaitingChild;
+            return onWaitingChild!;
           } else {
-            return onWaiting != null ? onWaiting() : Container();
+            return onWaiting != null ? onWaiting!() : Container();
           }
         });
   }
