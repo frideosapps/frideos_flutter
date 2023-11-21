@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/core.dart';
-
 import '../extended_asyncwidgets.dart';
 
 ///
@@ -13,35 +12,29 @@ import '../extended_asyncwidgets.dart';
 ///
 class FadeOutWidget extends StatefulWidget {
   const FadeOutWidget(
-      {@required this.child,
-      @required this.duration,
-      Key key,
-      this.curve = Curves.linear})
-      : assert(child != null, 'The child argument is null.'),
-        assert(duration != null, 'The duration argument is null.'),
-        super(key: key);
+      {required this.child, required this.duration, Key? key, this.curve = Curves.linear})
+      : super(key: key);
 
   final Widget child;
   final int duration;
   final Curve curve;
 
   @override
-  _FadeOutWidgetState createState() {
+  State<FadeOutWidget> createState() {
     return _FadeOutWidgetState();
   }
 }
 
-class _FadeOutWidgetState extends State<FadeOutWidget>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  CurvedAnimation animationCurve;
+class _FadeOutWidgetState extends State<FadeOutWidget> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late CurvedAnimation animationCurve;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-        duration: Duration(milliseconds: widget.duration), vsync: this);
+    controller =
+        AnimationController(duration: Duration(milliseconds: widget.duration), vsync: this);
     animationCurve = CurvedAnimation(parent: controller, curve: widget.curve)
       ..addListener(() {
         setState(() {});
@@ -58,15 +51,14 @@ class _FadeOutWidgetState extends State<FadeOutWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Stack(
+    return Stack(
       children: <Widget>[
         Opacity(
           opacity: 1.0 - animationCurve.value,
           child: widget.child,
         ),
       ],
-    ));
+    );
   }
 }
 
@@ -77,35 +69,29 @@ class _FadeOutWidgetState extends State<FadeOutWidget>
 ///
 class FadeInWidget extends StatefulWidget {
   const FadeInWidget(
-      {@required this.child,
-      @required this.duration,
-      Key key,
-      this.curve = Curves.linear})
-      : assert(child != null, 'The child argument is null.'),
-        assert(duration != null, 'The duration argument is null.'),
-        super(key: key);
+      {required this.child, required this.duration, Key? key, this.curve = Curves.linear})
+      : super(key: key);
 
   final Widget child;
   final int duration;
   final Curve curve;
 
   @override
-  _FadeInWidgetState createState() {
+  State<FadeInWidget> createState() {
     return _FadeInWidgetState();
   }
 }
 
-class _FadeInWidgetState extends State<FadeInWidget>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  CurvedAnimation animationCurve;
+class _FadeInWidgetState extends State<FadeInWidget> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late CurvedAnimation animationCurve;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-        duration: Duration(milliseconds: widget.duration), vsync: this);
+    controller =
+        AnimationController(duration: Duration(milliseconds: widget.duration), vsync: this);
     animationCurve = CurvedAnimation(parent: controller, curve: widget.curve)
       ..addListener(() {
         setState(() {});
@@ -122,15 +108,14 @@ class _FadeInWidgetState extends State<FadeInWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Stack(
+    return Stack(
       children: <Widget>[
         Opacity(
           opacity: animationCurve.value,
           child: widget.child,
         ),
       ],
-    ));
+    );
   }
 }
 
@@ -142,37 +127,35 @@ class _FadeInWidgetState extends State<FadeInWidget>
 ///
 class LinearTransition extends StatefulWidget {
   const LinearTransition({
-    @required this.firstWidget,
-    @required this.secondWidget,
-    @required this.transitionDuration,
-    Key key,
-  })  : assert(firstWidget != null, 'The firstWidget argument is null.'),
-        assert(secondWidget != null, 'The secondWidget argument is null.'),
-        assert(transitionDuration != null,
-            'The transitionDuration argument is null.'),
-        super(key: key);
+    required this.firstWidget,
+    required this.secondWidget,
+    required this.transitionDuration,
+    Key? key,
+  }) : super(key: key);
 
   final Widget firstWidget;
   final Widget secondWidget;
   final int transitionDuration;
 
   @override
-  _LinearTransitionState createState() {
+  State<LinearTransition> createState() {
     return _LinearTransitionState();
   }
 }
 
 class _LinearTransitionState extends State<LinearTransition> {
   final StreamedValue<double> opacity = StreamedValue<double>();
-  Timer timer;
-  int interval;
-  double opacityVel;
+  Timer? timer;
+  late int interval;
+  late double opacityVel;
 
   void _updateOpacity(Timer t) {
     var newOpacity = opacity.value + opacityVel;
     if (newOpacity > 1.0) {
       newOpacity = 1.0;
-      timer.cancel();
+      if (timer != null) {
+        timer!.cancel();
+      }
     }
 
     opacity.value = newOpacity;
@@ -190,32 +173,30 @@ class _LinearTransitionState extends State<LinearTransition> {
   @override
   void dispose() {
     if (timer != null) {
-      timer.cancel();
+      timer!.cancel();
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ValueBuilder<double>(
-        streamed: opacity,
-        builder: (context, snapshot) {
-          return Stack(
-            children: <Widget>[
-              Opacity(
-                opacity: 1.0 - snapshot.data,
-                child: widget.firstWidget,
-              ),
-              Opacity(
-                opacity: snapshot.data,
-                child: widget.secondWidget,
-              ),
-            ],
-          );
-        },
-        noDataChild: widget.firstWidget,
-      ),
+    return ValueBuilder<double>(
+      streamed: opacity,
+      builder: (context, snapshot) {
+        return Stack(
+          children: <Widget>[
+            Opacity(
+              opacity: 1.0 - snapshot.data!,
+              child: widget.firstWidget,
+            ),
+            Opacity(
+              opacity: snapshot.data!,
+              child: widget.secondWidget,
+            ),
+          ],
+        );
+      },
+      noDataChild: widget.firstWidget,
     );
   }
 }
@@ -227,17 +208,13 @@ class _LinearTransitionState extends State<LinearTransition> {
 ///
 ///
 class CurvedTransition extends StatefulWidget {
-  const CurvedTransition(
-      {@required this.firstWidget,
-      @required this.secondWidget,
-      @required this.transitionDuration,
-      Key key,
-      this.curve})
-      : assert(firstWidget != null, 'The firstWidget argument is null.'),
-        assert(secondWidget != null, 'The secondWidget argument is null.'),
-        assert(transitionDuration != null,
-            'The transitionDuration argument is null.'),
-        super(key: key);
+  const CurvedTransition({
+    required this.firstWidget,
+    required this.secondWidget,
+    required this.transitionDuration,
+    Key? key,
+    required this.curve,
+  }) : super(key: key);
 
   final Widget firstWidget;
   final Widget secondWidget;
@@ -245,23 +222,21 @@ class CurvedTransition extends StatefulWidget {
   final Curve curve;
 
   @override
-  _CurvedTransitionState createState() {
+  State<CurvedTransition> createState() {
     return _CurvedTransitionState();
   }
 }
 
-class _CurvedTransitionState extends State<CurvedTransition>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  CurvedAnimation animationCurve;
+class _CurvedTransitionState extends State<CurvedTransition> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late CurvedAnimation animationCurve;
 
   @override
   void initState() {
     super.initState();
 
     controller = AnimationController(
-        duration: Duration(milliseconds: widget.transitionDuration),
-        vsync: this);
+        duration: Duration(milliseconds: widget.transitionDuration), vsync: this);
     animationCurve = CurvedAnimation(parent: controller, curve: widget.curve)
       ..addListener(() {
         setState(() {});
@@ -278,8 +253,7 @@ class _CurvedTransitionState extends State<CurvedTransition>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Stack(
+    return Stack(
       children: <Widget>[
         Opacity(
           opacity: 1.0 - animationCurve.value,
@@ -290,6 +264,6 @@ class _CurvedTransitionState extends State<CurvedTransition>
           child: widget.secondWidget,
         ),
       ],
-    ));
+    );
   }
 }

@@ -53,11 +53,11 @@ import '../core.dart';
 ///
 ///
 class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
-  StreamedMap({Map<K, V> initialData, this.onError}) {
+  StreamedMap({Map<K, V>? initialData, this.onError}) {
     stream = StreamedValue<Map<K, V>>()
       ..stream.stream.listen((data) {
         if (_onChange != null) {
-          _onChange(data);
+          _onChange!(data);
         }
       }, onError: onError);
 
@@ -66,23 +66,23 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
     }
   }
 
-  StreamedValue<Map<K, V>> stream;
+  late StreamedValue<Map<K, V>> stream;
 
   /// Callback to handle the errors
-  final Function onError;
+  final Function? onError;
 
   /// Sink for the stream
-  Function(Map<K, V>) get inStream => stream.inStream;
+  Function get inStream => stream.inStream;
 
   /// Stream getter
   @override
   Stream<Map<K, V>> get outStream => stream.outStream;
 
   /// The initial event of the stream
-  Map<K, V> initialData;
+  Map<K, V>? initialData;
 
   /// Last value emitted by the stream
-  Map<K, V> lastValue;
+  Map<K, V>? lastValue;
 
   /// timesUpdate shows how many times the got updated
   int timesUpdated = 0;
@@ -93,7 +93,7 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
   int get length => stream.value.length;
 
   /// This function will be called every time the stream updates.
-  void Function(Map<K, V> data) _onChange;
+  void Function(Map<K, V> data)? _onChange;
 
   /// Clear the map, add all the key/value pairs of the map passed
   /// and update the stream
@@ -124,7 +124,7 @@ class StreamedMap<K, V> implements StreamedObject<Map<K, V>> {
   }
 
   /// Used to remove a key from the map and update the stream.
-  V removeKey(K key) {
+  V? removeKey(K key) {
     final removed = value.remove(key);
     refresh();
     return removed;

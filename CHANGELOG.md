@@ -1,3 +1,7 @@
+# Version 1.0.2 (21-11-23)
+- Updated for Flutter 3.13.9
+
+
 # Version 1.0.1 (17-05-20)
 - Updated RxDart to 24.1
 - Switch from inheritFromWidgetOfExactType to dependOnInheritedWidgetOfExactType on AppStateProvider class
@@ -7,9 +11,9 @@
 
 # Version 1.0.0 (05-01-20)
 - Integrated frideos_core in the package
-- Removed shared preferences helpers  
+- Removed shared preferences helpers
 - Improved Readme.md, added an article
-  
+
 # Version 0.10.0+1 (28-12-19)
 - CompositeItem fix
 
@@ -26,7 +30,7 @@
 # Version 0.9.0 (25-12-19)
 - Updated to RxDart 23.1
 - Added classes for managing scenes: ScenesObject and ScenesWidget.
-  
+
 # Version 0.8.0 (08-12-19)
 - Updated to RxDart 22.6
 - Updated to SharedPreferences 0.5.4
@@ -45,7 +49,7 @@
 
 ## Version 0.6.1 (13-04-19)
 - Update README.md: added a new example.
-  
+
 - Bugfix to the `LinearTransition` widget.
 
 ## Version 0.6.0 (31-03-19)
@@ -79,15 +83,15 @@
 ## Version 0.4.1 (10-03-19)
 
 ### - StreamedList
-  - Added `AddAll` method.  
-  
-### - AnimatedObject 
-  - added `AnimatedType` enum, to handle the behavior of the animated object.
-  - added `startAnimation` method: it is now possible specify a type of behavior (increment or decrement the value), the velocity, a minValue (in case of decrement) and a maxValue (increment).
-  - added `outStream` getter (deprecated: `animationStream`).
+- Added `AddAll` method.
 
-  - Code refactoring.
-  
+### - AnimatedObject
+- added `AnimatedType` enum, to handle the behavior of the animated object.
+- added `startAnimation` method: it is now possible specify a type of behavior (increment or decrement the value), the velocity, a minValue (in case of decrement) and a maxValue (increment).
+- added `outStream` getter (deprecated: `animationStream`).
+
+- Code refactoring.
+
 ### - Blur widgets and Wave widget refactored to use the ValueBuilder widget.
 
 ### - Code refactoring.
@@ -107,7 +111,7 @@ By extending the AppStateModel interface it is possible to create a class to dri
 
 
 ### - AppStateProvider
-Simple state provider that extends a StatefulWidget and use an InheritedWidget 
+Simple state provider that extends a StatefulWidget and use an InheritedWidget
 to share the state with the widgets on the tree. Used along with streams, it is possibile for the widgets the access this data to modify it and propagates the changes on the entire widgets tree.
 
 From the "theme changer" example:
@@ -325,7 +329,7 @@ ValueBuilder<MyTheme>(
 
 ### StreamedObjects
 #### - Added the `onChange` method. It calls a function every time the stream updates.
-#### - More details in the debugMode. 
+#### - More details in the debugMode.
 
 ### - Code refactoring
 
@@ -333,8 +337,8 @@ ValueBuilder<MyTheme>(
 ## Version 0.3.0 (24-02-19)
 
 #### - StreamedList and StreamedMap classes
-##### *Breaking change*: 
-StreamedList and StreamedMap by default aren't initialiazed (to avoid that when using them along with a StreamBuilder/StreamedWidget the `snaphost.hasData` is true from the beginning,becoming harder to show for example a loading spinner without using a workaround). 
+##### *Breaking change*:
+StreamedList and StreamedMap by default aren't initialiazed (to avoid that when using them along with a StreamBuilder/StreamedWidget the `snaphost.hasData` is true from the beginning,becoming harder to show for example a loading spinner without using a workaround).
 
 #### - "initialData" parameter
 - Added `initialData` parameter to the constructor to all the streamed classes to initialize the stream with an initial data.

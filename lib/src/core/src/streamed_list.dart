@@ -53,11 +53,11 @@ import '../core.dart';
 ///
 ///
 class StreamedList<T> implements StreamedObject<List<T>> {
-  StreamedList({List<T> initialData, this.onError}) {
+  StreamedList({List<T>? initialData, this.onError}) {
     stream = StreamedValue<List<T>>()
       ..stream.listen((data) {
         if (_onChange != null) {
-          _onChange(data);
+          _onChange!(data);
         }
       }, onError: onError);
 
@@ -66,23 +66,23 @@ class StreamedList<T> implements StreamedObject<List<T>> {
     }
   }
 
-  StreamedValue<List<T>> stream;
+  late StreamedValue<List<T>> stream;
 
   /// Callback to handle the errors
-  final Function onError;
+  final Function? onError;
 
   /// Sink for the stream
-  Function(List<T>) get inStream => stream.inStream;
+  Function get inStream => stream.inStream;
 
   /// Stream getter
   @override
   Stream<List<T>> get outStream => stream.outStream;
 
   /// The initial event of the stream
-  List<T> initialData;
+  List<T>? initialData;
 
   /// Last value emitted by the stream
-  List<T> lastValue;
+  List<T>? lastValue;
 
   /// timesUpdated shows how many times the stream got updated
   int timesUpdated = 0;
@@ -93,7 +93,7 @@ class StreamedList<T> implements StreamedObject<List<T>> {
   int get length => stream.value.length;
 
   /// This function will be called every time the stream updates.
-  void Function(List<T> data) _onChange;
+  void Function(List<T> data)? _onChange;
 
   /// Set the new value and update the stream
   set value(List<T> list) {

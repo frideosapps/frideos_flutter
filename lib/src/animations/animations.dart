@@ -14,19 +14,19 @@ typedef AnimationStatusCallback = Function(AnimationStatus status);
 ///
 class AnimationBaseClass {
   AnimationBaseClass({
-    this.duration,
-    this.setState,
-    this.tickerProvider,
+    required this.duration,
+    required this.setState,
+    required this.tickerProvider,
     this.onAnimating,
   });
 
   final Duration duration;
   final dynamic setState;
   final TickerProvider tickerProvider;
-  final AnimationStatusCallback onAnimating;
+  final AnimationStatusCallback? onAnimating;
 
   // Controller and getters
-  AnimationController baseController;
+  late AnimationController baseController;
   AnimationStatus get status => baseController.status;
 
   bool get isAnimating => baseController.isAnimating;
@@ -45,7 +45,7 @@ class AnimationBaseClass {
     if (onAnimating != null) {
       baseController.addListener(() {
         setState(() {});
-        onAnimating(status);
+        onAnimating!(status);
       });
     } else {
       baseController.addListener(() {
@@ -66,7 +66,7 @@ class AnimationBaseClass {
     baseController.dispose();
   }
 
-  void stop({bool canceled}) {
+  void stop({bool canceled = true}) {
     baseController.stop(canceled: canceled);
   }
 
@@ -83,13 +83,13 @@ class AnimationBaseClass {
 ///
 class AnimationTween<T> extends AnimationBaseClass {
   AnimationTween({
-    @required this.begin,
-    @required this.end,
+    required TickerProvider tickerProvider,
+    required Duration duration,
+    this.begin,
+    this.end,
     dynamic setState,
-    TickerProvider tickerProvider,
-    Duration duration,
     this.controller,
-    AnimationStatusCallback onAnimating,
+    AnimationStatusCallback? onAnimating,
   })  : assert(begin != null && end != null),
         super(
           duration: duration,
@@ -104,15 +104,14 @@ class AnimationTween<T> extends AnimationBaseClass {
       super.init();
     }
 
-    animation =
-        Tween<T>(begin: begin, end: end).animate(controller ?? baseController);
+    animation = Tween<T>(begin: begin, end: end).animate(controller ?? baseController);
   }
 
-  final T begin;
-  final T end;
+  T? begin;
+  T? end;
 
-  final AnimationController controller;
-  Animation<T> animation;
+  AnimationController? controller;
+  late Animation<T> animation;
 
   T get value => animation.value;
 }
@@ -125,15 +124,15 @@ class AnimationTween<T> extends AnimationBaseClass {
 ///
 class AnimationCurved<T> extends AnimationBaseClass {
   AnimationCurved({
+    required TickerProvider tickerProvider,
+    required Duration duration,
     this.controller,
-    @required this.begin,
-    @required this.end,
-    @required this.curve,
+    this.begin,
+    this.end,
+    this.curve,
     this.reverseCurve,
     dynamic setState,
-    TickerProvider tickerProvider,
-    Duration duration,
-    AnimationStatusCallback onAnimating,
+    AnimationStatusCallback? onAnimating,
   })  : assert(begin != null && end != null && curve != null),
         super(
           duration: duration,
@@ -148,19 +147,17 @@ class AnimationCurved<T> extends AnimationBaseClass {
       super.init();
     }
     animation = Tween<T>(begin: begin, end: end).animate(CurvedAnimation(
-        parent: controller ?? baseController,
-        curve: curve,
-        reverseCurve: reverseCurve));
+        parent: controller ?? baseController, curve: curve!, reverseCurve: reverseCurve));
   }
 
-  final T begin;
-  final T end;
+  T? begin;
+  T? end;
 
-  final Curve curve;
-  final Curve reverseCurve;
+  Curve? curve;
+  Curve? reverseCurve;
 
-  final AnimationController controller;
-  Animation<T> animation;
+  AnimationController? controller;
+  late Animation<T> animation;
 
   T get value => animation.value;
 }
@@ -169,8 +166,7 @@ class AnimationCurved<T> extends AnimationBaseClass {
 ///
 ///
 
-typedef AnimationCreateBuilder = Widget Function(
-    BuildContext context, AnimationCurved animation);
+typedef AnimationCreateBuilder = Widget Function(BuildContext context, AnimationCurved animation);
 
 ///
 /// AnimationCreate
@@ -180,28 +176,28 @@ typedef AnimationCreateBuilder = Widget Function(
 ///
 class AnimationCreate<T> extends StatefulWidget {
   const AnimationCreate({
-    Key key,
-    @required this.begin,
-    @required this.end,
+    required this.begin,
+    required this.end,
+    required this.builder,
+    this.onAnimating,
+    this.onCompleted,
+    this.onStart,
+    super.key,
     this.curve = Curves.linear,
     this.reverseCurve = Curves.linear,
     this.duration = 1000,
     this.repeat = false,
     this.reverse = false,
-    this.onAnimating,
-    this.onStart,
-    this.onCompleted,
-    this.builder,
-  }) : super(key: key);
+  });
 
   final T begin;
   final T end;
   final Curve curve;
   final Curve reverseCurve;
   final int duration;
-  final Function onAnimating;
-  final Function onCompleted;
-  final Function onStart;
+  final Function? onAnimating;
+  final Function? onCompleted;
+  final Function? onStart;
   final AnimationCreateBuilder builder;
   final bool repeat;
   final bool reverse;
@@ -212,7 +208,7 @@ class AnimationCreate<T> extends StatefulWidget {
 
 class _AnimationCreateState<T> extends State<AnimationCreate<T>>
     with SingleTickerProviderStateMixin {
-  AnimationCurved<T> animation;
+  late AnimationCurved<T> animation;
 
   @override
   void initState() {
@@ -230,7 +226,7 @@ class _AnimationCreateState<T> extends State<AnimationCreate<T>>
     )..forward();
 
     if (widget.onStart != null) {
-      widget.onStart();
+      widget.onStart!();
     }
   }
 
@@ -251,12 +247,12 @@ class _AnimationCreateState<T> extends State<AnimationCreate<T>>
         }
 
         if (widget.onCompleted != null) {
-          widget.onCompleted();
+          widget.onCompleted!();
         }
       } else if (animation.status == AnimationStatus.dismissed) {
         animation.forward();
         if (widget.onStart != null) {
-          widget.onStart();
+          widget.onStart!();
         }
       }
     } else {
@@ -265,20 +261,18 @@ class _AnimationCreateState<T> extends State<AnimationCreate<T>>
           animation.reverse();
         }
         if (widget.onCompleted != null) {
-          widget.onCompleted();
+          widget.onCompleted!();
         }
       }
     }
 
     if (widget.onAnimating != null) {
-      widget.onAnimating();
+      widget.onAnimating!();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return widget.builder(context, animation);
-  }
+  Widget build(BuildContext context) => widget.builder(context, animation);
 }
 
 ///
@@ -289,8 +283,8 @@ class _AnimationCreateState<T> extends State<AnimationCreate<T>>
 ///
 class CompositeItem<T> {
   CompositeItem({
-    @required this.begin,
-    @required this.end,
+    required this.begin,
+    required this.end,
     this.curve,
     this.reverseCurve,
   }) : assert(begin != null && end != null);
@@ -298,10 +292,10 @@ class CompositeItem<T> {
   final T begin;
   final T end;
 
-  final Curve curve;
-  final Curve reverseCurve;
+  Curve? curve;
+  Curve? reverseCurve;
 
-  Animation<dynamic> animation;
+  late Animation<dynamic> animation;
 }
 
 ///
@@ -312,17 +306,13 @@ class CompositeItem<T> {
 ///
 class CompositeAnimation extends AnimationBaseClass {
   CompositeAnimation({
-    @required this.composite,
-    @required dynamic setState,
-    @required TickerProvider tickerProvider,
-    @required Duration duration,
-    AnimationStatusCallback onAnimating,
+    required this.composite,
+    required dynamic setState,
+    required TickerProvider tickerProvider,
+    required Duration duration,
+    AnimationStatusCallback? onAnimating,
   })  : assert(
-          composite != null &&
-              composite.isNotEmpty &&
-              setState != null &&
-              tickerProvider != null &&
-              duration != null,
+          composite.isNotEmpty && setState != null,
         ),
         super(
           duration: duration,
@@ -336,22 +326,18 @@ class CompositeAnimation extends AnimationBaseClass {
     composite.values.forEach((tween) {
       if (tween.curve == null) {
         if (tween.begin.runtimeType == MaterialColor) {
-          tween.animation = ColorTween(begin: tween.begin, end: tween.end)
-              .animate(baseController);
+          tween.animation = ColorTween(begin: tween.begin, end: tween.end).animate(baseController);
         } else {
-          tween.animation = Tween<dynamic>(begin: tween.begin, end: tween.end)
-              .animate(baseController);
+          tween.animation =
+              Tween<dynamic>(begin: tween.begin, end: tween.end).animate(baseController);
         }
       } else {
         if (tween.begin.runtimeType == MaterialColor) {
-          tween.animation = ColorTween(begin: tween.begin, end: tween.end)
-              .animate(baseController);
+          tween.animation = ColorTween(begin: tween.begin, end: tween.end).animate(baseController);
         } else {
-          tween.animation = Tween<dynamic>(begin: tween.begin, end: tween.end)
-              .animate(CurvedAnimation(
-                  parent: baseController,
-                  curve: tween.curve,
-                  reverseCurve: tween.reverseCurve));
+          tween.animation = Tween<dynamic>(begin: tween.begin, end: tween.end).animate(
+              CurvedAnimation(
+                  parent: baseController, curve: tween.curve!, reverseCurve: tween.reverseCurve));
         }
       }
     });
@@ -359,14 +345,13 @@ class CompositeAnimation extends AnimationBaseClass {
 
   final Map<dynamic, CompositeItem<dynamic>> composite;
 
-  dynamic value(dynamic key) => composite[key].animation.value;
+  dynamic value(dynamic key) => composite[key]!.animation.value;
 
-  int valueInt(dynamic key) => composite[key].animation.value.toInt();
+  int valueInt(dynamic key) => composite[key]!.animation.value.toInt();
 
-  dynamic animation(dynamic key) => composite[key].animation;
+  dynamic animation(dynamic key) => composite[key]!.animation;
 
-  AnimationStatus animationStatus(dynamic key) =>
-      composite[key].animation.status;
+  AnimationStatus animationStatus(dynamic key) => composite[key]!.animation.status;
 }
 
 ///
@@ -385,21 +370,21 @@ typedef CompositeCreateBuilder = Widget Function(
 ///
 class CompositeCreate extends StatefulWidget {
   const CompositeCreate({
-    Key key,
+    required this.compositeMap,
+    required this.onAnimating,
+    required this.builder,
+    Key? key,
     this.duration = 1000,
-    this.compositeMap,
     this.repeat = false,
-    this.onAnimating,
     this.onStart,
     this.onCompleted,
-    this.builder,
   }) : super(key: key);
 
   final int duration;
   final Map<dynamic, CompositeItem> compositeMap;
-  final Function onAnimating;
-  final Function onCompleted;
-  final Function onStart;
+  final Function? onAnimating;
+  final Function? onCompleted;
+  final Function? onStart;
   final CompositeCreateBuilder builder;
   final bool repeat;
 
@@ -407,9 +392,8 @@ class CompositeCreate extends StatefulWidget {
   _CompositeCreateState createState() => _CompositeCreateState();
 }
 
-class _CompositeCreateState extends State<CompositeCreate>
-    with TickerProviderStateMixin {
-  CompositeAnimation compositeAnimation;
+class _CompositeCreateState extends State<CompositeCreate> with TickerProviderStateMixin {
+  late CompositeAnimation compositeAnimation;
 
   @override
   void initState() {
@@ -424,7 +408,7 @@ class _CompositeCreateState extends State<CompositeCreate>
     )..forward();
 
     if (widget.onStart != null) {
-      widget.onStart();
+      widget.onStart!();
     }
   }
 
@@ -440,29 +424,27 @@ class _CompositeCreateState extends State<CompositeCreate>
       if (compositeAnimation.status == AnimationStatus.completed) {
         compositeAnimation.reverse();
         if (widget.onCompleted != null) {
-          widget.onCompleted();
+          widget.onCompleted!();
         }
       } else if (compositeAnimation.status == AnimationStatus.dismissed) {
         compositeAnimation.forward();
         if (widget.onStart != null) {
-          widget.onStart();
+          widget.onStart!();
         }
       }
     } else {
       if (compositeAnimation.status == AnimationStatus.completed) {
         if (widget.onCompleted != null) {
-          widget.onCompleted();
+          widget.onCompleted!();
         }
       }
     }
 
     if (widget.onAnimating != null) {
-      widget.onAnimating();
+      widget.onAnimating!();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return widget.builder(context, compositeAnimation);
-  }
+  Widget build(BuildContext context) => widget.builder(context, compositeAnimation);
 }
