@@ -378,7 +378,7 @@ class TimerObject extends StreamedValue<int> {
     if (isTimerActive) {
       _timer!.cancel();
       _time = 0;
-      inStream(null);
+      //inStream(null);
       isTimerActive = false;
     }
     if (isStopwatchActive) {
