@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import 'interfaces/streamed_object.dart';
 import 'streamed_value.dart';
 
@@ -110,7 +108,7 @@ enum AnimatedType { increment, decrement }
 ///
 ///
 class AnimatedObject<T> implements StreamedObject<T> {
-  AnimatedObject({@required this.initialValue, @required this.interval})
+  AnimatedObject({this.initialValue, this.interval})
       : assert(initialValue != null, 'The initialValue argument is null.'),
         assert(interval != null, 'The interval argument is null.') {
     status.value = AnimatedStatus.stop;
@@ -139,13 +137,13 @@ class AnimatedObject<T> implements StreamedObject<T> {
   set value(T value) => animation.value = value;
 
   /// The initial value of the animation
-  T initialValue;
+  T? initialValue;
 
   /// Timer to handle the timing
   final TimerObject timer = TimerObject();
 
   /// Interval in milliseconds
-  int interval;
+  int? interval;
 
   ///
   /// AnimatedObject status
@@ -170,8 +168,8 @@ class AnimatedObject<T> implements StreamedObject<T> {
   /// In the callback increase the animation.value!
   void start(Function(Timer t) callback) {
     if (!timer.isTimerActive) {
-      animation.value = initialValue;
-      timer.startPeriodic(Duration(milliseconds: interval), callback);
+      animation.value = initialValue!;
+      timer.startPeriodic(Duration(milliseconds: interval!), callback);
       status.value = AnimatedStatus.active;
     }
   }
@@ -191,13 +189,8 @@ class AnimatedObject<T> implements StreamedObject<T> {
   /// `minValue` must be set. Once reached a min or a max value, the
   /// animation stops.
   ///
-  void startAnimation(
-      {@required AnimatedType type,
-      @required dynamic velocity,
-      dynamic minValue,
-      dynamic maxValue}) {
-    assert(type != null && velocity != null,
-        'type and velocity parameters must be not null.');
+  void startAnimation({AnimatedType? type, dynamic velocity, dynamic minValue, dynamic maxValue}) {
+    assert(type != null && velocity != null, 'type and velocity parameters must be not null.');
 
     dynamic valueTmp = initialValue;
 
@@ -246,7 +239,7 @@ class AnimatedObject<T> implements StreamedObject<T> {
   /// Method to reset the animation. It doesn't stop the animation, it just
   /// sets the animation.value to the [initialValue].
   void reset() {
-    animation.value = initialValue;
+    animation.value = initialValue!;
   }
 
   /// Method to pause the animation

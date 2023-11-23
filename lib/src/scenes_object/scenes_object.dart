@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/core.dart';
-
 import 'scene.dart';
 
 ///
@@ -113,7 +112,9 @@ class ScenesObject implements StreamedObject {
     _scenes = scenes;
 
     // Extract the times
-    scenes.forEach((scene) => _stages.add(scene.time));
+    for (var scene in scenes) {
+      _stages.add(scene.time);
+    }
 
     // Buffering the list
     _scenesBuffer.addAll(_stages);
@@ -167,7 +168,7 @@ class ScenesObject implements StreamedObject {
 
   /// List of scenes
   ///
-  List<Scene> _scenes;
+  late List<Scene?> _scenes;
 
   /// Every widget is sent to this stream
   ///
@@ -181,6 +182,7 @@ class ScenesObject implements StreamedObject {
   Stream<Widget> get outStream => _widgetStream.outStream;
 
   /// Getter
+  @override
   Widget get value => _widgetStream.value;
 
   /// This callback it is not scene specific and it is called
@@ -202,7 +204,7 @@ class ScenesObject implements StreamedObject {
   bool absoluteTiming;
 
   /// By this function is set the type of timing: absolute or relative
-  Function(Timer t) periodic;
+  late Function(Timer t) periodic;
 
   void clearList() {
     _scenes.clear();
@@ -216,7 +218,9 @@ class ScenesObject implements StreamedObject {
     if (_stages.isNotEmpty) {
       _stages.clear();
     }
-    scenes.forEach((scene) => _stages.add(scene.time));
+    for (var scene in scenes) {
+      _stages.add(scene.time);
+    }
   }
 
   /// To set the callback non widget specific (this is called
@@ -232,11 +236,11 @@ class ScenesObject implements StreamedObject {
 
   int getListLength() => _scenes.length;
 
-  Scene getCurrentScene() => _scenes[sceneIndex];
+  Scene getCurrentScene() => _scenes[sceneIndex]!;
 
   int getSceneIndex() => sceneIndex;
 
-  Scene getNextScene() {
+  Scene? getNextScene() {
     final nextScene = sceneIndex + 1;
     if (nextScene < _scenes.length) {
       return _scenes[nextScene];
@@ -247,41 +251,39 @@ class ScenesObject implements StreamedObject {
 
   Scene getScene(int index) {
     assert(_scenes[index] != null);
-    return _scenes[index];
+    return _scenes[index]!;
   }
 
   void startScenes() {
-    if (_scenes != null) {
-      if (!_timerObject.isTimerActive && _scenes.isNotEmpty) {
-        // Buffer the list
-        if (_scenesBuffer.isNotEmpty) {
-          _scenesBuffer.clear();
-        }
-        _scenesBuffer.addAll(_stages);
+    if (!_timerObject.isTimerActive && _scenes.isNotEmpty) {
+      // Buffer the list
+      if (_scenesBuffer.isNotEmpty) {
+        _scenesBuffer.clear();
+      }
+      _scenesBuffer.addAll(_stages);
 
-        // Show the first element of the list of widgets
-        _widgetStream.value = _scenes[0].widget;
+      // Show the first element of the list of widgets
+      _widgetStream.value = _scenes[0]!.widget;
 
-        // Set the scene index to the first element
-        sceneIndex = 0;
+      // Set the scene index to the first element
+      sceneIndex = 0;
 
-        final interval = Duration(milliseconds: updateTimeScenes);
+      const interval = Duration(milliseconds: updateTimeScenes);
 
-        // The implementation of the periodic function is set by setting
-        // the absoluteTiming flag to true (absolute) or false (relative).
-        _timerObject.startPeriodic(interval, periodic);
+      // The implementation of the periodic function is set by setting
+      // the absoluteTiming flag to true (absolute) or false (relative).
+      _timerObject.startPeriodic(interval, periodic);
 
-        _status.value = SceneStatus.active;
+      _status.value = SceneStatus.active;
 
-        // Call the onShow function
-        if (_scenes[sceneIndex].onShow != null) {
-          _scenes[sceneIndex].onShow();
-        }
+      // Call the onShow function
+      if (_scenes[sceneIndex]!.onShow != null) {
+        _scenes[sceneIndex]!.onShow!();
+      }
 
-        // Calling the callback on start if the flag isn't set to false
-        if (callbackOnStart) {
-          _callback();
-        }
+      // Calling the callback on start if the flag isn't set to false
+      if (callbackOnStart) {
+        _callback();
       }
     }
   }
@@ -295,7 +297,7 @@ class ScenesObject implements StreamedObject {
 
     // Set the scene to the first element
     sceneIndex = 0;
-    _widgetStream.value = _scenes[0].widget;
+    _widgetStream.value = _scenes[0]!.widget;
 
     isLastScene = false;
   }
@@ -308,8 +310,8 @@ class ScenesObject implements StreamedObject {
 
     // Calling the onEnd callback if the timing is relative
     if (!absoluteTiming) {
-      final time = _scenes[sceneIndex].time;
-      Timer(Duration(milliseconds: time), _onEnd);
+      final time = _scenes[sceneIndex]!.time;
+      Timer(Duration(milliseconds: time), _onEnd());
     }
   }
 
@@ -325,10 +327,9 @@ class ScenesObject implements StreamedObject {
       final scene = _scenesBuffer.first;
 
       // If the current time is between +/- 100ms of an item of the scenes
-      if (currentTime >= scene - sceneTimeMargin &&
-          currentTime <= scene + sceneTimeMargin) {
+      if (currentTime >= scene - sceneTimeMargin && currentTime <= scene + sceneTimeMargin) {
         // Send to stream the new widget
-        _widgetStream.value = _scenes[sceneIndex].widget;
+        _widgetStream.value = _scenes[sceneIndex]!.widget;
 
         // To call the general callback and the onShow callback
         // of the single windget
@@ -365,14 +366,13 @@ class ScenesObject implements StreamedObject {
       final timePassed = currentTime - lastSceneTime;
 
       // If the current time is between +/- 100ms of an item of the scenes
-      if (timePassed >= scene - sceneTimeMargin &&
-          timePassed <= scene + sceneTimeMargin) {
+      if (timePassed >= scene - sceneTimeMargin && timePassed <= scene + sceneTimeMargin) {
         // Set the new index so the next time is shown the next widget
         // on the list
         sceneIndex++;
 
         // Send to stream the new widget
-        _widgetStream.value = _scenes[sceneIndex].widget;
+        _widgetStream.value = _scenes[sceneIndex]!.widget;
 
         // To call the general callback and the onShow callback
         // of the single windget
@@ -393,8 +393,8 @@ class ScenesObject implements StreamedObject {
 
   void _callCallbacks() {
     // Call the onShow function
-    if (_scenes[sceneIndex].onShow != null) {
-      _scenes[sceneIndex].onShow();
+    if (_scenes[sceneIndex]!.onShow != null) {
+      _scenes[sceneIndex]!.onShow!();
     }
 
     // Calling the callback

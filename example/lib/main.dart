@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:frideos/frideos.dart';
 
 void main() => runApp(MyApp());
@@ -31,11 +30,11 @@ class AppState extends AppStateModel {
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  AppState appState;
+  late AppState appState;
 
   @override
   void initState() {
@@ -90,11 +89,10 @@ class MyHomePage extends StatelessWidget {
               ],
             ),
             Container(height: 30),
-            RaisedButton(
+            ElevatedButton(
                 child: const Text('Second page'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SecondPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage()));
                 }),
           ],
         ),
@@ -134,11 +132,10 @@ class SecondPage extends StatelessWidget {
               ],
             ),
             Container(height: 30),
-            RaisedButton(
+            ElevatedButton(
                 child: const Text('Other page'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SecondPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage()));
                 }),
           ],
         ),

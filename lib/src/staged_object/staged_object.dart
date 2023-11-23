@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/core.dart';
-
 import 'stage.dart';
 
 ///
@@ -206,7 +205,7 @@ class StagedObject implements StreamedObject {
 
   /// Map of widgets
   ///
-  Map<int, Stage> _stagesMap;
+  late Map<int, Stage> _stagesMap;
 
   /// Every widget is sent to this stream
   ///
@@ -220,6 +219,7 @@ class StagedObject implements StreamedObject {
   Stream<Widget> get outStream => _widgetStream.outStream;
 
   /// Getter
+  @override
   Widget get value => _widgetStream.value;
 
   /// This callback it is not stage specific and it is called
@@ -241,7 +241,7 @@ class StagedObject implements StreamedObject {
   bool absoluteTiming;
 
   /// By this function is set the type of timing: absolute or relative
-  Function(Timer t) periodic;
+  late Function(Timer t) periodic;
 
   void clearMap() {
     _stagesMap.clear();
@@ -274,17 +274,17 @@ class StagedObject implements StreamedObject {
   }
 
   Stage getCurrentStage() {
-    return _stagesMap[stageIndex];
+    return _stagesMap[stageIndex]!;
   }
 
   int getStageIndex() {
     return stageIndex;
   }
 
-  Stage getNextStage() {
+  Stage? getNextStage() {
     final nextStage = stageIndex + 1;
     if (_stagesMap.containsKey(nextStage)) {
-      return _stagesMap[nextStage];
+      return _stagesMap[nextStage]!;
     } else {
       return null;
     }
@@ -292,41 +292,39 @@ class StagedObject implements StreamedObject {
 
   Stage getStage(int index) {
     assert(_stagesMap[index] != null);
-    return _stagesMap[index];
+    return _stagesMap[index]!;
   }
 
   void startStages() {
-    if (_stagesMap != null) {
-      if (!_timerObject.isTimerActive && _stagesMap.isNotEmpty) {
-        // Buffer the list
-        if (_stagesBuffer.isNotEmpty) {
-          _stagesBuffer.clear();
-        }
-        _stagesBuffer.addAll(_stages);
+    if (!_timerObject.isTimerActive && _stagesMap.isNotEmpty) {
+      // Buffer the list
+      if (_stagesBuffer.isNotEmpty) {
+        _stagesBuffer.clear();
+      }
+      _stagesBuffer.addAll(_stages);
 
-        // Show the first element of the list of widgets
-        _widgetStream.value = _stagesMap[0].widget;
+      // Show the first element of the list of widgets
+      _widgetStream.value = _stagesMap.values.first.widget;
 
-        // Set the stage index to the first element
-        stageIndex = 0;
+      // Set the stage index to the first element
+      stageIndex = 0;
 
-        final interval = Duration(milliseconds: updateTimeStaged);
+      const interval = Duration(milliseconds: updateTimeStaged);
 
-        // The implementation of the periodic function is set by setting
-        // the absoluteTiming flag to true (absolute) or false (relative).
-        _timerObject.startPeriodic(interval, periodic);
+      // The implementation of the periodic function is set by setting
+      // the absoluteTiming flag to true (absolute) or false (relative).
+      _timerObject.startPeriodic(interval, periodic);
 
-        _status.value = StageStatus.active;
+      _status.value = StageStatus.active;
 
-        // Call the onShow function
-        if (_stagesMap[stageIndex].onShow != null) {
-          _stagesMap[stageIndex].onShow();
-        }
+      // Call the onShow function
+      if (_stagesMap[stageIndex]!.onShow != null) {
+        _stagesMap[stageIndex]!.onShow!();
+      }
 
-        // Calling the callback on start if the flag isn't set to false
-        if (callbackOnStart) {
-          _callback();
-        }
+      // Calling the callback on start if the flag isn't set to false
+      if (callbackOnStart) {
+        _callback();
       }
     }
   }
@@ -340,7 +338,7 @@ class StagedObject implements StreamedObject {
 
     // Set the stage to the first element
     stageIndex = 0;
-    _widgetStream.value = _stagesMap[0].widget;
+    _widgetStream.value = _stagesMap.values.first.widget;
 
     isLastStage = false;
   }
@@ -353,8 +351,8 @@ class StagedObject implements StreamedObject {
 
     // Calling the onEnd callback if the timing is relative
     if (!absoluteTiming) {
-      final time = _stagesMap[stageIndex].time;
-      Timer(Duration(milliseconds: time), _onEnd);
+      final time = _stagesMap[stageIndex]!.time;
+      Timer(Duration(milliseconds: time), _onEnd());
     }
   }
 
@@ -370,10 +368,9 @@ class StagedObject implements StreamedObject {
       final stage = _stagesBuffer.first;
 
       // If the current time is between +/- 100ms of an item of the stages
-      if (currentTime >= stage - stageTimeMargin &&
-          currentTime <= stage + stageTimeMargin) {
+      if (currentTime >= stage - stageTimeMargin && currentTime <= stage + stageTimeMargin) {
         // Send to stream the new widget
-        _widgetStream.value = _stagesMap[stageIndex].widget;
+        _widgetStream.value = _stagesMap[stageIndex]!.widget;
 
         // To call the general callback and the onShow callback
         // of the single windget
@@ -410,14 +407,13 @@ class StagedObject implements StreamedObject {
       final timePassed = currentTime - lastStageTime;
 
       // If the current time is between +/- 100ms of an item of the stages
-      if (timePassed >= stage - stageTimeMargin &&
-          timePassed <= stage + stageTimeMargin) {
+      if (timePassed >= stage - stageTimeMargin && timePassed <= stage + stageTimeMargin) {
         // Set the new index so the next time is shown the next widget
         // on the list
         stageIndex++;
 
         // Send to stream the new widget
-        _widgetStream.value = _stagesMap[stageIndex].widget;
+        _widgetStream.value = _stagesMap[stageIndex]!.widget;
 
         // To call the general callback and the onShow callback
         // of the single windget
@@ -438,8 +434,8 @@ class StagedObject implements StreamedObject {
 
   void _callCallbacks() {
     // Call the onShow function
-    if (_stagesMap[stageIndex].onShow != null) {
-      _stagesMap[stageIndex].onShow();
+    if (_stagesMap[stageIndex]!.onShow != null) {
+      _stagesMap[stageIndex]!.onShow!();
     }
 
     // Calling the callback

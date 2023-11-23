@@ -12,15 +12,15 @@ import 'extended_asyncwidgets.dart';
 ///
 ///
 class ReceiverWidget extends StatelessWidget {
-  const ReceiverWidget({Key key, this.stream})
-      : assert(stream != null, 'The strean argument is null.'),
-        super(key: key);
+  const ReceiverWidget({
+    super.key,
+    required this.stream,
+  });
 
   final Stream<Widget> stream;
 
   @override
   Widget build(BuildContext context) {
-    return StreamedWidget<Widget>(
-        stream: stream, builder: (context, snapshot) => snapshot.data);
+    return StreamedWidget<Widget>(stream: stream, builder: (context, snapshot) => snapshot.data!);
   }
 }

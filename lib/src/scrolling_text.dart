@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'core/core.dart';
-
 import 'extended_asyncwidgets.dart';
 
 ///
@@ -11,33 +10,28 @@ import 'extended_asyncwidgets.dart';
 /// over a given time.
 ///
 class ScrollingText extends StatefulWidget {
-  const ScrollingText(
-      {@required this.text,
-      @required this.scrollingDuration,
-      Key key,
-      this.style})
-      : assert(text != null, 'The text argument is null.'),
-        assert(
-            scrollingDuration != null, 'The scrollDuration argument is null.'),
-        super(key: key);
+  const ScrollingText({
+    required this.text,
+    required this.scrollingDuration,
+    super.key,
+    this.style,
+  });
 
   final String text;
   final int scrollingDuration;
-  final TextStyle style;
+  final TextStyle? style;
 
   @override
-  _ScrollingTextState createState() {
-    return _ScrollingTextState();
-  }
+  State<ScrollingText> createState() => _ScrollingTextState();
 }
 
 class _ScrollingTextState extends State<ScrollingText> {
   final StreamedValue<String> textStream = StreamedValue<String>();
-  Timer timer;
+  Timer? timer;
 
   void showText(String str) {
     if (timer != null) {
-      if (timer.isActive) {
+      if (timer!.isActive) {
       } else {
         startShowingText(str);
       }
@@ -47,7 +41,12 @@ class _ScrollingTextState extends State<ScrollingText> {
   }
 
   void startShowingText(String str) {
-    timer = Utils.sendText(str, textStream, null, widget.scrollingDuration);
+    timer = Utils.sendText(
+      text: str,
+      stream: textStream,
+      duration: null,
+      milliseconds: widget.scrollingDuration,
+    );
   }
 
   @override
@@ -59,7 +58,7 @@ class _ScrollingTextState extends State<ScrollingText> {
   @override
   void dispose() {
     if (timer != null) {
-      timer.cancel();
+      timer!.cancel();
     }
     super.dispose();
   }
@@ -72,7 +71,7 @@ class _ScrollingTextState extends State<ScrollingText> {
         initialData: '',
         stream: textStream.outStream,
         builder: (context, snapshot) {
-          return Text(snapshot.data, style: widget.style);
+          return Text(snapshot.data!, style: widget.style);
         },
         noDataChild: const Text('NO DATA'),
       ),
